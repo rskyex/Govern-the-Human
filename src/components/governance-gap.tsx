@@ -403,27 +403,38 @@ function GapCanvas() {
 
       ctx.clearRect(0, 0, w, h)
 
-      // ── Ring — upper-left, slow drift (~60s / ~85s) ──
-      const ringR = vmin * 0.17
+      // ── Primary ring — upper-left, the analytical lens ──
+      const ringR = vmin * 0.19
       drawRing(
         ctx,
-        w * 0.15 + Math.sin(t * 1.05) * 3 + Math.sin(t * 0.47) * 1.5,
-        h * 0.12 + Math.cos(t * 0.74) * 2.5 + Math.cos(t * 0.37) * 1,
+        w * 0.14 + Math.sin(t * 1.05) * 3 + Math.sin(t * 0.47) * 1.5,
+        h * 0.1 + Math.cos(t * 0.74) * 2.5 + Math.cos(t * 0.37) * 1,
         ringR,
         t,
       )
 
-      // ── Sinking ghost — right side, descending through section ──
-      const ghostScale = vmin / 650
-      drawSinkingGhost(ctx, w * 0.78, h * 0.32, ghostScale, t, h)
+      // ── Secondary ring — lower-left, smaller, deeper ──
+      drawRing(
+        ctx,
+        w * 0.06 + Math.sin(t * 0.82) * 2,
+        h * 0.72 + Math.cos(t * 0.62) * 2,
+        vmin * 0.1,
+        t + 2.5,
+      )
 
-      // ── Orbs at depth-zone boundaries ──
-      // Near the observed/partial boundary
-      drawOrb(ctx, w * 0.88, h * 0.42, vmin * 0.04, t, 0)
-      // Near the partial/missed boundary
-      drawOrb(ctx, w * 0.7, h * 0.62, vmin * 0.035, t, 1.8)
-      // Deep in the missed zone
-      drawOrb(ctx, w * 0.85, h * 0.82, vmin * 0.03, t, 3.6)
+      // ── Sinking ghost — right side, descending ──
+      const ghostScale = vmin / 580
+      drawSinkingGhost(ctx, w * 0.8, h * 0.3, ghostScale, t, h)
+
+      // ── Ghost echo — fainter reflection, offset ──
+      drawSinkingGhost(ctx, w * 0.68, h * 0.45, vmin / 850, t - 0.4, h)
+
+      // ── Orbs at depth-zone boundaries — 5 total ──
+      drawOrb(ctx, w * 0.9, h * 0.22, vmin * 0.045, t, 0)
+      drawOrb(ctx, w * 0.88, h * 0.42, vmin * 0.04, t, 1.2)
+      drawOrb(ctx, w * 0.72, h * 0.58, vmin * 0.035, t, 2.5)
+      drawOrb(ctx, w * 0.85, h * 0.75, vmin * 0.03, t, 3.8)
+      drawOrb(ctx, w * 0.06, h * 0.48, vmin * 0.038, t, 5.2)
     }
 
     resize()

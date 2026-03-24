@@ -38,6 +38,99 @@ function ThesisCanvas() {
 
     const resize = () => { c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0) }
 
+    function drawOrb(cx: number, cy: number, r: number, t: number, ph: number) {
+      if (!ctx) return
+      const orbA = t * (0.42 + ph * 0.02) + ph
+      const ox = cx + Math.cos(orbA) * r * 0.7
+      const oy = cy + Math.sin(orbA) * r * 0.5
+      ctx.save()
+      ctx.translate(ox, oy)
+      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.06)'; ctx.shadowBlur = r * 0.5
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(91,164,201,0.005)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore()
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
+      const og = ctx.createRadialGradient(-r * 0.18, -r * 0.22, 0, 0, 0, r)
+      og.addColorStop(0, 'rgba(91,164,201,0.042)'); og.addColorStop(0.4, 'rgba(91,164,201,0.018)')
+      og.addColorStop(1, 'rgba(91,164,201,0.003)'); ctx.fillStyle = og; ctx.fill()
+      ctx.strokeStyle = 'rgba(145,195,225,0.07)'; ctx.lineWidth = 0.8; ctx.stroke()
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.62, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(139,126,184,0.006)'; ctx.fill()
+      ctx.strokeStyle = 'rgba(139,126,184,0.022)'; ctx.lineWidth = 0.4; ctx.stroke()
+      ctx.restore()
+    }
+
+    function drawRingCompact(cx: number, cy: number, r: number, t: number) {
+      if (!ctx) return
+      ctx.save(); ctx.translate(cx, cy)
+      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.08)'; ctx.shadowBlur = 12
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(91,164,201,0.05)'; ctx.lineWidth = r * 0.08; ctx.stroke(); ctx.restore()
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.76, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(91,164,201,0.025)'; ctx.lineWidth = r * 0.025; ctx.stroke()
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.56, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(139,126,184,0.018)'; ctx.lineWidth = 0.6; ctx.stroke()
+      const rot = t * 0.12; ctx.save(); ctx.rotate(rot)
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2; const major = i % 6 === 0
+        const len = major ? r * 0.08 : r * 0.03
+        ctx.beginPath()
+        ctx.moveTo(Math.cos(a) * (r - r * 0.04 - len), Math.sin(a) * (r - r * 0.04 - len))
+        ctx.lineTo(Math.cos(a) * (r - r * 0.04), Math.sin(a) * (r - r * 0.04))
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.12 : 0.04})`; ctx.lineWidth = major ? 1.2 : 0.5
+        ctx.lineCap = 'round'; ctx.stroke()
+      }
+      ctx.restore()
+      const ha = t * 0.16; ctx.beginPath(); ctx.moveTo(0, 0)
+      ctx.lineTo(Math.cos(ha) * r * 0.65, Math.sin(ha) * r * 0.65)
+      ctx.strokeStyle = 'rgba(91,164,201,0.05)'; ctx.lineWidth = 0.8; ctx.lineCap = 'round'; ctx.stroke()
+      ctx.beginPath(); ctx.arc(0, 0, 1.8, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(91,164,201,0.1)'; ctx.fill()
+      ctx.restore()
+    }
+
+    function drawCranialHead(cx: number, cy: number, s: number, t: number, opacity: number) {
+      if (!ctx) return
+      const tilt = Math.sin(t * 0.524) * 0.015
+      ctx.save(); ctx.translate(cx + Math.sin(t * 0.82) * 3, cy + Math.sin(t * 1.05) * 5)
+      ctx.rotate(tilt)
+      // Glow
+      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.12 * opacity})`; ctx.shadowBlur = 22 * s
+      drawCranialProfile(ctx, s); ctx.strokeStyle = 'rgba(91,164,201,0.005)'; ctx.lineWidth = 2; ctx.stroke(); ctx.restore()
+      // Fill
+      drawCranialProfile(ctx, s)
+      const fg = ctx.createRadialGradient(10 * s, -20 * s, 0, 0, 0, 95 * s)
+      fg.addColorStop(0, `rgba(91,164,201,${0.045 * opacity})`); fg.addColorStop(0.35, `rgba(91,164,201,${0.025 * opacity})`)
+      fg.addColorStop(0.7, `rgba(91,164,201,${0.01 * opacity})`); fg.addColorStop(1, 'rgba(91,164,201,0)')
+      ctx.fillStyle = fg; ctx.fill()
+      // Secondary subsurface
+      drawCranialProfile(ctx, s * 0.9)
+      const fg2 = ctx.createRadialGradient(-15 * s, 10 * s, 0, 0, 0, 70 * s)
+      fg2.addColorStop(0, `rgba(130,160,210,${0.015 * opacity})`); fg2.addColorStop(1, 'rgba(91,164,201,0)')
+      ctx.fillStyle = fg2; ctx.fill()
+      // Rim
+      drawCranialProfile(ctx, s)
+      ctx.strokeStyle = `rgba(145,195,225,${0.1 * opacity})`; ctx.lineWidth = 1.2; ctx.stroke()
+      drawCranialProfile(ctx, s * 0.97)
+      ctx.strokeStyle = `rgba(180,215,235,${0.035 * opacity})`; ctx.lineWidth = 0.3; ctx.stroke()
+      // Frosted inner shells
+      const shells = [0.8, 0.6, 0.42]
+      shells.forEach((sc, i) => {
+        const lag = Math.sin(t * 0.82 - 0.1 * (i + 1)) * 1.5
+        ctx.save(); ctx.translate(lag, Math.cos(t * 1.05 - 0.08 * (i + 1)) * 1)
+        drawCranialProfile(ctx, s * sc)
+        ctx.fillStyle = `rgba(139,126,184,${[0.012, 0.006, 0.003][i] * opacity})`; ctx.fill()
+        ctx.strokeStyle = `rgba(139,126,184,${[0.045, 0.025, 0.015][i] * opacity})`
+        ctx.lineWidth = 0.55 - i * 0.1; ctx.stroke(); ctx.restore()
+      })
+      // Caustics
+      ctx.save(); drawCranialProfile(ctx, s); ctx.clip()
+      const hl = ctx.createRadialGradient(-10 * s, -40 * s, 0, -10 * s, -40 * s, 30 * s)
+      hl.addColorStop(0, `rgba(255,255,255,${0.09 * opacity})`); hl.addColorStop(0.3, `rgba(255,255,255,${0.03 * opacity})`)
+      hl.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = hl
+      ctx.fillRect(-55 * s, -100 * s, 110 * s, 90 * s); ctx.restore()
+      ctx.restore()
+    }
+
     function draw() {
       if (!c || !ctx) return
       const w = c.offsetWidth, h = c.offsetHeight
@@ -45,126 +138,24 @@ function ThesisCanvas() {
       const vmin = Math.min(w, h)
       ctx.clearRect(0, 0, w, h)
 
-      // ── Lateral head profile — right side, slowly tilting ──
-      const headS = vmin / 280
-      const hx = w * 0.78 + Math.sin(t * 0.82) * 3
-      const hy = h * 0.48 + Math.sin(t * 1.05) * 5
-      const tilt = Math.sin(t * 0.524) * 0.015
+      // ── Primary cranial profile — right side, large ──
+      drawCranialHead(w * 0.78, h * 0.48, vmin / 260, t, 1)
 
-      ctx.save()
-      ctx.translate(hx, hy)
-      ctx.rotate(tilt)
+      // ── Mirror echo — left side, fainter, slightly delayed ──
+      drawCranialHead(w * 0.15, h * 0.38, vmin / 380, t - 0.4, 0.45)
 
-      // Subsurface glow
-      ctx.save()
-      ctx.shadowColor = 'rgba(91,164,201,0.12)'
-      ctx.shadowBlur = 22 * headS
-      drawCranialProfile(ctx, headS)
-      ctx.strokeStyle = 'rgba(91,164,201,0.006)'
-      ctx.lineWidth = 2
-      ctx.stroke()
-      ctx.restore()
+      // ── Governance ring — left-centre, large, partially behind text ──
+      drawRingCompact(
+        w * 0.28 + Math.sin(t * 0.74) * 3,
+        h * 0.68 + Math.cos(t * 0.62) * 2,
+        vmin * 0.18, t,
+      )
 
-      // Primary subsurface fill
-      drawCranialProfile(ctx, headS)
-      const fg = ctx.createRadialGradient(10 * headS, -20 * headS, 0, 0, 0, 95 * headS)
-      fg.addColorStop(0, 'rgba(91,164,201,0.045)')
-      fg.addColorStop(0.35, 'rgba(91,164,201,0.025)')
-      fg.addColorStop(0.7, 'rgba(91,164,201,0.01)')
-      fg.addColorStop(1, 'rgba(91,164,201,0.003)')
-      ctx.fillStyle = fg
-      ctx.fill()
-
-      // Secondary subsurface — colour shift
-      drawCranialProfile(ctx, headS * 0.9)
-      const fg2 = ctx.createRadialGradient(-15 * headS, 10 * headS, 0, 0, 0, 70 * headS)
-      fg2.addColorStop(0, 'rgba(130,160,210,0.015)')
-      fg2.addColorStop(1, 'rgba(91,164,201,0)')
-      ctx.fillStyle = fg2
-      ctx.fill()
-
-      // Rim edge — surface tension
-      drawCranialProfile(ctx, headS)
-      ctx.strokeStyle = 'rgba(145,195,225,0.1)'
-      ctx.lineWidth = 1.2
-      ctx.stroke()
-      // Inner tension line
-      drawCranialProfile(ctx, headS * 0.97)
-      ctx.strokeStyle = 'rgba(180,215,235,0.035)'
-      ctx.lineWidth = 0.3
-      ctx.stroke()
-
-      // Frosted inner shells — filled membranes, each lagging
-      const shells = [0.8, 0.6, 0.42]
-      const fillOps = [0.012, 0.006, 0.003]
-      const strokeOps = [0.045, 0.025, 0.015]
-      const shellColors = ['139,126,184', '91,164,201', '139,126,184']
-      shells.forEach((sc, i) => {
-        const lag = Math.sin(t * 0.82 - 0.1 * (i + 1)) * 1.5
-        ctx.save()
-        ctx.translate(lag, Math.cos(t * 1.05 - 0.08 * (i + 1)) * 1)
-        drawCranialProfile(ctx, headS * sc)
-        ctx.fillStyle = `rgba(${shellColors[i]},${fillOps[i]})`
-        ctx.fill()
-        ctx.strokeStyle = `rgba(${shellColors[i]},${strokeOps[i]})`
-        ctx.lineWidth = 0.55 - i * 0.1
-        ctx.stroke()
-        ctx.restore()
-      })
-
-      // Caustic highlights (clipped)
-      ctx.save()
-      drawCranialProfile(ctx, headS)
-      ctx.clip()
-      const hl = ctx.createRadialGradient(-10 * headS, -40 * headS, 0, -10 * headS, -40 * headS, 30 * headS)
-      hl.addColorStop(0, 'rgba(255,255,255,0.09)')
-      hl.addColorStop(0.3, 'rgba(255,255,255,0.03)')
-      hl.addColorStop(1, 'rgba(255,255,255,0)')
-      ctx.fillStyle = hl
-      ctx.fillRect(-55 * headS, -100 * headS, 110 * headS, 90 * headS)
-      const hl2 = ctx.createRadialGradient(20 * headS, 25 * headS, 0, 20 * headS, 25 * headS, 18 * headS)
-      hl2.addColorStop(0, 'rgba(255,255,255,0.03)')
-      hl2.addColorStop(1, 'rgba(255,255,255,0)')
-      ctx.fillStyle = hl2
-      ctx.fillRect(0, 10 * headS, 50 * headS, 40 * headS)
-      ctx.restore()
-
-      ctx.restore()
-
-      // ── Two small orbs — left side ──
-      for (const orb of [{ x: 0.14, y: 0.3, r: 0.04, ph: 0 }, { x: 0.08, y: 0.7, r: 0.03, ph: 2.5 }]) {
-        const or = vmin * orb.r
-        const orbA = t * 0.45 + orb.ph
-        const ox = w * orb.x + Math.cos(orbA) * or * 0.7
-        const oy = h * orb.y + Math.sin(orbA) * or * 0.5
-
-        ctx.save()
-        ctx.translate(ox, oy)
-
-        // Subsurface fill
-        ctx.beginPath()
-        ctx.arc(0, 0, or, 0, Math.PI * 2)
-        const og = ctx.createRadialGradient(-or * 0.2, -or * 0.25, 0, 0, 0, or)
-        og.addColorStop(0, 'rgba(91,164,201,0.04)')
-        og.addColorStop(0.4, 'rgba(91,164,201,0.018)')
-        og.addColorStop(1, 'rgba(91,164,201,0.003)')
-        ctx.fillStyle = og
-        ctx.fill()
-        // Rim
-        ctx.strokeStyle = 'rgba(145,195,225,0.07)'
-        ctx.lineWidth = 0.8
-        ctx.stroke()
-        // Frosted inner shell
-        ctx.beginPath()
-        ctx.arc(0, 0, or * 0.65, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(139,126,184,0.006)'
-        ctx.fill()
-        ctx.strokeStyle = 'rgba(139,126,184,0.025)'
-        ctx.lineWidth = 0.4
-        ctx.stroke()
-
-        ctx.restore()
-      }
+      // ── Orbs — 4, scattered at different scales ──
+      drawOrb(w * 0.06, h * 0.28, vmin * 0.065, t, 0)
+      drawOrb(w * 0.42, h * 0.15, vmin * 0.045, t, 1.8)
+      drawOrb(w * 0.92, h * 0.72, vmin * 0.055, t, 3.5)
+      drawOrb(w * 0.55, h * 0.82, vmin * 0.035, t, 5.2)
     }
 
     resize()

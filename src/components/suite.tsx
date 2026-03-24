@@ -227,10 +227,116 @@ function PlatformedCanvas() {
 
 /* ━━━ Suite ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
+/* ── Section-level ambient canvas — large forms floating behind the cards ── */
+
+function SuiteAmbientCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current
+    if (!c) return
+    const ctx = c.getContext('2d')
+    if (!ctx) return
+    const dpr = window.devicePixelRatio || 1
+    const resize = () => { c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0) }
+
+    function draw() {
+      if (!c || !ctx) return
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
+      const vmin = Math.min(w, h)
+      ctx.clearRect(0, 0, w, h)
+
+      // ── Large ghost silhouette — right edge, tall, faint ──
+      const gs = vmin / 600
+      const gx = w * 0.88 + Math.sin(t * 0.74) * 3
+      const gy = h * 0.22 + Math.sin(t * 0.92) * 5
+      ctx.save()
+      ctx.translate(gx, gy)
+      ctx.scale(1 + Math.sin(t * 1.57) * 0.003, 1 + Math.sin(t * 1.57) * 0.003)
+      // Torso
+      ctx.save(); ctx.translate(0, 45 * gs)
+      ctx.beginPath()
+      ctx.moveTo(-14 * gs, 0); ctx.lineTo(-14 * gs, 18 * gs)
+      ctx.bezierCurveTo(-20 * gs, 22 * gs, -55 * gs, 28 * gs, -82 * gs, 36 * gs)
+      ctx.bezierCurveTo(-92 * gs, 40 * gs, -96 * gs, 56 * gs, -90 * gs, 72 * gs)
+      ctx.bezierCurveTo(-84 * gs, 78 * gs, -68 * gs, 76 * gs, -56 * gs, 80 * gs)
+      ctx.bezierCurveTo(-48 * gs, 100 * gs, -44 * gs, 128 * gs, -40 * gs, 160 * gs)
+      ctx.bezierCurveTo(-32 * gs, 180 * gs, -16 * gs, 190 * gs, 0, 192 * gs)
+      ctx.bezierCurveTo(16 * gs, 190 * gs, 32 * gs, 180 * gs, 40 * gs, 160 * gs)
+      ctx.bezierCurveTo(44 * gs, 128 * gs, 48 * gs, 100 * gs, 56 * gs, 80 * gs)
+      ctx.bezierCurveTo(68 * gs, 76 * gs, 84 * gs, 78 * gs, 90 * gs, 72 * gs)
+      ctx.bezierCurveTo(96 * gs, 56 * gs, 92 * gs, 40 * gs, 82 * gs, 36 * gs)
+      ctx.bezierCurveTo(55 * gs, 28 * gs, 20 * gs, 22 * gs, 14 * gs, 18 * gs)
+      ctx.lineTo(14 * gs, 0); ctx.closePath()
+      const tg = ctx.createLinearGradient(0, 0, 0, 192 * gs)
+      tg.addColorStop(0, 'rgba(91,164,201,0.025)'); tg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
+      tg.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = tg; ctx.fill()
+      ctx.strokeStyle = 'rgba(145,195,225,0.04)'; ctx.lineWidth = 0.8; ctx.stroke()
+      ctx.restore()
+      // Head
+      headPath(ctx, gs)
+      const hfg = ctx.createRadialGradient(0, -6 * gs, 0, 0, 0, 52 * gs)
+      hfg.addColorStop(0, 'rgba(91,164,201,0.03)'); hfg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
+      hfg.addColorStop(1, 'rgba(91,164,201,0.003)'); ctx.fillStyle = hfg; ctx.fill()
+      ctx.strokeStyle = 'rgba(145,195,225,0.055)'; ctx.lineWidth = 1; ctx.stroke()
+      headPath(ctx, gs * 0.72); ctx.strokeStyle = 'rgba(139,126,184,0.025)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.restore()
+
+      // ── Governance ring — upper left area ──
+      const rr = vmin * 0.15
+      const rx = w * 0.08 + Math.sin(t * 0.82) * 2
+      const ry = h * 0.12 + Math.cos(t * 0.68) * 2
+      ctx.save(); ctx.translate(rx, ry)
+      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.06)'; ctx.shadowBlur = 10
+      ctx.beginPath(); ctx.arc(0, 0, rr, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(91,164,201,0.035)'; ctx.lineWidth = rr * 0.07; ctx.stroke(); ctx.restore()
+      ctx.beginPath(); ctx.arc(0, 0, rr * 0.74, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(91,164,201,0.018)'; ctx.lineWidth = rr * 0.02; ctx.stroke()
+      ctx.save(); ctx.rotate(t * 0.1)
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2; const major = i % 6 === 0
+        const len = major ? rr * 0.06 : rr * 0.025
+        ctx.beginPath()
+        ctx.moveTo(Math.cos(a) * (rr - rr * 0.035 - len), Math.sin(a) * (rr - rr * 0.035 - len))
+        ctx.lineTo(Math.cos(a) * (rr - rr * 0.035), Math.sin(a) * (rr - rr * 0.035))
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.08 : 0.025})`; ctx.lineWidth = major ? 0.9 : 0.4
+        ctx.lineCap = 'round'; ctx.stroke()
+      }
+      ctx.restore(); ctx.restore()
+
+      // ── 4 orbs scattered ──
+      for (const orb of [
+        { x: 0.05, y: 0.48, r: 0.05, ph: 0 },
+        { x: 0.72, y: 0.08, r: 0.04, ph: 1.8 },
+        { x: 0.94, y: 0.7, r: 0.035, ph: 3.5 },
+        { x: 0.32, y: 0.92, r: 0.03, ph: 5.1 },
+      ]) {
+        const or = vmin * orb.r
+        const oa = t * (0.4 + orb.ph * 0.015) + orb.ph
+        ctx.save()
+        ctx.translate(w * orb.x + Math.cos(oa) * or * 0.6, h * orb.y + Math.sin(oa) * or * 0.4)
+        ctx.beginPath(); ctx.arc(0, 0, or, 0, Math.PI * 2)
+        const og = ctx.createRadialGradient(-or * 0.18, -or * 0.2, 0, 0, 0, or)
+        og.addColorStop(0, 'rgba(91,164,201,0.03)'); og.addColorStop(0.5, 'rgba(91,164,201,0.012)')
+        og.addColorStop(1, 'rgba(91,164,201,0.002)'); ctx.fillStyle = og; ctx.fill()
+        ctx.strokeStyle = 'rgba(145,195,225,0.045)'; ctx.lineWidth = 0.6; ctx.stroke()
+        ctx.beginPath(); ctx.arc(0, 0, or * 0.6, 0, Math.PI * 2)
+        ctx.strokeStyle = 'rgba(139,126,184,0.018)'; ctx.lineWidth = 0.3; ctx.stroke()
+        ctx.restore()
+      }
+    }
+
+    resize(); window.addEventListener('resize', resize)
+    let id: number; const loop = () => { draw(); id = requestAnimationFrame(loop) }; loop()
+    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
+  }, [])
+  return <canvas ref={ref} className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true" />
+}
+
 export function Suite() {
   return (
-    <section id="suite" className="py-28 md:py-40 bg-surface">
-      <div className="max-w-[1040px] mx-auto px-6 md:px-12">
+    <section id="suite" className="relative py-28 md:py-40 bg-surface overflow-hidden">
+      <SuiteAmbientCanvas />
+      <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
         <Reveal>
           <SectionLabel>The Suite</SectionLabel>
           <h2 className="font-display text-[1.75rem] md:text-[2.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary max-w-[520px] mb-20">

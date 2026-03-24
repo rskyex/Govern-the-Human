@@ -104,8 +104,42 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
       const vmin = Math.min(w, h)
       ctx.clearRect(0, 0, w, h)
 
-      const s = vmin / 420
-      const cx = w * 0.82 + Math.sin(t * 0.82 + depth * 1.5) * 2
+      // ── Supporting objects per layer ──
+
+      // Orb — positioned differently per layer
+      const orbR = vmin * (0.055 - depth * 0.008)
+      const orbX = w * (0.12 + depth * 0.06) + Math.cos(t * (0.42 + depth * 0.05) + depth * 2) * orbR * 0.5
+      const orbY = h * (0.3 + depth * 0.15) + Math.sin(t * (0.38 + depth * 0.04) + depth * 2) * orbR * 0.4
+      ctx.save(); ctx.translate(orbX, orbY)
+      ctx.beginPath(); ctx.arc(0, 0, orbR, 0, Math.PI * 2)
+      const og = ctx.createRadialGradient(-orbR * 0.18, -orbR * 0.2, 0, 0, 0, orbR)
+      og.addColorStop(0, `rgba(91,164,201,${0.032 * opMul})`); og.addColorStop(0.5, `rgba(91,164,201,${0.014 * opMul})`)
+      og.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = og; ctx.fill()
+      ctx.strokeStyle = `rgba(145,195,225,${0.055 * opMul})`; ctx.lineWidth = 0.6; ctx.stroke()
+      ctx.beginPath(); ctx.arc(0, 0, orbR * 0.6, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(139,126,184,${0.02 * opMul})`; ctx.lineWidth = 0.3; ctx.stroke()
+      ctx.restore()
+
+      // Ring fragment — arc, not full circle. Gets more enclosing with depth.
+      const ringR = vmin * (0.12 + depth * 0.04)
+      const ringX = w * (0.92 - depth * 0.04) + Math.sin(t * 0.62 + depth) * 2
+      const ringY = h * 0.5 + Math.cos(t * 0.52 + depth) * 2
+      const arcSpan = Math.PI * (0.6 + depth * 0.4) // deeper = more enclosing
+      const arcStart = -Math.PI * 0.5 + t * (0.08 + depth * 0.02) + depth * 1.2
+      ctx.save(); ctx.translate(ringX, ringY)
+      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.05 * opMul})`; ctx.shadowBlur = 8
+      ctx.beginPath(); ctx.arc(0, 0, ringR, arcStart, arcStart + arcSpan)
+      ctx.strokeStyle = `rgba(91,164,201,${0.04 * opMul})`; ctx.lineWidth = ringR * 0.06
+      ctx.lineCap = 'round'; ctx.stroke(); ctx.restore()
+      // Inner arc
+      ctx.beginPath(); ctx.arc(0, 0, ringR * 0.78, arcStart + 0.15, arcStart + arcSpan - 0.15)
+      ctx.strokeStyle = `rgba(139,126,184,${0.02 * opMul})`; ctx.lineWidth = ringR * 0.02
+      ctx.lineCap = 'round'; ctx.stroke()
+      ctx.restore()
+
+      // ── Primary form — larger, right side ──
+      const s = vmin / 320
+      const cx = w * 0.78 + Math.sin(t * 0.82 + depth * 1.5) * 2
       const cy = h * 0.5 + Math.sin(t * 1.05 + depth * 1.2) * 4
 
       ctx.save()

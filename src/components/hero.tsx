@@ -633,16 +633,24 @@ export function Hero() {
       }
       ctx.restore()
 
+      // ── Ghost echo — distant, behind everything, fainter ──
+      drawGhost(ctx, w * 0.62, h * 0.55, vmin / 900, t - 0.5)
+
       // ── Ghost — dominant, left-of-centre ──
       drawGhost(ctx, w * 0.34, h * 0.28, vmin / 520, t)
 
       // ── Ring — right side ──
       drawRing(ctx, w * 0.76, h * 0.48, vmin * 0.2, t)
 
-      // ── Orbs — 3 at different depths ──
+      // ── Second ring — smaller, upper area, partially off-screen ──
+      drawRing(ctx, w * 0.18, h * 0.08, vmin * 0.12, t + 3.0)
+
+      // ── Orbs — 5 at different depths ──
       drawOrb(ctx, w * 0.12, h * 0.22, vmin * 0.08, t, 0)
       drawOrb(ctx, w * 0.58, h * 0.16, vmin * 0.055, t, 2.1)
       drawOrb(ctx, w * 0.83, h * 0.78, vmin * 0.042, t, 4.3)
+      drawOrb(ctx, w * 0.05, h * 0.72, vmin * 0.035, t, 5.8)
+      drawOrb(ctx, w * 0.92, h * 0.32, vmin * 0.03, t, 7.2)
     }
 
     resize()
