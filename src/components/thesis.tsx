@@ -55,51 +55,78 @@ function ThesisCanvas() {
       ctx.translate(hx, hy)
       ctx.rotate(tilt)
 
-      // Glow
+      // Subsurface glow
       ctx.save()
-      ctx.shadowColor = 'rgba(91,164,201,0.1)'
-      ctx.shadowBlur = 20 * headS
+      ctx.shadowColor = 'rgba(91,164,201,0.12)'
+      ctx.shadowBlur = 22 * headS
       drawCranialProfile(ctx, headS)
-      ctx.strokeStyle = 'rgba(91,164,201,0.01)'
-      ctx.lineWidth = 1
+      ctx.strokeStyle = 'rgba(91,164,201,0.006)'
+      ctx.lineWidth = 2
       ctx.stroke()
       ctx.restore()
 
-      // Fill
+      // Primary subsurface fill
       drawCranialProfile(ctx, headS)
       const fg = ctx.createRadialGradient(10 * headS, -20 * headS, 0, 0, 0, 95 * headS)
-      fg.addColorStop(0, 'rgba(91,164,201,0.04)')
-      fg.addColorStop(0.5, 'rgba(91,164,201,0.02)')
-      fg.addColorStop(1, 'rgba(91,164,201,0.006)')
+      fg.addColorStop(0, 'rgba(91,164,201,0.045)')
+      fg.addColorStop(0.35, 'rgba(91,164,201,0.025)')
+      fg.addColorStop(0.7, 'rgba(91,164,201,0.01)')
+      fg.addColorStop(1, 'rgba(91,164,201,0.003)')
       ctx.fillStyle = fg
       ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.09)'
+
+      // Secondary subsurface — colour shift
+      drawCranialProfile(ctx, headS * 0.9)
+      const fg2 = ctx.createRadialGradient(-15 * headS, 10 * headS, 0, 0, 0, 70 * headS)
+      fg2.addColorStop(0, 'rgba(130,160,210,0.015)')
+      fg2.addColorStop(1, 'rgba(91,164,201,0)')
+      ctx.fillStyle = fg2
+      ctx.fill()
+
+      // Rim edge — surface tension
+      drawCranialProfile(ctx, headS)
+      ctx.strokeStyle = 'rgba(145,195,225,0.1)'
       ctx.lineWidth = 1.2
       ctx.stroke()
+      // Inner tension line
+      drawCranialProfile(ctx, headS * 0.97)
+      ctx.strokeStyle = 'rgba(180,215,235,0.035)'
+      ctx.lineWidth = 0.3
+      ctx.stroke()
 
-      // Inner shells — each lagging slightly
+      // Frosted inner shells — filled membranes, each lagging
       const shells = [0.8, 0.6, 0.42]
-      const colors = ['rgba(139,126,184,0.05)', 'rgba(91,164,201,0.03)', 'rgba(139,126,184,0.018)']
+      const fillOps = [0.012, 0.006, 0.003]
+      const strokeOps = [0.045, 0.025, 0.015]
+      const shellColors = ['139,126,184', '91,164,201', '139,126,184']
       shells.forEach((sc, i) => {
         const lag = Math.sin(t * 0.82 - 0.1 * (i + 1)) * 1.5
         ctx.save()
         ctx.translate(lag, Math.cos(t * 1.05 - 0.08 * (i + 1)) * 1)
         drawCranialProfile(ctx, headS * sc)
-        ctx.strokeStyle = colors[i]
-        ctx.lineWidth = 0.6 - i * 0.1
+        ctx.fillStyle = `rgba(${shellColors[i]},${fillOps[i]})`
+        ctx.fill()
+        ctx.strokeStyle = `rgba(${shellColors[i]},${strokeOps[i]})`
+        ctx.lineWidth = 0.55 - i * 0.1
         ctx.stroke()
         ctx.restore()
       })
 
-      // Highlight
+      // Caustic highlights (clipped)
       ctx.save()
       drawCranialProfile(ctx, headS)
       ctx.clip()
-      const hl = ctx.createRadialGradient(-10 * headS, -40 * headS, 0, -10 * headS, -40 * headS, 35 * headS)
-      hl.addColorStop(0, 'rgba(255,255,255,0.07)')
+      const hl = ctx.createRadialGradient(-10 * headS, -40 * headS, 0, -10 * headS, -40 * headS, 30 * headS)
+      hl.addColorStop(0, 'rgba(255,255,255,0.09)')
+      hl.addColorStop(0.3, 'rgba(255,255,255,0.03)')
       hl.addColorStop(1, 'rgba(255,255,255,0)')
       ctx.fillStyle = hl
       ctx.fillRect(-55 * headS, -100 * headS, 110 * headS, 90 * headS)
+      const hl2 = ctx.createRadialGradient(20 * headS, 25 * headS, 0, 20 * headS, 25 * headS, 18 * headS)
+      hl2.addColorStop(0, 'rgba(255,255,255,0.03)')
+      hl2.addColorStop(1, 'rgba(255,255,255,0)')
+      ctx.fillStyle = hl2
+      ctx.fillRect(0, 10 * headS, 50 * headS, 40 * headS)
       ctx.restore()
 
       ctx.restore()
@@ -114,16 +141,26 @@ function ThesisCanvas() {
         ctx.save()
         ctx.translate(ox, oy)
 
+        // Subsurface fill
         ctx.beginPath()
         ctx.arc(0, 0, or, 0, Math.PI * 2)
         const og = ctx.createRadialGradient(-or * 0.2, -or * 0.25, 0, 0, 0, or)
-        og.addColorStop(0, 'rgba(91,164,201,0.035)')
-        og.addColorStop(0.5, 'rgba(91,164,201,0.015)')
-        og.addColorStop(1, 'rgba(91,164,201,0.004)')
+        og.addColorStop(0, 'rgba(91,164,201,0.04)')
+        og.addColorStop(0.4, 'rgba(91,164,201,0.018)')
+        og.addColorStop(1, 'rgba(91,164,201,0.003)')
         ctx.fillStyle = og
         ctx.fill()
-        ctx.strokeStyle = 'rgba(91,164,201,0.06)'
+        // Rim
+        ctx.strokeStyle = 'rgba(145,195,225,0.07)'
         ctx.lineWidth = 0.8
+        ctx.stroke()
+        // Frosted inner shell
+        ctx.beginPath()
+        ctx.arc(0, 0, or * 0.65, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(139,126,184,0.006)'
+        ctx.fill()
+        ctx.strokeStyle = 'rgba(139,126,184,0.025)'
+        ctx.lineWidth = 0.4
         ctx.stroke()
 
         ctx.restore()

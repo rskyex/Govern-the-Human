@@ -77,115 +77,165 @@ function drawGhost(
   ctx.translate(cx + driftX, cy + floatY)
   ctx.scale(breathe * deformX, breathe * deformY)
 
-  // ── Torso ──
+  // ── Torso — translucent gel / blown glass material ──
   ctx.save()
   ctx.translate(0, 50 * s)
 
-  // Luminous edge glow
+  // Subsurface glow — soft light diffusing through the volume
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.12)'
-  ctx.shadowBlur = 18 * s
+  ctx.shadowColor = 'rgba(91,164,201,0.14)'
+  ctx.shadowBlur = 22 * s
   torsoPath(ctx, s)
-  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
-  ctx.lineWidth = 2
+  ctx.strokeStyle = 'rgba(91,164,201,0.008)'
+  ctx.lineWidth = 3
   ctx.stroke()
   ctx.restore()
 
-  // Main fill — dissolves toward waist
+  // Layered subsurface fill — two offset gradients for depth
   torsoPath(ctx, s)
-  const tg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  tg.addColorStop(0, 'rgba(91,164,201,0.05)')
-  tg.addColorStop(0.35, 'rgba(91,164,201,0.032)')
-  tg.addColorStop(0.7, 'rgba(91,164,201,0.012)')
+  const tg = ctx.createLinearGradient(-20 * s, 0, 20 * s, 192 * s)
+  tg.addColorStop(0, 'rgba(91,164,201,0.055)')
+  tg.addColorStop(0.25, 'rgba(91,164,201,0.038)')
+  tg.addColorStop(0.6, 'rgba(91,164,201,0.015)')
   tg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg
   ctx.fill()
 
-  // Edge stroke — fades at waist
+  // Second subsurface layer — warmer, offset centre
+  torsoPath(ctx, s * 0.94)
+  const tg2 = ctx.createRadialGradient(8 * s, 40 * s, 0, 0, 60 * s, 90 * s)
+  tg2.addColorStop(0, 'rgba(120,170,210,0.02)')
+  tg2.addColorStop(0.5, 'rgba(91,164,201,0.008)')
+  tg2.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.fillStyle = tg2
+  ctx.fill()
+
+  // Rim edge — bright at shoulders, fading at waist (surface tension)
   torsoPath(ctx, s)
   const eg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  eg.addColorStop(0, 'rgba(91,164,201,0.1)')
-  eg.addColorStop(0.5, 'rgba(91,164,201,0.05)')
+  eg.addColorStop(0, 'rgba(145,195,225,0.12)')
+  eg.addColorStop(0.3, 'rgba(91,164,201,0.07)')
+  eg.addColorStop(0.6, 'rgba(91,164,201,0.025)')
   eg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.strokeStyle = eg
-  ctx.lineWidth = 1.2
+  ctx.lineWidth = 1.3
   ctx.stroke()
 
-  // Inner echo — lags behind outer form
+  // Inner tension line — thinner, brighter, just inside the rim
+  torsoPath(ctx, s * 0.97)
+  const itl = ctx.createLinearGradient(0, 0, 0, 186 * s)
+  itl.addColorStop(0, 'rgba(180,215,235,0.06)')
+  itl.addColorStop(0.4, 'rgba(145,195,225,0.025)')
+  itl.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.strokeStyle = itl
+  ctx.lineWidth = 0.4
+  ctx.stroke()
+
+  // Frosted inner echo — filled, not just stroked
   ctx.save()
   ctx.translate(echoOffsetX * 0.7, echoOffsetY * 0.7)
   torsoPath(ctx, s * 0.86)
-  const ig = ctx.createLinearGradient(0, 0, 0, 165 * s)
-  ig.addColorStop(0, 'rgba(139,126,184,0.04)')
-  ig.addColorStop(0.6, 'rgba(139,126,184,0.015)')
-  ig.addColorStop(1, 'rgba(139,126,184,0)')
-  ctx.strokeStyle = ig
-  ctx.lineWidth = 0.7
+  const ifg = ctx.createLinearGradient(0, 0, 0, 165 * s)
+  ifg.addColorStop(0, 'rgba(139,126,184,0.018)')
+  ifg.addColorStop(0.5, 'rgba(139,126,184,0.008)')
+  ifg.addColorStop(1, 'rgba(139,126,184,0)')
+  ctx.fillStyle = ifg
+  ctx.fill()
+  ctx.strokeStyle = 'rgba(139,126,184,0.035)'
+  ctx.lineWidth = 0.6
   ctx.stroke()
   ctx.restore()
 
   ctx.restore()
 
-  // ── Head ──
+  // ── Head — blown glass with subsurface scattering ──
 
-  // Slight tilt
   ctx.save()
   ctx.rotate(headTilt)
 
-  // Halo glow
+  // Outer glow halo
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.15)'
-  ctx.shadowBlur = 24 * s
+  ctx.shadowColor = 'rgba(91,164,201,0.16)'
+  ctx.shadowBlur = 28 * s
   headPath(ctx, s)
-  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
-  ctx.lineWidth = 1
+  ctx.strokeStyle = 'rgba(91,164,201,0.006)'
+  ctx.lineWidth = 2
   ctx.stroke()
   ctx.restore()
 
-  // Main fill
+  // Primary subsurface fill — radial, bright core
   headPath(ctx, s)
-  const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, -2 * s, 56 * s)
-  hg.addColorStop(0, 'rgba(91,164,201,0.06)')
-  hg.addColorStop(0.4, 'rgba(91,164,201,0.035)')
-  hg.addColorStop(0.8, 'rgba(91,164,201,0.015)')
+  const hg = ctx.createRadialGradient(0, -8 * s, 0, 0, -2 * s, 56 * s)
+  hg.addColorStop(0, 'rgba(91,164,201,0.065)')
+  hg.addColorStop(0.3, 'rgba(91,164,201,0.04)')
+  hg.addColorStop(0.65, 'rgba(91,164,201,0.018)')
   hg.addColorStop(1, 'rgba(91,164,201,0.005)')
   ctx.fillStyle = hg
   ctx.fill()
 
-  // Edge
+  // Secondary subsurface — offset, warmer, creates colour shift
+  headPath(ctx, s * 0.92)
+  const hg2 = ctx.createRadialGradient(12 * s, 8 * s, 0, 5 * s, 0, 42 * s)
+  hg2.addColorStop(0, 'rgba(130,160,210,0.025)')
+  hg2.addColorStop(0.5, 'rgba(120,145,200,0.01)')
+  hg2.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.fillStyle = hg2
+  ctx.fill()
+
+  // Rim edge — bright, taut (surface tension of liquid glass)
   headPath(ctx, s)
-  ctx.strokeStyle = 'rgba(91,164,201,0.13)'
+  ctx.strokeStyle = 'rgba(145,195,225,0.14)'
   ctx.lineWidth = 1.4
   ctx.stroke()
 
-  // Inner echo 1 — lags behind
+  // Inner tension line
+  headPath(ctx, s * 0.97)
+  ctx.strokeStyle = 'rgba(180,215,235,0.05)'
+  ctx.lineWidth = 0.35
+  ctx.stroke()
+
+  // Frosted inner echo 1 — filled membrane
   ctx.save()
   ctx.translate(echoOffsetX, echoOffsetY)
   headPath(ctx, s * 0.76)
-  ctx.strokeStyle = 'rgba(139,126,184,0.065)'
-  ctx.lineWidth = 0.8
+  const ie1 = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 42 * s)
+  ie1.addColorStop(0, 'rgba(139,126,184,0.02)')
+  ie1.addColorStop(1, 'rgba(139,126,184,0.005)')
+  ctx.fillStyle = ie1
+  ctx.fill()
+  ctx.strokeStyle = 'rgba(139,126,184,0.055)'
+  ctx.lineWidth = 0.7
   ctx.stroke()
   ctx.restore()
 
-  // Inner echo 2 — lags more
+  // Frosted inner echo 2 — deeper, dimmer
   ctx.save()
   ctx.translate(echoOffsetX * 1.5, echoOffsetY * 1.5)
   headPath(ctx, s * 0.52)
-  ctx.strokeStyle = 'rgba(91,164,201,0.025)'
-  ctx.lineWidth = 0.5
+  ctx.fillStyle = 'rgba(91,164,201,0.008)'
+  ctx.fill()
+  ctx.strokeStyle = 'rgba(91,164,201,0.022)'
+  ctx.lineWidth = 0.4
   ctx.stroke()
   ctx.restore()
 
-  // Glass highlight (clipped)
+  // Primary caustic highlight (clipped) — upper left
   ctx.save()
   headPath(ctx, s)
   ctx.clip()
-  const hl = ctx.createRadialGradient(-14 * s, -24 * s, 0, -14 * s, -24 * s, 30 * s)
-  hl.addColorStop(0, 'rgba(255,255,255,0.12)')
-  hl.addColorStop(0.4, 'rgba(255,255,255,0.04)')
+  const hl = ctx.createRadialGradient(-14 * s, -24 * s, 0, -14 * s, -24 * s, 28 * s)
+  hl.addColorStop(0, 'rgba(255,255,255,0.14)')
+  hl.addColorStop(0.3, 'rgba(255,255,255,0.05)')
+  hl.addColorStop(0.7, 'rgba(255,255,255,0.01)')
   hl.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hl
   ctx.fillRect(-50 * s, -55 * s, 100 * s, 80 * s)
+  // Secondary caustic — lower right (refraction)
+  const hl2 = ctx.createRadialGradient(18 * s, 20 * s, 0, 18 * s, 20 * s, 16 * s)
+  hl2.addColorStop(0, 'rgba(255,255,255,0.04)')
+  hl2.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = hl2
+  ctx.fillRect(0, 5 * s, 40 * s, 35 * s)
   ctx.restore()
 
   ctx.restore() // end head tilt
@@ -247,32 +297,50 @@ function drawRing(
   ctx.translate(cx + driftX, cy + driftY)
   ctx.scale(tiltX * pulse, (1 / tiltX) * pulse) // tilt preserves area
 
-  // ── Disc fill ──
+  // ── Disc body — frosted glass fill ──
   ctx.beginPath()
   ctx.arc(0, 0, r * 1.02, 0, Math.PI * 2)
-  const df = ctx.createRadialGradient(0, 0, r * 0.3, 0, 0, r * 1.02)
-  df.addColorStop(0, 'rgba(91,164,201,0.012)')
-  df.addColorStop(0.6, 'rgba(91,164,201,0.006)')
+  const df = ctx.createRadialGradient(-r * 0.15, -r * 0.15, 0, 0, 0, r * 1.02)
+  df.addColorStop(0, 'rgba(91,164,201,0.016)')
+  df.addColorStop(0.4, 'rgba(91,164,201,0.008)')
+  df.addColorStop(0.8, 'rgba(91,164,201,0.003)')
   df.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = df
   ctx.fill()
 
-  // ── Outer band — luminous ──
+  // ── Outer band — frosted glass tubing with glow ──
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.08)'
-  ctx.shadowBlur = 12
+  ctx.shadowColor = 'rgba(91,164,201,0.1)'
+  ctx.shadowBlur = 16
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.06)'
+  ctx.strokeStyle = 'rgba(91,164,201,0.055)'
   ctx.lineWidth = r * 0.1
   ctx.stroke()
   ctx.restore()
+  // Inner rim of outer band — surface tension
+  ctx.beginPath()
+  ctx.arc(0, 0, r - r * 0.05, 0, Math.PI * 2)
+  ctx.strokeStyle = 'rgba(145,195,225,0.04)'
+  ctx.lineWidth = 0.4
+  ctx.stroke()
+  // Outer rim of outer band
+  ctx.beginPath()
+  ctx.arc(0, 0, r + r * 0.05, 0, Math.PI * 2)
+  ctx.strokeStyle = 'rgba(145,195,225,0.03)'
+  ctx.lineWidth = 0.3
+  ctx.stroke()
 
-  // Middle band
+  // Middle band — frosted
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.78, 0, Math.PI * 2)
   ctx.strokeStyle = 'rgba(91,164,201,0.03)'
   ctx.lineWidth = r * 0.03
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.arc(0, 0, r * 0.78, 0, Math.PI * 2)
+  ctx.strokeStyle = 'rgba(145,195,225,0.015)'
+  ctx.lineWidth = 0.3
   ctx.stroke()
 
   // Inner band
@@ -396,46 +464,65 @@ function drawOrb(
   ctx.translate(cx + dx, cy + dy)
   ctx.scale(breathe, breathe)
 
-  // Glow
+  // Subsurface glow
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.06)'
-  ctx.shadowBlur = r * 0.6
+  ctx.shadowColor = 'rgba(91,164,201,0.08)'
+  ctx.shadowBlur = r * 0.7
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
-  ctx.lineWidth = 1
+  ctx.strokeStyle = 'rgba(91,164,201,0.006)'
+  ctx.lineWidth = 2
   ctx.stroke()
   ctx.restore()
 
-  // Main sphere fill
+  // Primary subsurface fill — offset highlight centre
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
   const sg = ctx.createRadialGradient(-r * 0.18, -r * 0.22, 0, 0, 0, r)
-  sg.addColorStop(0, 'rgba(91,164,201,0.045)')
-  sg.addColorStop(0.4, 'rgba(91,164,201,0.022)')
-  sg.addColorStop(0.8, 'rgba(91,164,201,0.008)')
+  sg.addColorStop(0, 'rgba(91,164,201,0.05)')
+  sg.addColorStop(0.3, 'rgba(91,164,201,0.028)')
+  sg.addColorStop(0.7, 'rgba(91,164,201,0.01)')
   sg.addColorStop(1, 'rgba(91,164,201,0.003)')
   ctx.fillStyle = sg
   ctx.fill()
 
-  // Edge
+  // Secondary subsurface — warmer offset
+  ctx.beginPath()
+  ctx.arc(0, 0, r * 0.88, 0, Math.PI * 2)
+  const sg2 = ctx.createRadialGradient(r * 0.12, r * 0.1, 0, 0, 0, r * 0.88)
+  sg2.addColorStop(0, 'rgba(130,165,210,0.015)')
+  sg2.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.fillStyle = sg2
+  ctx.fill()
+
+  // Rim edge — taut, bright
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.08)'
+  ctx.strokeStyle = 'rgba(145,195,225,0.09)'
   ctx.lineWidth = 1
   ctx.stroke()
+  // Inner tension line
+  ctx.beginPath()
+  ctx.arc(0, 0, r * 0.97, 0, Math.PI * 2)
+  ctx.strokeStyle = 'rgba(180,215,235,0.03)'
+  ctx.lineWidth = 0.3
+  ctx.stroke()
 
-  // Inner shells — two
+  // Frosted inner shells
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.68, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(139,126,184,0.035)'
-  ctx.lineWidth = 0.6
+  ctx.fillStyle = 'rgba(139,126,184,0.008)'
+  ctx.fill()
+  ctx.strokeStyle = 'rgba(139,126,184,0.03)'
+  ctx.lineWidth = 0.5
   ctx.stroke()
 
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.42, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.02)'
-  ctx.lineWidth = 0.4
+  ctx.fillStyle = 'rgba(91,164,201,0.005)'
+  ctx.fill()
+  ctx.strokeStyle = 'rgba(91,164,201,0.018)'
+  ctx.lineWidth = 0.35
   ctx.stroke()
 
   // Internal traces — very slow orbital drift
@@ -460,17 +547,25 @@ function drawOrb(
     ctx.stroke()
   }
 
-  // Highlight — clipped to sphere
+  // Caustic highlights — clipped to sphere
   ctx.save()
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
   ctx.clip()
-  const hl = ctx.createRadialGradient(-r * 0.25, -r * 0.3, 0, -r * 0.25, -r * 0.3, r * 0.55)
-  hl.addColorStop(0, 'rgba(255,255,255,0.11)')
-  hl.addColorStop(0.35, 'rgba(255,255,255,0.03)')
+  // Primary caustic — upper left
+  const hl = ctx.createRadialGradient(-r * 0.25, -r * 0.3, 0, -r * 0.25, -r * 0.3, r * 0.5)
+  hl.addColorStop(0, 'rgba(255,255,255,0.13)')
+  hl.addColorStop(0.25, 'rgba(255,255,255,0.04)')
+  hl.addColorStop(0.6, 'rgba(255,255,255,0.01)')
   hl.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hl
   ctx.fillRect(-r, -r, r * 2, r * 2)
+  // Secondary caustic — lower right refraction
+  const hl2 = ctx.createRadialGradient(r * 0.2, r * 0.22, 0, r * 0.2, r * 0.22, r * 0.25)
+  hl2.addColorStop(0, 'rgba(255,255,255,0.035)')
+  hl2.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = hl2
+  ctx.fillRect(0, 0, r, r)
   ctx.restore()
 
   ctx.restore()

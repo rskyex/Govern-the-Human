@@ -74,51 +74,84 @@ function drawSinkingGhost(
   const depthRatio = Math.max(0, Math.min(1, (cy / h)))
   const fadeMultiplier = 1 - depthRatio * 0.5
 
-  // ── Torso ──
+  // ── Torso — gel material, depth-faded ──
+  const f = fadeMultiplier
   ctx.save()
   ctx.translate(0, 50 * s)
 
-  drawTorso(ctx, s * 1.06)
-  ctx.fillStyle = `rgba(91,164,201,${0.01 * fadeMultiplier})`
-  ctx.fill()
-
+  // Subsurface glow
+  ctx.save()
+  ctx.shadowColor = `rgba(91,164,201,${0.1 * f})`
+  ctx.shadowBlur = 16 * s
   drawTorso(ctx, s)
-  const tg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  tg.addColorStop(0, `rgba(91,164,201,${0.04 * fadeMultiplier})`)
-  tg.addColorStop(0.5, `rgba(91,164,201,${0.02 * fadeMultiplier})`)
+  ctx.strokeStyle = 'rgba(91,164,201,0.005)'
+  ctx.lineWidth = 2
+  ctx.stroke()
+  ctx.restore()
+
+  // Primary fill
+  drawTorso(ctx, s)
+  const tg = ctx.createLinearGradient(-15 * s, 0, 15 * s, 192 * s)
+  tg.addColorStop(0, `rgba(91,164,201,${0.048 * f})`)
+  tg.addColorStop(0.3, `rgba(91,164,201,${0.028 * f})`)
+  tg.addColorStop(0.65, `rgba(91,164,201,${0.01 * f})`)
   tg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg
   ctx.fill()
-  ctx.strokeStyle = `rgba(91,164,201,${0.06 * fadeMultiplier})`
+
+  // Rim — surface tension
+  drawTorso(ctx, s)
+  const teg = ctx.createLinearGradient(0, 0, 0, 192 * s)
+  teg.addColorStop(0, `rgba(145,195,225,${0.09 * f})`)
+  teg.addColorStop(0.4, `rgba(91,164,201,${0.04 * f})`)
+  teg.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.strokeStyle = teg
   ctx.lineWidth = 1.2
   ctx.stroke()
 
+  // Frosted inner echo
   drawTorso(ctx, s * 0.88)
-  ctx.strokeStyle = `rgba(139,126,184,${0.03 * fadeMultiplier})`
-  ctx.lineWidth = 0.6
+  ctx.fillStyle = `rgba(139,126,184,${0.01 * f})`
+  ctx.fill()
+  ctx.strokeStyle = `rgba(139,126,184,${0.03 * f})`
+  ctx.lineWidth = 0.5
   ctx.stroke()
 
   ctx.restore()
 
-  // ── Head ──
-  drawHead(ctx, s * 1.1)
-  ctx.fillStyle = `rgba(91,164,201,${0.012 * fadeMultiplier})`
-  ctx.fill()
-
+  // ── Head — blown glass, depth-faded ──
+  // Glow
+  ctx.save()
+  ctx.shadowColor = `rgba(91,164,201,${0.12 * f})`
+  ctx.shadowBlur = 22 * s
   drawHead(ctx, s)
-  const hg = ctx.createRadialGradient(0, 0, 0, 0, 0, 52 * s)
-  hg.addColorStop(0, `rgba(91,164,201,${0.05 * fadeMultiplier})`)
-  hg.addColorStop(0.6, `rgba(91,164,201,${0.025 * fadeMultiplier})`)
-  hg.addColorStop(1, `rgba(91,164,201,${0.01 * fadeMultiplier})`)
+  ctx.strokeStyle = 'rgba(91,164,201,0.005)'
+  ctx.lineWidth = 1.5
+  ctx.stroke()
+  ctx.restore()
+
+  // Primary subsurface
+  drawHead(ctx, s)
+  const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, 0, 52 * s)
+  hg.addColorStop(0, `rgba(91,164,201,${0.055 * f})`)
+  hg.addColorStop(0.4, `rgba(91,164,201,${0.03 * f})`)
+  hg.addColorStop(0.8, `rgba(91,164,201,${0.012 * f})`)
+  hg.addColorStop(1, `rgba(91,164,201,${0.003 * f})`)
   ctx.fillStyle = hg
   ctx.fill()
-  ctx.strokeStyle = `rgba(91,164,201,${0.1 * fadeMultiplier})`
+
+  // Rim
+  drawHead(ctx, s)
+  ctx.strokeStyle = `rgba(145,195,225,${0.11 * f})`
   ctx.lineWidth = 1.3
   ctx.stroke()
 
+  // Frosted inner echo
   drawHead(ctx, s * 0.76)
-  ctx.strokeStyle = `rgba(139,126,184,${0.05 * fadeMultiplier})`
-  ctx.lineWidth = 0.7
+  ctx.fillStyle = `rgba(139,126,184,${0.008 * f})`
+  ctx.fill()
+  ctx.strokeStyle = `rgba(139,126,184,${0.04 * f})`
+  ctx.lineWidth = 0.6
   ctx.stroke()
 
   // ── Thought traces ──
