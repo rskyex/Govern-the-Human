@@ -55,23 +55,28 @@ function ObservatoryCanvas() {
 
     function draw() {
       if (!c || !ctx) return
-      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
-      const r = Math.min(w, h) * 0.38
-      const cx = w * 0.5 + Math.sin(t * 0.82) * 2
-      const cy = h * 0.5 + Math.cos(t * 0.68) * 2
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.00005
+      const r = Math.min(w, h) * 0.52
+      const cx = w * 0.5 + Math.sin(t * 0.33) * 2
+      const cy = h * 0.5 + Math.cos(t * 0.27) * 2
       ctx.clearRect(0, 0, w, h)
 
       ctx.save()
       ctx.translate(cx, cy)
 
+      // Shadow glow
+      ctx.save()
+      ctx.shadowColor = 'rgba(91,164,201,0.1)'; ctx.shadowBlur = 18
+
       // Ring bands
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.06)'; ctx.lineWidth = r * 0.08; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.1)'; ctx.lineWidth = r * 0.08; ctx.stroke()
+      ctx.restore()
       ctx.beginPath(); ctx.arc(0, 0, r * 0.76, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.03)'; ctx.lineWidth = r * 0.025; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.05)'; ctx.lineWidth = r * 0.025; ctx.stroke()
 
       // Markers
-      const rot = t * 0.12
+      const rot = t * 0.05
       ctx.save(); ctx.rotate(rot)
       for (let i = 0; i < 24; i++) {
         const a = (i / 24) * Math.PI * 2
@@ -80,18 +85,18 @@ function ObservatoryCanvas() {
         ctx.beginPath()
         ctx.moveTo(Math.cos(a) * (r - r * 0.04 - len), Math.sin(a) * (r - r * 0.04 - len))
         ctx.lineTo(Math.cos(a) * (r - r * 0.04), Math.sin(a) * (r - r * 0.04))
-        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.14 : 0.05})`
-        ctx.lineWidth = major ? 1.3 : 0.6; ctx.lineCap = 'round'; ctx.stroke()
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.22 : 0.08})`
+        ctx.lineWidth = major ? 1.69 : 0.78; ctx.lineCap = 'round'; ctx.stroke()
       }
       ctx.restore()
 
       // Hand
-      const ha = t * 0.18
+      const ha = t * 0.07
       ctx.beginPath(); ctx.moveTo(0, 0)
       ctx.lineTo(Math.cos(ha) * r * 0.68, Math.sin(ha) * r * 0.68)
-      ctx.strokeStyle = 'rgba(91,164,201,0.06)'; ctx.lineWidth = 0.8; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.1)'; ctx.lineWidth = 0.8; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(91,164,201,0.12)'; ctx.fill()
+      ctx.fillStyle = 'rgba(91,164,201,0.2)'; ctx.fill()
 
       ctx.restore()
     }
@@ -117,8 +122,8 @@ function DriftCanvas() {
 
     function draw() {
       if (!c || !ctx) return
-      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
-      const s = Math.min(w, h) / 340
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.00005
+      const s = Math.min(w, h) / 220
       ctx.clearRect(0, 0, w, h)
 
       ctx.save()
@@ -126,21 +131,21 @@ function DriftCanvas() {
 
       // 5 echoes of the same cranial profile, slowly drifting apart
       for (let i = 0; i < 5; i++) {
-        const spread = Math.sin(t * 0.524 + i * 0.3) * (3 + i * 2.5)
-        const vertDrift = Math.sin(t * 0.785 + i * 0.7) * (1 + i * 1.2)
+        const spread = Math.sin(t * 0.21 + i * 0.3) * (5 + i * 4)
+        const vertDrift = Math.sin(t * 0.314 + i * 0.7) * (1.6 + i * 2)
         const scale = 1 - i * 0.08
-        const op = 0.07 - i * 0.012
+        const op = 0.12 - i * 0.02
         const color = i % 2 === 0 ? '91,164,201' : '139,126,184'
 
         ctx.save()
         ctx.translate(spread, vertDrift)
         cranialProfile(ctx, s * scale)
         ctx.strokeStyle = `rgba(${color},${op})`
-        ctx.lineWidth = 0.7 - i * 0.08
+        ctx.lineWidth = 0.91 - i * 0.1
         ctx.stroke()
         if (i === 0) {
           const fg = ctx.createRadialGradient(10 * s, -20 * s, 0, 0, 0, 80 * s)
-          fg.addColorStop(0, 'rgba(91,164,201,0.02)')
+          fg.addColorStop(0, 'rgba(91,164,201,0.04)')
           fg.addColorStop(1, 'rgba(91,164,201,0)')
           ctx.fillStyle = fg
           ctx.fill()
@@ -172,24 +177,24 @@ function PlatformedCanvas() {
 
     function draw() {
       if (!c || !ctx) return
-      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
-      const s = Math.min(w, h) / 320
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.00005
+      const s = Math.min(w, h) / 210
       ctx.clearRect(0, 0, w, h)
 
-      const gap = 28 * s + Math.sin(t * 0.698) * 3 * s // gap oscillates
-      const floatY = Math.sin(t * 1.05) * 3
+      const gap = 35 * s + Math.sin(t * 0.28) * 3 * s // gap oscillates
+      const floatY = Math.sin(t * 0.42) * 3
 
       // Left-facing head
       ctx.save()
       ctx.translate(w * 0.5 - gap, h * 0.48 + floatY)
       headPath(ctx, s * 0.85)
       const lg = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 48 * s)
-      lg.addColorStop(0, 'rgba(91,164,201,0.04)')
-      lg.addColorStop(1, 'rgba(91,164,201,0.008)')
+      lg.addColorStop(0, 'rgba(91,164,201,0.068)')
+      lg.addColorStop(1, 'rgba(91,164,201,0.014)')
       ctx.fillStyle = lg; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.08)'; ctx.lineWidth = 1; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.136)'; ctx.lineWidth = 1; ctx.stroke()
       headPath(ctx, s * 0.62)
-      ctx.strokeStyle = 'rgba(139,126,184,0.04)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(139,126,184,0.068)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.restore()
 
       // Right-facing head (mirrored)
@@ -198,12 +203,12 @@ function PlatformedCanvas() {
       ctx.scale(-1, 1)
       headPath(ctx, s * 0.85)
       const rg = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 48 * s)
-      rg.addColorStop(0, 'rgba(91,164,201,0.035)')
-      rg.addColorStop(1, 'rgba(91,164,201,0.006)')
+      rg.addColorStop(0, 'rgba(91,164,201,0.06)')
+      rg.addColorStop(1, 'rgba(91,164,201,0.01)')
       ctx.fillStyle = rg; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.065)'; ctx.lineWidth = 1; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.11)'; ctx.lineWidth = 1; ctx.stroke()
       headPath(ctx, s * 0.62)
-      ctx.strokeStyle = 'rgba(139,126,184,0.03)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(139,126,184,0.051)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.restore()
 
       // Connecting arc between them — the feedback loop
@@ -211,10 +216,10 @@ function PlatformedCanvas() {
       ctx.translate(w * 0.5, h * 0.48 + floatY)
       ctx.beginPath()
       ctx.arc(0, -10 * s, gap + 20 * s, Math.PI * 0.15, Math.PI * 0.85)
-      ctx.strokeStyle = 'rgba(91,164,201,0.025)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.04)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.beginPath()
       ctx.arc(0, 10 * s, gap + 20 * s, -Math.PI * 0.85, -Math.PI * 0.15)
-      ctx.strokeStyle = 'rgba(139,126,184,0.02)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(139,126,184,0.032)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.restore()
     }
 
@@ -241,17 +246,17 @@ function SuiteAmbientCanvas() {
 
     function draw() {
       if (!c || !ctx) return
-      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.00005
       const vmin = Math.min(w, h)
       ctx.clearRect(0, 0, w, h)
 
       // ── Large ghost silhouette — right edge, tall, faint ──
-      const gs = vmin / 600
-      const gx = w * 0.88 + Math.sin(t * 0.74) * 3
-      const gy = h * 0.22 + Math.sin(t * 0.92) * 5
+      const gs = vmin / 380
+      const gx = w * 0.88 + Math.sin(t * 0.296) * 3
+      const gy = h * 0.22 + Math.sin(t * 0.368) * 5
       ctx.save()
       ctx.translate(gx, gy)
-      ctx.scale(1 + Math.sin(t * 1.57) * 0.003, 1 + Math.sin(t * 1.57) * 0.003)
+      ctx.scale(1 + Math.sin(t * 0.628) * 0.003, 1 + Math.sin(t * 0.628) * 0.003)
       // Torso
       ctx.save(); ctx.translate(0, 45 * gs)
       ctx.beginPath()
@@ -268,59 +273,59 @@ function SuiteAmbientCanvas() {
       ctx.bezierCurveTo(55 * gs, 28 * gs, 20 * gs, 22 * gs, 14 * gs, 18 * gs)
       ctx.lineTo(14 * gs, 0); ctx.closePath()
       const tg = ctx.createLinearGradient(0, 0, 0, 192 * gs)
-      tg.addColorStop(0, 'rgba(91,164,201,0.025)'); tg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
+      tg.addColorStop(0, 'rgba(91,164,201,0.0425)'); tg.addColorStop(0.5, 'rgba(91,164,201,0.02)')
       tg.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = tg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.04)'; ctx.lineWidth = 0.8; ctx.stroke()
+      ctx.strokeStyle = 'rgba(145,195,225,0.068)'; ctx.lineWidth = 1.04; ctx.stroke()
       ctx.restore()
       // Head
       headPath(ctx, gs)
       const hfg = ctx.createRadialGradient(0, -6 * gs, 0, 0, 0, 52 * gs)
-      hfg.addColorStop(0, 'rgba(91,164,201,0.03)'); hfg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
-      hfg.addColorStop(1, 'rgba(91,164,201,0.003)'); ctx.fillStyle = hfg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.055)'; ctx.lineWidth = 1; ctx.stroke()
-      headPath(ctx, gs * 0.72); ctx.strokeStyle = 'rgba(139,126,184,0.025)'; ctx.lineWidth = 0.5; ctx.stroke()
+      hfg.addColorStop(0, 'rgba(91,164,201,0.051)'); hfg.addColorStop(0.5, 'rgba(91,164,201,0.02)')
+      hfg.addColorStop(1, 'rgba(91,164,201,0.005)'); ctx.fillStyle = hfg; ctx.fill()
+      ctx.strokeStyle = 'rgba(145,195,225,0.094)'; ctx.lineWidth = 1.3; ctx.stroke()
+      headPath(ctx, gs * 0.72); ctx.strokeStyle = 'rgba(139,126,184,0.0425)'; ctx.lineWidth = 0.65; ctx.stroke()
       ctx.restore()
 
       // ── Governance ring — upper left area ──
-      const rr = vmin * 0.15
-      const rx = w * 0.08 + Math.sin(t * 0.82) * 2
-      const ry = h * 0.12 + Math.cos(t * 0.68) * 2
+      const rr = vmin * 0.24
+      const rx = w * 0.08 + Math.sin(t * 0.328) * 2
+      const ry = h * 0.12 + Math.cos(t * 0.272) * 2
       ctx.save(); ctx.translate(rx, ry)
-      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.06)'; ctx.shadowBlur = 10
+      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.1)'; ctx.shadowBlur = 13
       ctx.beginPath(); ctx.arc(0, 0, rr, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.035)'; ctx.lineWidth = rr * 0.07; ctx.stroke(); ctx.restore()
+      ctx.strokeStyle = 'rgba(91,164,201,0.06)'; ctx.lineWidth = rr * 0.07; ctx.stroke(); ctx.restore()
       ctx.beginPath(); ctx.arc(0, 0, rr * 0.74, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.018)'; ctx.lineWidth = rr * 0.02; ctx.stroke()
-      ctx.save(); ctx.rotate(t * 0.1)
+      ctx.strokeStyle = 'rgba(91,164,201,0.031)'; ctx.lineWidth = rr * 0.02; ctx.stroke()
+      ctx.save(); ctx.rotate(t * 0.04)
       for (let i = 0; i < 24; i++) {
         const a = (i / 24) * Math.PI * 2; const major = i % 6 === 0
         const len = major ? rr * 0.06 : rr * 0.025
         ctx.beginPath()
         ctx.moveTo(Math.cos(a) * (rr - rr * 0.035 - len), Math.sin(a) * (rr - rr * 0.035 - len))
         ctx.lineTo(Math.cos(a) * (rr - rr * 0.035), Math.sin(a) * (rr - rr * 0.035))
-        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.08 : 0.025})`; ctx.lineWidth = major ? 0.9 : 0.4
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.136 : 0.0425})`; ctx.lineWidth = major ? 1.17 : 0.52
         ctx.lineCap = 'round'; ctx.stroke()
       }
       ctx.restore(); ctx.restore()
 
       // ── 4 orbs scattered ──
       for (const orb of [
-        { x: 0.05, y: 0.48, r: 0.05, ph: 0 },
-        { x: 0.72, y: 0.08, r: 0.04, ph: 1.8 },
-        { x: 0.94, y: 0.7, r: 0.035, ph: 3.5 },
-        { x: 0.32, y: 0.92, r: 0.03, ph: 5.1 },
+        { x: 0.05, y: 0.48, r: 0.08, ph: 0 },
+        { x: 0.72, y: 0.08, r: 0.064, ph: 1.8 },
+        { x: 0.94, y: 0.7, r: 0.056, ph: 3.5 },
+        { x: 0.32, y: 0.92, r: 0.048, ph: 5.1 },
       ]) {
         const or = vmin * orb.r
-        const oa = t * (0.4 + orb.ph * 0.015) + orb.ph
+        const oa = t * (0.16 + orb.ph * 0.006) + orb.ph
         ctx.save()
         ctx.translate(w * orb.x + Math.cos(oa) * or * 0.6, h * orb.y + Math.sin(oa) * or * 0.4)
         ctx.beginPath(); ctx.arc(0, 0, or, 0, Math.PI * 2)
         const og = ctx.createRadialGradient(-or * 0.18, -or * 0.2, 0, 0, 0, or)
-        og.addColorStop(0, 'rgba(91,164,201,0.03)'); og.addColorStop(0.5, 'rgba(91,164,201,0.012)')
-        og.addColorStop(1, 'rgba(91,164,201,0.002)'); ctx.fillStyle = og; ctx.fill()
-        ctx.strokeStyle = 'rgba(145,195,225,0.045)'; ctx.lineWidth = 0.6; ctx.stroke()
+        og.addColorStop(0, 'rgba(91,164,201,0.051)'); og.addColorStop(0.5, 'rgba(91,164,201,0.02)')
+        og.addColorStop(1, 'rgba(91,164,201,0.0034)'); ctx.fillStyle = og; ctx.fill()
+        ctx.strokeStyle = 'rgba(145,195,225,0.077)'; ctx.lineWidth = 0.78; ctx.stroke()
         ctx.beginPath(); ctx.arc(0, 0, or * 0.6, 0, Math.PI * 2)
-        ctx.strokeStyle = 'rgba(139,126,184,0.018)'; ctx.lineWidth = 0.3; ctx.stroke()
+        ctx.strokeStyle = 'rgba(139,126,184,0.031)'; ctx.lineWidth = 0.39; ctx.stroke()
         ctx.restore()
       }
     }

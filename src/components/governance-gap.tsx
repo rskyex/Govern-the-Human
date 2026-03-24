@@ -59,12 +59,12 @@ function drawSinkingGhost(
   t: number,
   h: number,
 ) {
-  // Very slow vertical float (~60s) and drift (~80s)
-  const drift = Math.sin(t * 0.785) * 3 + Math.sin(t * 0.47) * 1.5
-  const floatY = Math.sin(t * 1.05) * 5 + Math.cos(t * 0.62) * 2
-  const breathe = 1 + Math.sin(t * 1.57) * 0.004 + Math.sin(t * 1.05) * 0.002
-  // Subtle deformation (~90s)
-  const deformX = 1 + Math.sin(t * 0.698) * 0.003
+  // Glacial vertical float (~140s) and drift (~175s)
+  const drift = Math.sin(t * 0.314) * 6 + Math.sin(t * 0.19) * 3
+  const floatY = Math.sin(t * 0.42) * 10 + Math.cos(t * 0.25) * 4
+  const breathe = 1 + Math.sin(t * 0.628) * 0.008 + Math.sin(t * 0.42) * 0.004 + Math.sin(t * 0.12) * 0.005
+  // Asymmetric deformation (~200s, ~280s)
+  const deformX = 1 + Math.sin(t * 0.28) * 0.008
 
   ctx.save()
   ctx.translate(cx + drift, cy + floatY)
@@ -81,8 +81,8 @@ function drawSinkingGhost(
 
   // Subsurface glow
   ctx.save()
-  ctx.shadowColor = `rgba(91,164,201,${0.1 * f})`
-  ctx.shadowBlur = 16 * s
+  ctx.shadowColor = `rgba(91,164,201,${0.16 * f})`
+  ctx.shadowBlur = 28 * s
   drawTorso(ctx, s)
   ctx.strokeStyle = 'rgba(91,164,201,0.005)'
   ctx.lineWidth = 2
@@ -92,9 +92,9 @@ function drawSinkingGhost(
   // Primary fill
   drawTorso(ctx, s)
   const tg = ctx.createLinearGradient(-15 * s, 0, 15 * s, 192 * s)
-  tg.addColorStop(0, `rgba(91,164,201,${0.048 * f})`)
-  tg.addColorStop(0.3, `rgba(91,164,201,${0.028 * f})`)
-  tg.addColorStop(0.65, `rgba(91,164,201,${0.01 * f})`)
+  tg.addColorStop(0, `rgba(91,164,201,${0.07 * f})`)
+  tg.addColorStop(0.3, `rgba(91,164,201,${0.04 * f})`)
+  tg.addColorStop(0.65, `rgba(91,164,201,${0.018 * f})`)
   tg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg
   ctx.fill()
@@ -102,19 +102,19 @@ function drawSinkingGhost(
   // Rim — surface tension
   drawTorso(ctx, s)
   const teg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  teg.addColorStop(0, `rgba(145,195,225,${0.09 * f})`)
-  teg.addColorStop(0.4, `rgba(91,164,201,${0.04 * f})`)
+  teg.addColorStop(0, `rgba(145,195,225,${0.14 * f})`)
+  teg.addColorStop(0.4, `rgba(91,164,201,${0.06 * f})`)
   teg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.strokeStyle = teg
-  ctx.lineWidth = 1.2
+  ctx.lineWidth = 1.6
   ctx.stroke()
 
   // Frosted inner echo
   drawTorso(ctx, s * 0.88)
-  ctx.fillStyle = `rgba(139,126,184,${0.01 * f})`
+  ctx.fillStyle = `rgba(139,126,184,${0.016 * f})`
   ctx.fill()
-  ctx.strokeStyle = `rgba(139,126,184,${0.03 * f})`
-  ctx.lineWidth = 0.5
+  ctx.strokeStyle = `rgba(139,126,184,${0.045 * f})`
+  ctx.lineWidth = 0.65
   ctx.stroke()
 
   ctx.restore()
@@ -122,8 +122,8 @@ function drawSinkingGhost(
   // ── Head — blown glass, depth-faded ──
   // Glow
   ctx.save()
-  ctx.shadowColor = `rgba(91,164,201,${0.12 * f})`
-  ctx.shadowBlur = 22 * s
+  ctx.shadowColor = `rgba(91,164,201,${0.2 * f})`
+  ctx.shadowBlur = 36 * s
   drawHead(ctx, s)
   ctx.strokeStyle = 'rgba(91,164,201,0.005)'
   ctx.lineWidth = 1.5
@@ -133,25 +133,25 @@ function drawSinkingGhost(
   // Primary subsurface
   drawHead(ctx, s)
   const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, 0, 52 * s)
-  hg.addColorStop(0, `rgba(91,164,201,${0.055 * f})`)
-  hg.addColorStop(0.4, `rgba(91,164,201,${0.03 * f})`)
-  hg.addColorStop(0.8, `rgba(91,164,201,${0.012 * f})`)
-  hg.addColorStop(1, `rgba(91,164,201,${0.003 * f})`)
+  hg.addColorStop(0, `rgba(91,164,201,${0.08 * f})`)
+  hg.addColorStop(0.4, `rgba(91,164,201,${0.045 * f})`)
+  hg.addColorStop(0.8, `rgba(91,164,201,${0.02 * f})`)
+  hg.addColorStop(1, `rgba(91,164,201,${0.008 * f})`)
   ctx.fillStyle = hg
   ctx.fill()
 
   // Rim
   drawHead(ctx, s)
-  ctx.strokeStyle = `rgba(145,195,225,${0.11 * f})`
-  ctx.lineWidth = 1.3
+  ctx.strokeStyle = `rgba(145,195,225,${0.16 * f})`
+  ctx.lineWidth = 1.7
   ctx.stroke()
 
   // Frosted inner echo
   drawHead(ctx, s * 0.76)
-  ctx.fillStyle = `rgba(139,126,184,${0.008 * f})`
+  ctx.fillStyle = `rgba(139,126,184,${0.014 * f})`
   ctx.fill()
-  ctx.strokeStyle = `rgba(139,126,184,${0.04 * f})`
-  ctx.lineWidth = 0.6
+  ctx.strokeStyle = `rgba(139,126,184,${0.06 * f})`
+  ctx.lineWidth = 0.8
   ctx.stroke()
 
   // ── Thought traces ──
@@ -168,14 +168,14 @@ function drawSinkingGhost(
       Math.cos(a2) * r2,
       Math.sin(a2) * r2,
     )
-    ctx.strokeStyle = `rgba(91,164,201,${(0.035 + Math.sin(t * 0.9 + i) * 0.012) * fadeMultiplier})`
+    ctx.strokeStyle = `rgba(91,164,201,${(0.05 + Math.sin(t * 0.35 + i) * 0.018) * fadeMultiplier})`
     ctx.lineWidth = 0.5
     ctx.stroke()
   }
 
   // Highlight
   const hlg = ctx.createRadialGradient(-12 * s, -18 * s, 0, -12 * s, -18 * s, 22 * s)
-  hlg.addColorStop(0, `rgba(255,255,255,${0.07 * fadeMultiplier})`)
+  hlg.addColorStop(0, `rgba(255,255,255,${0.1 * fadeMultiplier})`)
   hlg.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hlg
   ctx.fillRect(-40 * s, -50 * s, 80 * s, 60 * s)
@@ -197,23 +197,23 @@ function drawRing(
 
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.065)'
+  ctx.strokeStyle = 'rgba(91,164,201,0.09)'
   ctx.lineWidth = r * 0.1
   ctx.stroke()
 
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.78, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.03)'
-  ctx.lineWidth = r * 0.035
+  ctx.strokeStyle = 'rgba(91,164,201,0.045)'
+  ctx.lineWidth = r * 0.04
   ctx.stroke()
 
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.58, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(139,126,184,0.02)'
+  ctx.strokeStyle = 'rgba(139,126,184,0.03)'
   ctx.lineWidth = 1
   ctx.stroke()
 
-  const rot = t * 0.12 // ~8.5min/revolution
+  const rot = t * 0.05 // ~20min/revolution
   ctx.save()
   ctx.rotate(rot)
   for (let i = 0; i < 24; i++) {
@@ -225,8 +225,8 @@ function drawRing(
     ctx.beginPath()
     ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner)
     ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer)
-    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.12 : 0.05})`
-    ctx.lineWidth = major ? 1.3 : 0.7
+    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.18 : 0.07})`
+    ctx.lineWidth = major ? 1.7 : 0.9
     ctx.stroke()
   }
   ctx.restore()
@@ -240,26 +240,26 @@ function drawRing(
     ctx.beginPath()
     ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner)
     ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer)
-    ctx.strokeStyle = 'rgba(91,164,201,0.04)'
-    ctx.lineWidth = 0.6
+    ctx.strokeStyle = 'rgba(91,164,201,0.06)'
+    ctx.lineWidth = 0.7
     ctx.stroke()
   }
   ctx.restore()
 
-  const handA = t * 0.18 // ~6min/revolution
+  const handA = t * 0.07 // ~15min/revolution
   ctx.beginPath()
   ctx.moveTo(0, 0)
   ctx.lineTo(Math.cos(handA) * r * 0.7, Math.sin(handA) * r * 0.7)
   const hg = ctx.createLinearGradient(0, 0, Math.cos(handA) * r * 0.7, Math.sin(handA) * r * 0.7)
-  hg.addColorStop(0, 'rgba(91,164,201,0.06)')
-  hg.addColorStop(1, 'rgba(91,164,201,0.01)')
+  hg.addColorStop(0, 'rgba(91,164,201,0.09)')
+  hg.addColorStop(1, 'rgba(91,164,201,0.015)')
   ctx.strokeStyle = hg
   ctx.lineWidth = 1
   ctx.stroke()
 
   ctx.beginPath()
   ctx.arc(0, 0, 2, 0, Math.PI * 2)
-  ctx.fillStyle = 'rgba(91,164,201,0.1)'
+  ctx.fillStyle = 'rgba(91,164,201,0.15)'
   ctx.fill()
 
   ctx.restore()
@@ -276,9 +276,9 @@ function drawOrb(
   phase: number,
 ) {
   ctx.save()
-  // Slow orbital drift (~60s)
-  const orbA = t * 0.524 + phase
-  ctx.translate(cx + Math.cos(orbA) * r * 0.6 + Math.sin(t * 0.35 + phase) * 1, cy + Math.sin(orbA) * r * 0.4 + Math.cos(t * 0.28 + phase) * 0.8)
+  // Glacial orbital drift (~150s)
+  const orbA = t * 0.21 + phase
+  ctx.translate(cx + Math.cos(orbA) * r * 0.8 + Math.sin(t * 0.14 + phase) * 2, cy + Math.sin(orbA) * r * 0.55 + Math.cos(t * 0.11 + phase) * 1.5)
 
   const og = ctx.createRadialGradient(0, 0, r * 0.6, 0, 0, r * 1.2)
   og.addColorStop(0, 'rgba(91,164,201,0.018)')
@@ -291,12 +291,12 @@ function drawOrb(
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
   const sg = ctx.createRadialGradient(-r * 0.2, -r * 0.25, 0, 0, 0, r)
-  sg.addColorStop(0, 'rgba(91,164,201,0.035)')
-  sg.addColorStop(0.5, 'rgba(91,164,201,0.015)')
-  sg.addColorStop(1, 'rgba(91,164,201,0.006)')
+  sg.addColorStop(0, 'rgba(91,164,201,0.055)')
+  sg.addColorStop(0.5, 'rgba(91,164,201,0.025)')
+  sg.addColorStop(1, 'rgba(91,164,201,0.008)')
   ctx.fillStyle = sg
   ctx.fill()
-  ctx.strokeStyle = 'rgba(91,164,201,0.07)'
+  ctx.strokeStyle = 'rgba(91,164,201,0.1)'
   ctx.lineWidth = 1
   ctx.stroke()
 
@@ -321,7 +321,7 @@ function drawOrb(
   }
 
   const hlg = ctx.createRadialGradient(-r * 0.25, -r * 0.28, 0, -r * 0.25, -r * 0.28, r * 0.45)
-  hlg.addColorStop(0, 'rgba(255,255,255,0.08)')
+  hlg.addColorStop(0, 'rgba(255,255,255,0.11)')
   hlg.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hlg
   ctx.beginPath()
@@ -398,17 +398,17 @@ function GapCanvas() {
       if (!canvas || !ctx) return
       const w = canvas.offsetWidth
       const h = canvas.offsetHeight
-      const t = Date.now() * 0.0001
+      const t = Date.now() * 0.00005
       const vmin = Math.min(w, h)
 
       ctx.clearRect(0, 0, w, h)
 
       // ── Primary ring — upper-left, the analytical lens ──
-      const ringR = vmin * 0.19
+      const ringR = vmin * 0.26
       drawRing(
         ctx,
-        w * 0.14 + Math.sin(t * 1.05) * 3 + Math.sin(t * 0.47) * 1.5,
-        h * 0.1 + Math.cos(t * 0.74) * 2.5 + Math.cos(t * 0.37) * 1,
+        w * 0.14 + Math.sin(t * 0.42) * 4 + Math.sin(t * 0.19) * 2,
+        h * 0.1 + Math.cos(t * 0.30) * 3 + Math.cos(t * 0.15) * 1.5,
         ringR,
         t,
       )
@@ -416,25 +416,25 @@ function GapCanvas() {
       // ── Secondary ring — lower-left, smaller, deeper ──
       drawRing(
         ctx,
-        w * 0.06 + Math.sin(t * 0.82) * 2,
-        h * 0.72 + Math.cos(t * 0.62) * 2,
-        vmin * 0.1,
+        w * 0.06 + Math.sin(t * 0.33) * 3,
+        h * 0.72 + Math.cos(t * 0.25) * 3,
+        vmin * 0.15,
         t + 2.5,
       )
 
-      // ── Sinking ghost — right side, descending ──
-      const ghostScale = vmin / 580
-      drawSinkingGhost(ctx, w * 0.8, h * 0.3, ghostScale, t, h)
+      // ── Sinking ghost — right side, descending, larger ──
+      const ghostScale = vmin / 360
+      drawSinkingGhost(ctx, w * 0.74, h * 0.3, ghostScale, t, h)
 
       // ── Ghost echo — fainter reflection, offset ──
-      drawSinkingGhost(ctx, w * 0.68, h * 0.45, vmin / 850, t - 0.4, h)
+      drawSinkingGhost(ctx, w * 0.62, h * 0.45, vmin / 520, t - 0.4, h)
 
-      // ── Orbs at depth-zone boundaries — 5 total ──
-      drawOrb(ctx, w * 0.9, h * 0.22, vmin * 0.045, t, 0)
-      drawOrb(ctx, w * 0.88, h * 0.42, vmin * 0.04, t, 1.2)
-      drawOrb(ctx, w * 0.72, h * 0.58, vmin * 0.035, t, 2.5)
-      drawOrb(ctx, w * 0.85, h * 0.75, vmin * 0.03, t, 3.8)
-      drawOrb(ctx, w * 0.06, h * 0.48, vmin * 0.038, t, 5.2)
+      // ── Orbs at depth-zone boundaries — 5 total, larger ──
+      drawOrb(ctx, w * 0.9, h * 0.22, vmin * 0.068, t, 0)
+      drawOrb(ctx, w * 0.88, h * 0.42, vmin * 0.06, t, 1.2)
+      drawOrb(ctx, w * 0.72, h * 0.58, vmin * 0.052, t, 2.5)
+      drawOrb(ctx, w * 0.85, h * 0.75, vmin * 0.045, t, 3.8)
+      drawOrb(ctx, w * 0.06, h * 0.48, vmin * 0.057, t, 5.2)
     }
 
     resize()

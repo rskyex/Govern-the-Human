@@ -100,120 +100,120 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
     function draw() {
       if (!c || !ctx) return
       const w = c.offsetWidth, h = c.offsetHeight
-      const t = Date.now() * 0.0001
+      const t = Date.now() * 0.00005
       const vmin = Math.min(w, h)
       ctx.clearRect(0, 0, w, h)
 
       // ── Supporting objects per layer ──
 
       // Orb — positioned differently per layer
-      const orbR = vmin * (0.055 - depth * 0.008)
-      const orbX = w * (0.12 + depth * 0.06) + Math.cos(t * (0.42 + depth * 0.05) + depth * 2) * orbR * 0.5
-      const orbY = h * (0.3 + depth * 0.15) + Math.sin(t * (0.38 + depth * 0.04) + depth * 2) * orbR * 0.4
+      const orbR = vmin * (0.085 - depth * 0.012)
+      const orbX = w * (0.12 + depth * 0.06) + Math.cos(t * (0.168 + depth * 0.02) + depth * 2) * orbR * 0.5
+      const orbY = h * (0.3 + depth * 0.15) + Math.sin(t * (0.152 + depth * 0.016) + depth * 2) * orbR * 0.4
       ctx.save(); ctx.translate(orbX, orbY)
       ctx.beginPath(); ctx.arc(0, 0, orbR, 0, Math.PI * 2)
       const og = ctx.createRadialGradient(-orbR * 0.18, -orbR * 0.2, 0, 0, 0, orbR)
-      og.addColorStop(0, `rgba(91,164,201,${0.032 * opMul})`); og.addColorStop(0.5, `rgba(91,164,201,${0.014 * opMul})`)
+      og.addColorStop(0, `rgba(91,164,201,${0.054 * opMul})`); og.addColorStop(0.5, `rgba(91,164,201,${0.024 * opMul})`)
       og.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = og; ctx.fill()
-      ctx.strokeStyle = `rgba(145,195,225,${0.055 * opMul})`; ctx.lineWidth = 0.6; ctx.stroke()
+      ctx.strokeStyle = `rgba(145,195,225,${0.094 * opMul})`; ctx.lineWidth = 0.78; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, orbR * 0.6, 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(139,126,184,${0.02 * opMul})`; ctx.lineWidth = 0.3; ctx.stroke()
+      ctx.strokeStyle = `rgba(139,126,184,${0.034 * opMul})`; ctx.lineWidth = 0.39; ctx.stroke()
       ctx.restore()
 
       // Ring fragment — arc, not full circle. Gets more enclosing with depth.
-      const ringR = vmin * (0.12 + depth * 0.04)
-      const ringX = w * (0.92 - depth * 0.04) + Math.sin(t * 0.62 + depth) * 2
-      const ringY = h * 0.5 + Math.cos(t * 0.52 + depth) * 2
-      const arcSpan = Math.PI * (0.6 + depth * 0.4) // deeper = more enclosing
-      const arcStart = -Math.PI * 0.5 + t * (0.08 + depth * 0.02) + depth * 1.2
+      const ringR = vmin * (0.18 + depth * 0.06)
+      const ringX = w * (0.92 - depth * 0.04) + Math.sin(t * 0.248 + depth) * 2
+      const ringY = h * 0.5 + Math.cos(t * 0.208 + depth) * 2
+      const arcSpan = Math.PI * (0.8 + depth * 0.4) // deeper = more enclosing
+      const arcStart = -Math.PI * 0.5 + t * (0.032 + depth * 0.008) + depth * 1.2
       ctx.save(); ctx.translate(ringX, ringY)
-      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.05 * opMul})`; ctx.shadowBlur = 8
+      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.085 * opMul})`; ctx.shadowBlur = 12
       ctx.beginPath(); ctx.arc(0, 0, ringR, arcStart, arcStart + arcSpan)
-      ctx.strokeStyle = `rgba(91,164,201,${0.04 * opMul})`; ctx.lineWidth = ringR * 0.06
+      ctx.strokeStyle = `rgba(91,164,201,${0.068 * opMul})`; ctx.lineWidth = ringR * 0.078
       ctx.lineCap = 'round'; ctx.stroke(); ctx.restore()
       // Inner arc
       ctx.beginPath(); ctx.arc(0, 0, ringR * 0.78, arcStart + 0.15, arcStart + arcSpan - 0.15)
-      ctx.strokeStyle = `rgba(139,126,184,${0.02 * opMul})`; ctx.lineWidth = ringR * 0.02
+      ctx.strokeStyle = `rgba(139,126,184,${0.034 * opMul})`; ctx.lineWidth = ringR * 0.026
       ctx.lineCap = 'round'; ctx.stroke()
       ctx.restore()
 
       // ── Primary form — larger, right side ──
-      const s = vmin / 320
-      const cx = w * 0.78 + Math.sin(t * 0.82 + depth * 1.5) * 2
-      const cy = h * 0.5 + Math.sin(t * 1.05 + depth * 1.2) * 4
+      const s = vmin / 210
+      const cx = w * 0.78 + Math.sin(t * 0.328 + depth * 1.5) * 2
+      const cy = h * 0.5 + Math.sin(t * 0.42 + depth * 1.2) * 4
 
       ctx.save()
       ctx.translate(cx, cy)
-      ctx.rotate(Math.sin(t * 0.524 + depth) * 0.01)
+      ctx.rotate(Math.sin(t * 0.21 + depth) * 0.01)
 
       if (depth === 0) {
         // Layer I: Clear head profile — the knowable subject
         ctx.save()
-        ctx.shadowColor = `rgba(91,164,201,${0.08 * opMul})`
-        ctx.shadowBlur = 16 * s
+        ctx.shadowColor = `rgba(91,164,201,${0.136 * opMul})`
+        ctx.shadowBlur = 24 * s
         headPath(ctx, s)
-        ctx.strokeStyle = 'rgba(91,164,201,0.01)'
-        ctx.lineWidth = 1
+        ctx.strokeStyle = 'rgba(91,164,201,0.017)'
+        ctx.lineWidth = 1.3
         ctx.stroke()
         ctx.restore()
 
         headPath(ctx, s)
         const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, 0, 55 * s)
-        hg.addColorStop(0, `rgba(91,164,201,${0.05 * opMul})`)
-        hg.addColorStop(0.6, `rgba(91,164,201,${0.02 * opMul})`)
+        hg.addColorStop(0, `rgba(91,164,201,${0.085 * opMul})`)
+        hg.addColorStop(0.6, `rgba(91,164,201,${0.034 * opMul})`)
         hg.addColorStop(1, 'rgba(91,164,201,0)')
         ctx.fillStyle = hg
         ctx.fill()
-        ctx.strokeStyle = `rgba(91,164,201,${0.1 * opMul})`
-        ctx.lineWidth = 1.2
+        ctx.strokeStyle = `rgba(91,164,201,${0.17 * opMul})`
+        ctx.lineWidth = 1.56
         ctx.stroke()
 
         headPath(ctx, s * 0.75)
-        ctx.strokeStyle = `rgba(139,126,184,${0.05 * opMul})`
-        ctx.lineWidth = 0.6
+        ctx.strokeStyle = `rgba(139,126,184,${0.085 * opMul})`
+        ctx.lineWidth = 0.78
         ctx.stroke()
       } else if (depth === 1) {
         // Layer II: Fragmenting torso — self-relation destabilised
         // Draw head smaller, torso prominent, with visible separation
-        const deform = 1 + Math.sin(t * 0.698) * 0.005
+        const deform = 1 + Math.sin(t * 0.279) * 0.012
         ctx.scale(deform, 1 / deform)
 
         ctx.save()
         ctx.translate(0, 45 * s)
         torsoPath(ctx, s * 0.7)
         const tg = ctx.createLinearGradient(0, 0, 0, 135 * s)
-        tg.addColorStop(0, `rgba(139,126,184,${0.035 * opMul})`)
-        tg.addColorStop(0.6, `rgba(139,126,184,${0.015 * opMul})`)
+        tg.addColorStop(0, `rgba(139,126,184,${0.06 * opMul})`)
+        tg.addColorStop(0.6, `rgba(139,126,184,${0.026 * opMul})`)
         tg.addColorStop(1, 'rgba(139,126,184,0)')
         ctx.fillStyle = tg
         ctx.fill()
-        ctx.strokeStyle = `rgba(139,126,184,${0.06 * opMul})`
-        ctx.lineWidth = 1
+        ctx.strokeStyle = `rgba(139,126,184,${0.102 * opMul})`
+        ctx.lineWidth = 1.3
         ctx.stroke()
 
         // Fragmenting inner echo — offset, suggesting instability
         ctx.save()
-        ctx.translate(Math.sin(t * 0.785) * 2, Math.cos(t * 0.628) * 1.5)
+        ctx.translate(Math.sin(t * 0.314) * 3.5, Math.cos(t * 0.251) * 2.5)
         torsoPath(ctx, s * 0.58)
-        ctx.strokeStyle = `rgba(91,164,201,${0.025 * opMul})`
-        ctx.lineWidth = 0.5
+        ctx.strokeStyle = `rgba(91,164,201,${0.043 * opMul})`
+        ctx.lineWidth = 0.65
         ctx.stroke()
         ctx.restore()
         ctx.restore()
 
         // Small head above — slightly displaced
         ctx.save()
-        ctx.translate(Math.sin(t * 0.628) * 1.5, 0)
+        ctx.translate(Math.sin(t * 0.251) * 2.5, 0)
         headPath(ctx, s * 0.55)
-        ctx.fillStyle = `rgba(139,126,184,${0.02 * opMul})`
+        ctx.fillStyle = `rgba(139,126,184,${0.034 * opMul})`
         ctx.fill()
-        ctx.strokeStyle = `rgba(139,126,184,${0.05 * opMul})`
-        ctx.lineWidth = 0.8
+        ctx.strokeStyle = `rgba(139,126,184,${0.085 * opMul})`
+        ctx.lineWidth = 1.04
         ctx.stroke()
         ctx.restore()
       } else {
         // Layer III: Fading full silhouette — deeply submerged
-        const breathe = 1 + Math.sin(t * 1.57) * 0.003
+        const breathe = 1 + Math.sin(t * 0.628) * 0.007
         ctx.scale(breathe, breathe)
 
         // Faint full body
@@ -221,27 +221,27 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
         ctx.translate(0, 40 * s)
         torsoPath(ctx, s * 0.6)
         const tg = ctx.createLinearGradient(0, 0, 0, 115 * s)
-        tg.addColorStop(0, `rgba(91,164,201,${0.02 * opMul})`)
+        tg.addColorStop(0, `rgba(91,164,201,${0.034 * opMul})`)
         tg.addColorStop(1, 'rgba(91,164,201,0)')
         ctx.fillStyle = tg
         ctx.fill()
-        ctx.strokeStyle = `rgba(91,164,201,${0.03 * opMul})`
-        ctx.lineWidth = 0.8
+        ctx.strokeStyle = `rgba(91,164,201,${0.051 * opMul})`
+        ctx.lineWidth = 1.04
         ctx.stroke()
         ctx.restore()
 
         headPath(ctx, s * 0.5)
-        ctx.fillStyle = `rgba(91,164,201,${0.012 * opMul})`
+        ctx.fillStyle = `rgba(91,164,201,${0.02 * opMul})`
         ctx.fill()
-        ctx.strokeStyle = `rgba(91,164,201,${0.025 * opMul})`
-        ctx.lineWidth = 0.6
+        ctx.strokeStyle = `rgba(91,164,201,${0.043 * opMul})`
+        ctx.lineWidth = 0.78
         ctx.stroke()
 
         // A faint ring enclosing the form — the governance structure
         ctx.beginPath()
         ctx.arc(0, 30 * s, 85 * s, 0, Math.PI * 2)
-        ctx.strokeStyle = `rgba(91,164,201,${0.015 * opMul})`
-        ctx.lineWidth = 0.5
+        ctx.strokeStyle = `rgba(91,164,201,${0.026 * opMul})`
+        ctx.lineWidth = 0.65
         ctx.stroke()
       }
 
