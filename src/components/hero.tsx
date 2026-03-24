@@ -54,22 +54,22 @@ function drawGhost(
   s: number,
   t: number,
 ) {
-  // ── Motion: very slow, layered, barely perceptible ──
-  // Dominant vertical float: ~55s cycle
-  const floatY = Math.sin(t * 1.14) * 8 + Math.sin(t * 0.67) * 3
-  // Gentle horizontal drift: ~70s cycle
-  const driftX = Math.sin(t * 0.9) * 3 + Math.sin(t * 0.53) * 1.5
-  // Breathing: ~30s cycle, barely visible
-  const breathe = 1 + Math.sin(t * 2.09) * 0.004 + Math.sin(t * 1.37) * 0.002
-  // Subtle non-uniform deformation: body shifts shape (~80s, ~110s)
-  const deformX = 1 + Math.sin(t * 0.785) * 0.003
-  const deformY = 1 + Math.cos(t * 0.571) * 0.004
-  // Very slight head tilt: ~100s
-  const headTilt = Math.sin(t * 0.628) * 0.012
+  // ── Motion: glacial, weighty, psychologically present ──
+  // Dominant vertical float: ~140s cycle
+  const floatY = Math.sin(t * 0.45) * 16 + Math.sin(t * 0.27) * 7
+  // Gentle horizontal drift: ~175s cycle
+  const driftX = Math.sin(t * 0.36) * 6 + Math.sin(t * 0.21) * 3
+  // Breathing: ~75s cycle, visible but slow
+  const breathe = 1 + Math.sin(t * 0.84) * 0.01 + Math.sin(t * 0.55) * 0.005
+  // Non-uniform deformation: asymmetric, unsettling (~200s, ~280s)
+  const deformX = 1 + Math.sin(t * 0.31) * 0.008
+  const deformY = 1 + Math.cos(t * 0.23) * 0.012
+  // Slow head tilt: ~250s — feels like it's turning toward you
+  const headTilt = Math.sin(t * 0.25) * 0.028
 
   // Inner echo lag — echoes trail the outer form by a time offset
-  const lagDriftX = Math.sin(t * 0.9 - 0.15) * 3 + Math.sin(t * 0.53 - 0.1) * 1.5
-  const lagFloatY = Math.sin(t * 1.14 - 0.12) * 8 + Math.sin(t * 0.67 - 0.08) * 3
+  const lagDriftX = Math.sin(t * 0.36 - 0.15) * 6 + Math.sin(t * 0.21 - 0.1) * 3
+  const lagFloatY = Math.sin(t * 0.45 - 0.12) * 16 + Math.sin(t * 0.27 - 0.08) * 7
   const echoOffsetX = (driftX - lagDriftX) * 0.6
   const echoOffsetY = (floatY - lagFloatY) * 0.6
 
@@ -81,22 +81,22 @@ function drawGhost(
   ctx.save()
   ctx.translate(0, 50 * s)
 
-  // Subsurface glow — soft light diffusing through the volume
+  // Subsurface glow — large, diffuse, physically present
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.14)'
-  ctx.shadowBlur = 22 * s
+  ctx.shadowColor = 'rgba(91,164,201,0.22)'
+  ctx.shadowBlur = 40 * s
   torsoPath(ctx, s)
-  ctx.strokeStyle = 'rgba(91,164,201,0.008)'
-  ctx.lineWidth = 3
+  ctx.strokeStyle = 'rgba(91,164,201,0.012)'
+  ctx.lineWidth = 4
   ctx.stroke()
   ctx.restore()
 
-  // Layered subsurface fill — two offset gradients for depth
+  // Layered subsurface fill — heavy, luminous volume
   torsoPath(ctx, s)
   const tg = ctx.createLinearGradient(-20 * s, 0, 20 * s, 192 * s)
-  tg.addColorStop(0, 'rgba(91,164,201,0.055)')
-  tg.addColorStop(0.25, 'rgba(91,164,201,0.038)')
-  tg.addColorStop(0.6, 'rgba(91,164,201,0.015)')
+  tg.addColorStop(0, 'rgba(91,164,201,0.09)')
+  tg.addColorStop(0.25, 'rgba(91,164,201,0.06)')
+  tg.addColorStop(0.6, 'rgba(91,164,201,0.025)')
   tg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg
   ctx.fill()
@@ -104,31 +104,31 @@ function drawGhost(
   // Second subsurface layer — warmer, offset centre
   torsoPath(ctx, s * 0.94)
   const tg2 = ctx.createRadialGradient(8 * s, 40 * s, 0, 0, 60 * s, 90 * s)
-  tg2.addColorStop(0, 'rgba(120,170,210,0.02)')
-  tg2.addColorStop(0.5, 'rgba(91,164,201,0.008)')
+  tg2.addColorStop(0, 'rgba(120,170,210,0.035)')
+  tg2.addColorStop(0.5, 'rgba(91,164,201,0.015)')
   tg2.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg2
   ctx.fill()
 
-  // Rim edge — bright at shoulders, fading at waist (surface tension)
+  // Rim edge — taut, present, the boundary of a form
   torsoPath(ctx, s)
   const eg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  eg.addColorStop(0, 'rgba(145,195,225,0.12)')
-  eg.addColorStop(0.3, 'rgba(91,164,201,0.07)')
-  eg.addColorStop(0.6, 'rgba(91,164,201,0.025)')
+  eg.addColorStop(0, 'rgba(145,195,225,0.2)')
+  eg.addColorStop(0.3, 'rgba(91,164,201,0.12)')
+  eg.addColorStop(0.6, 'rgba(91,164,201,0.04)')
   eg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.strokeStyle = eg
-  ctx.lineWidth = 1.3
+  ctx.lineWidth = 1.8
   ctx.stroke()
 
-  // Inner tension line — thinner, brighter, just inside the rim
+  // Inner tension line
   torsoPath(ctx, s * 0.97)
   const itl = ctx.createLinearGradient(0, 0, 0, 186 * s)
-  itl.addColorStop(0, 'rgba(180,215,235,0.06)')
-  itl.addColorStop(0.4, 'rgba(145,195,225,0.025)')
+  itl.addColorStop(0, 'rgba(180,215,235,0.1)')
+  itl.addColorStop(0.4, 'rgba(145,195,225,0.04)')
   itl.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.strokeStyle = itl
-  ctx.lineWidth = 0.4
+  ctx.lineWidth = 0.6
   ctx.stroke()
 
   // Frosted inner echo — filled, not just stroked
@@ -136,13 +136,13 @@ function drawGhost(
   ctx.translate(echoOffsetX * 0.7, echoOffsetY * 0.7)
   torsoPath(ctx, s * 0.86)
   const ifg = ctx.createLinearGradient(0, 0, 0, 165 * s)
-  ifg.addColorStop(0, 'rgba(139,126,184,0.018)')
-  ifg.addColorStop(0.5, 'rgba(139,126,184,0.008)')
+  ifg.addColorStop(0, 'rgba(139,126,184,0.03)')
+  ifg.addColorStop(0.5, 'rgba(139,126,184,0.014)')
   ifg.addColorStop(1, 'rgba(139,126,184,0)')
   ctx.fillStyle = ifg
   ctx.fill()
-  ctx.strokeStyle = 'rgba(139,126,184,0.035)'
-  ctx.lineWidth = 0.6
+  ctx.strokeStyle = 'rgba(139,126,184,0.055)'
+  ctx.lineWidth = 0.8
   ctx.stroke()
   ctx.restore()
 
@@ -153,45 +153,45 @@ function drawGhost(
   ctx.save()
   ctx.rotate(headTilt)
 
-  // Outer glow halo
+  // Outer glow halo — large, imposing
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.16)'
-  ctx.shadowBlur = 28 * s
+  ctx.shadowColor = 'rgba(91,164,201,0.26)'
+  ctx.shadowBlur = 48 * s
   headPath(ctx, s)
-  ctx.strokeStyle = 'rgba(91,164,201,0.006)'
-  ctx.lineWidth = 2
+  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
+  ctx.lineWidth = 3
   ctx.stroke()
   ctx.restore()
 
-  // Primary subsurface fill — radial, bright core
+  // Primary subsurface fill — luminous core
   headPath(ctx, s)
   const hg = ctx.createRadialGradient(0, -8 * s, 0, 0, -2 * s, 56 * s)
-  hg.addColorStop(0, 'rgba(91,164,201,0.065)')
-  hg.addColorStop(0.3, 'rgba(91,164,201,0.04)')
-  hg.addColorStop(0.65, 'rgba(91,164,201,0.018)')
-  hg.addColorStop(1, 'rgba(91,164,201,0.005)')
+  hg.addColorStop(0, 'rgba(91,164,201,0.11)')
+  hg.addColorStop(0.3, 'rgba(91,164,201,0.065)')
+  hg.addColorStop(0.65, 'rgba(91,164,201,0.03)')
+  hg.addColorStop(1, 'rgba(91,164,201,0.008)')
   ctx.fillStyle = hg
   ctx.fill()
 
   // Secondary subsurface — offset, warmer, creates colour shift
   headPath(ctx, s * 0.92)
   const hg2 = ctx.createRadialGradient(12 * s, 8 * s, 0, 5 * s, 0, 42 * s)
-  hg2.addColorStop(0, 'rgba(130,160,210,0.025)')
-  hg2.addColorStop(0.5, 'rgba(120,145,200,0.01)')
+  hg2.addColorStop(0, 'rgba(130,160,210,0.04)')
+  hg2.addColorStop(0.5, 'rgba(120,145,200,0.018)')
   hg2.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = hg2
   ctx.fill()
 
-  // Rim edge — bright, taut (surface tension of liquid glass)
+  // Rim edge — taut, defined, the boundary of something real
   headPath(ctx, s)
-  ctx.strokeStyle = 'rgba(145,195,225,0.14)'
-  ctx.lineWidth = 1.4
+  ctx.strokeStyle = 'rgba(145,195,225,0.22)'
+  ctx.lineWidth = 2
   ctx.stroke()
 
   // Inner tension line
   headPath(ctx, s * 0.97)
-  ctx.strokeStyle = 'rgba(180,215,235,0.05)'
-  ctx.lineWidth = 0.35
+  ctx.strokeStyle = 'rgba(180,215,235,0.08)'
+  ctx.lineWidth = 0.5
   ctx.stroke()
 
   // Frosted inner echo 1 — filled membrane
@@ -199,23 +199,23 @@ function drawGhost(
   ctx.translate(echoOffsetX, echoOffsetY)
   headPath(ctx, s * 0.76)
   const ie1 = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 42 * s)
-  ie1.addColorStop(0, 'rgba(139,126,184,0.02)')
-  ie1.addColorStop(1, 'rgba(139,126,184,0.005)')
+  ie1.addColorStop(0, 'rgba(139,126,184,0.035)')
+  ie1.addColorStop(1, 'rgba(139,126,184,0.008)')
   ctx.fillStyle = ie1
   ctx.fill()
-  ctx.strokeStyle = 'rgba(139,126,184,0.055)'
-  ctx.lineWidth = 0.7
+  ctx.strokeStyle = 'rgba(139,126,184,0.08)'
+  ctx.lineWidth = 0.9
   ctx.stroke()
   ctx.restore()
 
-  // Frosted inner echo 2 — deeper, dimmer
+  // Frosted inner echo 2 — deeper
   ctx.save()
   ctx.translate(echoOffsetX * 1.5, echoOffsetY * 1.5)
   headPath(ctx, s * 0.52)
-  ctx.fillStyle = 'rgba(91,164,201,0.008)'
+  ctx.fillStyle = 'rgba(91,164,201,0.014)'
   ctx.fill()
-  ctx.strokeStyle = 'rgba(91,164,201,0.022)'
-  ctx.lineWidth = 0.4
+  ctx.strokeStyle = 'rgba(91,164,201,0.035)'
+  ctx.lineWidth = 0.5
   ctx.stroke()
   ctx.restore()
 
@@ -224,15 +224,15 @@ function drawGhost(
   headPath(ctx, s)
   ctx.clip()
   const hl = ctx.createRadialGradient(-14 * s, -24 * s, 0, -14 * s, -24 * s, 28 * s)
-  hl.addColorStop(0, 'rgba(255,255,255,0.14)')
-  hl.addColorStop(0.3, 'rgba(255,255,255,0.05)')
-  hl.addColorStop(0.7, 'rgba(255,255,255,0.01)')
+  hl.addColorStop(0, 'rgba(255,255,255,0.18)')
+  hl.addColorStop(0.3, 'rgba(255,255,255,0.07)')
+  hl.addColorStop(0.7, 'rgba(255,255,255,0.015)')
   hl.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hl
   ctx.fillRect(-50 * s, -55 * s, 100 * s, 80 * s)
   // Secondary caustic — lower right (refraction)
   const hl2 = ctx.createRadialGradient(18 * s, 20 * s, 0, 18 * s, 20 * s, 16 * s)
-  hl2.addColorStop(0, 'rgba(255,255,255,0.04)')
+  hl2.addColorStop(0, 'rgba(255,255,255,0.06)')
   hl2.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hl2
   ctx.fillRect(0, 5 * s, 40 * s, 35 * s)
@@ -240,17 +240,17 @@ function drawGhost(
 
   ctx.restore() // end head tilt
 
-  // ── Thought-stream traces — slow rotation, varied weight ──
+  // ── Thought-stream traces — glacial rotation, varied weight ──
   for (let i = 0; i < 7; i++) {
-    // Very slow rotation: ~90s per revolution
-    const angle = (i / 7) * Math.PI * 2 + t * 0.35
-    const r1 = 7 * s
-    // Reach oscillates slowly (~40s)
-    const r2 = (24 + i * 2.5) * s + Math.sin(t * 0.785 + i * 1.6) * 7 * s
-    const a2 = angle + 0.65 + Math.sin(t * 0.628 + i) * 0.3
-    const weight = 0.35 + (i % 3) * 0.15
-    // Opacity pulses slowly (~35s, phase-offset per trace)
-    const op = 0.032 + Math.sin(t * 0.9 + i * 0.9) * 0.014
+    // Very slow rotation: ~225s per revolution
+    const angle = (i / 7) * Math.PI * 2 + t * 0.14
+    const r1 = 10 * s
+    // Reach oscillates slowly (~100s)
+    const r2 = (30 + i * 3) * s + Math.sin(t * 0.31 + i * 1.6) * 10 * s
+    const a2 = angle + 0.65 + Math.sin(t * 0.25 + i) * 0.4
+    const weight = 0.5 + (i % 3) * 0.2
+    // Opacity pulses slowly (~90s, phase-offset per trace)
+    const op = 0.05 + Math.sin(t * 0.35 + i * 0.9) * 0.02
 
     ctx.beginPath()
     ctx.moveTo(Math.cos(angle) * r1, Math.sin(angle) * r1)
@@ -284,74 +284,74 @@ function drawRing(
   r: number,
   t: number,
 ) {
-  // ── Motion: suspended instrument, barely drifting ──
-  // Slow drift: ~60s / ~90s cycles
-  const driftX = Math.sin(t * 1.05) * 4 + Math.sin(t * 0.44) * 2
-  const driftY = Math.cos(t * 0.82) * 3 + Math.cos(t * 0.37) * 1.5
-  // Subtle tilt — circle becomes barely oval (~90s)
-  const tiltX = 1 + Math.sin(t * 0.698) * 0.015
-  // Slow pulse: ~40s
-  const pulse = 1 + Math.sin(t * 1.57) * 0.003
+  // ── Motion: suspended instrument, immense, barely drifting ──
+  // Slow drift: ~150s / ~225s cycles
+  const driftX = Math.sin(t * 0.42) * 6 + Math.sin(t * 0.18) * 3
+  const driftY = Math.cos(t * 0.33) * 5 + Math.cos(t * 0.15) * 2
+  // Tilt — circle becomes noticeably oval (~225s)
+  const tiltX = 1 + Math.sin(t * 0.28) * 0.03
+  // Slow pulse: ~100s
+  const pulse = 1 + Math.sin(t * 0.63) * 0.005
 
   ctx.save()
   ctx.translate(cx + driftX, cy + driftY)
   ctx.scale(tiltX * pulse, (1 / tiltX) * pulse) // tilt preserves area
 
-  // ── Disc body — frosted glass fill ──
+  // ── Disc body — frosted glass fill, heavier ──
   ctx.beginPath()
   ctx.arc(0, 0, r * 1.02, 0, Math.PI * 2)
   const df = ctx.createRadialGradient(-r * 0.15, -r * 0.15, 0, 0, 0, r * 1.02)
-  df.addColorStop(0, 'rgba(91,164,201,0.016)')
-  df.addColorStop(0.4, 'rgba(91,164,201,0.008)')
-  df.addColorStop(0.8, 'rgba(91,164,201,0.003)')
+  df.addColorStop(0, 'rgba(91,164,201,0.028)')
+  df.addColorStop(0.4, 'rgba(91,164,201,0.014)')
+  df.addColorStop(0.8, 'rgba(91,164,201,0.005)')
   df.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = df
   ctx.fill()
 
-  // ── Outer band — frosted glass tubing with glow ──
+  // ── Outer band — frosted glass tubing with imposing glow ──
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.1)'
-  ctx.shadowBlur = 16
+  ctx.shadowColor = 'rgba(91,164,201,0.16)'
+  ctx.shadowBlur = 28
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.055)'
+  ctx.strokeStyle = 'rgba(91,164,201,0.09)'
   ctx.lineWidth = r * 0.1
   ctx.stroke()
   ctx.restore()
   // Inner rim of outer band — surface tension
   ctx.beginPath()
   ctx.arc(0, 0, r - r * 0.05, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(145,195,225,0.04)'
-  ctx.lineWidth = 0.4
+  ctx.strokeStyle = 'rgba(145,195,225,0.065)'
+  ctx.lineWidth = 0.6
   ctx.stroke()
   // Outer rim of outer band
   ctx.beginPath()
   ctx.arc(0, 0, r + r * 0.05, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(145,195,225,0.03)'
-  ctx.lineWidth = 0.3
+  ctx.strokeStyle = 'rgba(145,195,225,0.05)'
+  ctx.lineWidth = 0.4
   ctx.stroke()
 
   // Middle band — frosted
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.78, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.03)'
-  ctx.lineWidth = r * 0.03
+  ctx.strokeStyle = 'rgba(91,164,201,0.05)'
+  ctx.lineWidth = r * 0.04
   ctx.stroke()
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.78, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(145,195,225,0.015)'
-  ctx.lineWidth = 0.3
+  ctx.strokeStyle = 'rgba(145,195,225,0.025)'
+  ctx.lineWidth = 0.4
   ctx.stroke()
 
   // Inner band
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.58, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(139,126,184,0.022)'
-  ctx.lineWidth = 0.8
+  ctx.strokeStyle = 'rgba(139,126,184,0.035)'
+  ctx.lineWidth = 1
   ctx.stroke()
 
-  // ── 24 outer markers — very slow rotation: ~7min/revolution ──
-  const rot = t * 0.15
+  // ── 24 outer markers — glacial rotation: ~17min/revolution ──
+  const rot = t * 0.06
   ctx.save()
   ctx.rotate(rot)
   for (let i = 0; i < 24; i++) {
@@ -365,15 +365,15 @@ function drawRing(
     ctx.beginPath()
     ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner)
     ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer)
-    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.16 : mid ? 0.08 : 0.045})`
-    ctx.lineWidth = major ? 1.5 : mid ? 1 : 0.6
+    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.22 : mid ? 0.12 : 0.065})`
+    ctx.lineWidth = major ? 2 : mid ? 1.3 : 0.8
     ctx.lineCap = 'round'
     ctx.stroke()
 
     if (major) {
       ctx.beginPath()
       ctx.arc(Math.cos(a) * (r * 1.03), Math.sin(a) * (r * 1.03), 1.8, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(91,164,201,0.1)'
+      ctx.fillStyle = 'rgba(91,164,201,0.16)'
       ctx.fill()
     }
   }
@@ -390,15 +390,15 @@ function drawRing(
     ctx.beginPath()
     ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner)
     ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer)
-    ctx.strokeStyle = 'rgba(91,164,201,0.045)'
-    ctx.lineWidth = 0.6
+    ctx.strokeStyle = 'rgba(91,164,201,0.065)'
+    ctx.lineWidth = 0.8
     ctx.lineCap = 'round'
     ctx.stroke()
   }
   ctx.restore()
 
-  // ── Sweeping hand — very slow: ~5min/revolution ──
-  const handA = t * 0.2
+  // ── Sweeping hand — glacial: ~12min/revolution ──
+  const handA = t * 0.08
   // Trail (longer, fainter)
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.55, handA - 1.0, handA)
@@ -415,22 +415,22 @@ function drawRing(
     Math.cos(handA) * r * 0.72,
     Math.sin(handA) * r * 0.72,
   )
-  hg.addColorStop(0, 'rgba(91,164,201,0.08)')
-  hg.addColorStop(1, 'rgba(91,164,201,0.015)')
+  hg.addColorStop(0, 'rgba(91,164,201,0.12)')
+  hg.addColorStop(1, 'rgba(91,164,201,0.02)')
   ctx.strokeStyle = hg
-  ctx.lineWidth = 1
+  ctx.lineWidth = 1.3
   ctx.lineCap = 'round'
   ctx.stroke()
 
   // Centre
   ctx.beginPath()
   ctx.arc(0, 0, 2.2, 0, Math.PI * 2)
-  ctx.fillStyle = 'rgba(91,164,201,0.14)'
+  ctx.fillStyle = 'rgba(91,164,201,0.2)'
   ctx.fill()
 
   // ── Disc highlight ──
   const dhl = ctx.createRadialGradient(-r * 0.2, -r * 0.22, 0, -r * 0.2, -r * 0.22, r * 0.6)
-  dhl.addColorStop(0, 'rgba(255,255,255,0.04)')
+  dhl.addColorStop(0, 'rgba(255,255,255,0.06)')
   dhl.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = dhl
   ctx.beginPath()
@@ -450,39 +450,39 @@ function drawOrb(
   t: number,
   phase: number,
 ) {
-  // ── Slow elliptical orbit around anchor: ~60s, phase-offset ──
-  const orbSpeed = 0.523 + phase * 0.03 // slightly different per orb
+  // ── Glacial elliptical orbit: ~150s, phase-offset ──
+  const orbSpeed = 0.21 + phase * 0.012
   const orbAngle = t * orbSpeed + phase
-  const orbRx = r * 0.8  // orbit width proportional to orb size
-  const orbRy = r * 0.5
-  const dx = Math.cos(orbAngle) * orbRx + Math.sin(t * 0.37 + phase) * 1
-  const dy = Math.sin(orbAngle) * orbRy + Math.cos(t * 0.29 + phase) * 0.8
-  // Breathing: ~30s, phase-offset
-  const breathe = 1 + Math.sin(t * 1.05 + phase) * 0.006 + Math.sin(t * 0.73 + phase) * 0.003
+  const orbRx = r * 0.9
+  const orbRy = r * 0.6
+  const dx = Math.cos(orbAngle) * orbRx + Math.sin(t * 0.15 + phase) * 1.5
+  const dy = Math.sin(orbAngle) * orbRy + Math.cos(t * 0.12 + phase) * 1.2
+  // Breathing: ~75s, phase-offset
+  const breathe = 1 + Math.sin(t * 0.42 + phase) * 0.01 + Math.sin(t * 0.29 + phase) * 0.005
 
   ctx.save()
   ctx.translate(cx + dx, cy + dy)
   ctx.scale(breathe, breathe)
 
-  // Subsurface glow
+  // Subsurface glow — imposing
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.08)'
-  ctx.shadowBlur = r * 0.7
+  ctx.shadowColor = 'rgba(91,164,201,0.14)'
+  ctx.shadowBlur = r * 1.2
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.006)'
-  ctx.lineWidth = 2
+  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
+  ctx.lineWidth = 2.5
   ctx.stroke()
   ctx.restore()
 
-  // Primary subsurface fill — offset highlight centre
+  // Primary subsurface fill — heavier, more luminous
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
   const sg = ctx.createRadialGradient(-r * 0.18, -r * 0.22, 0, 0, 0, r)
-  sg.addColorStop(0, 'rgba(91,164,201,0.05)')
-  sg.addColorStop(0.3, 'rgba(91,164,201,0.028)')
-  sg.addColorStop(0.7, 'rgba(91,164,201,0.01)')
-  sg.addColorStop(1, 'rgba(91,164,201,0.003)')
+  sg.addColorStop(0, 'rgba(91,164,201,0.085)')
+  sg.addColorStop(0.3, 'rgba(91,164,201,0.045)')
+  sg.addColorStop(0.7, 'rgba(91,164,201,0.018)')
+  sg.addColorStop(1, 'rgba(91,164,201,0.005)')
   ctx.fillStyle = sg
   ctx.fill()
 
@@ -490,7 +490,7 @@ function drawOrb(
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.88, 0, Math.PI * 2)
   const sg2 = ctx.createRadialGradient(r * 0.12, r * 0.1, 0, 0, 0, r * 0.88)
-  sg2.addColorStop(0, 'rgba(130,165,210,0.015)')
+  sg2.addColorStop(0, 'rgba(130,165,210,0.025)')
   sg2.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = sg2
   ctx.fill()
@@ -594,34 +594,33 @@ export function Hero() {
       if (!canvas || !ctx) return
       const w = canvas.offsetWidth
       const h = canvas.offsetHeight
-      const t = Date.now() * 0.0001
+      const t = Date.now() * 0.00005
       const vmin = Math.min(w, h)
 
       ctx.clearRect(0, 0, w, h)
 
-      // ── Ambient glow ──
-      const ag = ctx.createRadialGradient(w * 0.36, h * 0.38, 0, w * 0.36, h * 0.38, vmin * 0.75)
-      ag.addColorStop(0, 'rgba(91,164,201,0.055)')
-      ag.addColorStop(0.3, 'rgba(139,126,184,0.025)')
-      ag.addColorStop(0.65, 'rgba(91,164,201,0.01)')
+      // ── Ambient glow — heavier, the room these presences inhabit ──
+      const ag = ctx.createRadialGradient(w * 0.36, h * 0.38, 0, w * 0.36, h * 0.38, vmin * 0.9)
+      ag.addColorStop(0, 'rgba(91,164,201,0.08)')
+      ag.addColorStop(0.3, 'rgba(139,126,184,0.04)')
+      ag.addColorStop(0.65, 'rgba(91,164,201,0.015)')
       ag.addColorStop(1, 'rgba(91,164,201,0)')
       ctx.fillStyle = ag
       ctx.fillRect(0, 0, w, h)
 
-      // ── Faint scan arcs — glacial rotation ──
+      // ── Scan arcs — glacial rotation, larger ──
       ctx.save()
       ctx.translate(w * 0.36, h * 0.36)
       for (let i = 0; i < 4; i++) {
-        const r = vmin * 0.22 + i * vmin * 0.1
-        // ~3-5min per revolution
-        const rot = t * (0.35 + i * 0.08) * (i % 2 === 0 ? 1 : -1)
+        const r = vmin * 0.3 + i * vmin * 0.14
+        const rot = t * (0.14 + i * 0.03) * (i % 2 === 0 ? 1 : -1)
         ctx.save()
         ctx.rotate(rot)
         const segs = 3 + i
         const gap = Math.PI * 0.14
         const seg = (Math.PI * 2 - segs * gap) / segs
-        ctx.strokeStyle = `rgba(91,164,201,${0.025 - i * 0.004})`
-        ctx.lineWidth = 0.5
+        ctx.strokeStyle = `rgba(91,164,201,${0.04 - i * 0.006})`
+        ctx.lineWidth = 0.7
         ctx.lineCap = 'round'
         for (let j = 0; j < segs; j++) {
           const a = j * (seg + gap)
@@ -633,24 +632,24 @@ export function Hero() {
       }
       ctx.restore()
 
-      // ── Ghost echo — distant, behind everything, fainter ──
-      drawGhost(ctx, w * 0.62, h * 0.55, vmin / 900, t - 0.5)
+      // ── Ghost echo — distant, behind everything ──
+      drawGhost(ctx, w * 0.62, h * 0.55, vmin / 560, t - 0.5)
 
-      // ── Ghost — dominant, left-of-centre ──
-      drawGhost(ctx, w * 0.34, h * 0.28, vmin / 520, t)
+      // ── Ghost — dominant, imposing, left-of-centre ──
+      drawGhost(ctx, w * 0.34, h * 0.26, vmin / 340, t)
 
-      // ── Ring — right side ──
-      drawRing(ctx, w * 0.76, h * 0.48, vmin * 0.2, t)
+      // ── Ring — right side, large ──
+      drawRing(ctx, w * 0.76, h * 0.48, vmin * 0.3, t)
 
-      // ── Second ring — smaller, upper area, partially off-screen ──
-      drawRing(ctx, w * 0.18, h * 0.08, vmin * 0.12, t + 3.0)
+      // ── Second ring — upper area, partially off-screen ──
+      drawRing(ctx, w * 0.16, h * 0.04, vmin * 0.2, t + 3.0)
 
-      // ── Orbs — 5 at different depths ──
-      drawOrb(ctx, w * 0.12, h * 0.22, vmin * 0.08, t, 0)
-      drawOrb(ctx, w * 0.58, h * 0.16, vmin * 0.055, t, 2.1)
-      drawOrb(ctx, w * 0.83, h * 0.78, vmin * 0.042, t, 4.3)
-      drawOrb(ctx, w * 0.05, h * 0.72, vmin * 0.035, t, 5.8)
-      drawOrb(ctx, w * 0.92, h * 0.32, vmin * 0.03, t, 7.2)
+      // ── Orbs — larger, fewer feel more deliberate ──
+      drawOrb(ctx, w * 0.1, h * 0.2, vmin * 0.12, t, 0)
+      drawOrb(ctx, w * 0.56, h * 0.14, vmin * 0.085, t, 2.1)
+      drawOrb(ctx, w * 0.85, h * 0.76, vmin * 0.065, t, 4.3)
+      drawOrb(ctx, w * 0.04, h * 0.74, vmin * 0.055, t, 5.8)
+      drawOrb(ctx, w * 0.93, h * 0.3, vmin * 0.048, t, 7.2)
     }
 
     resize()
