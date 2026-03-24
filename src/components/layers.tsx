@@ -1,8 +1,19 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { SectionLabel } from '@/components/ui/section-label'
 import { Reveal } from '@/components/ui/reveal'
-import { GlassDisc, GlassPlane, GlassRing } from '@/components/ui/glass-forms'
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ *  Three-Layer Model — descending chamber
+ *
+ *  Three forms descend and become more embedded:
+ *  Layer I  (Epistemic): a clear, legible head profile — surface-level
+ *  Layer II (Ontological): a fragmenting torso — self-relation destabilised
+ *  Layer III (Political): a fading full silhouette — deeply submerged
+ *
+ *  Each form is dimmer and more enclosed than the last.
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 interface LayerData {
   depth: string
@@ -36,76 +47,188 @@ const LAYERS: LayerData[] = [
   },
 ]
 
-/* Per-layer floating glass objects */
-const LAYER_OBJECTS = [
-  // Epistemic — bright, clear disc
-  (
-    <div key="l0-objs" className="absolute inset-0 overflow-hidden" aria-hidden="true">
-      <GlassDisc
-        diameter={280}
-        rx={68}
-        ry={-8}
-        opacity={0.18}
-        tint="200,220,240"
-        className="absolute hidden md:block"
-        style={{ top: '10%', right: '5%' }}
-        duration="24s"
-      />
-    </div>
-  ),
-  // Ontological — tilted ring, semi-transparent
-  (
-    <div key="l1-objs" className="absolute inset-0 overflow-hidden" aria-hidden="true">
-      <GlassRing
-        diameter={300}
-        tube={20}
-        rx={50}
-        ry={12}
-        tint="139,126,184"
-        opacity={0.08}
-        style={{ top: '5%', right: '2%' }}
-        duration="32s"
-      />
-    </div>
-  ),
-  // Political — heavy plane, almost opaque edge
-  (
-    <div key="l2-objs" className="absolute inset-0 overflow-hidden" aria-hidden="true">
-      <GlassPlane
-        w={360}
-        h={240}
-        rx={14}
-        ry={-18}
-        opacity={0.08}
-        blur={10}
-        radius={16}
-        className="absolute hidden md:block"
-        style={{ bottom: '8%', right: '0%' }}
-        duration="30s"
-      />
-    </div>
-  ),
-]
+/* ── Shared head/torso paths ── */
+
+function headPath(ctx: CanvasRenderingContext2D, s: number) {
+  ctx.beginPath()
+  ctx.moveTo(0, -48 * s)
+  ctx.bezierCurveTo(30 * s, -48 * s, 48 * s, -28 * s, 48 * s, -2 * s)
+  ctx.bezierCurveTo(48 * s, 18 * s, 40 * s, 34 * s, 28 * s, 44 * s)
+  ctx.bezierCurveTo(18 * s, 52 * s, 8 * s, 56 * s, 0, 58 * s)
+  ctx.bezierCurveTo(-8 * s, 56 * s, -18 * s, 52 * s, -28 * s, 44 * s)
+  ctx.bezierCurveTo(-40 * s, 34 * s, -48 * s, 18 * s, -48 * s, -2 * s)
+  ctx.bezierCurveTo(-48 * s, -28 * s, -30 * s, -48 * s, 0, -48 * s)
+  ctx.closePath()
+}
+
+function torsoPath(ctx: CanvasRenderingContext2D, s: number) {
+  ctx.beginPath()
+  ctx.moveTo(-14 * s, 0)
+  ctx.lineTo(-14 * s, 18 * s)
+  ctx.bezierCurveTo(-20 * s, 22 * s, -55 * s, 28 * s, -82 * s, 36 * s)
+  ctx.bezierCurveTo(-92 * s, 40 * s, -96 * s, 56 * s, -90 * s, 72 * s)
+  ctx.bezierCurveTo(-84 * s, 78 * s, -68 * s, 76 * s, -56 * s, 80 * s)
+  ctx.bezierCurveTo(-48 * s, 100 * s, -44 * s, 128 * s, -40 * s, 160 * s)
+  ctx.bezierCurveTo(-32 * s, 180 * s, -16 * s, 190 * s, 0, 192 * s)
+  ctx.bezierCurveTo(16 * s, 190 * s, 32 * s, 180 * s, 40 * s, 160 * s)
+  ctx.bezierCurveTo(44 * s, 128 * s, 48 * s, 100 * s, 56 * s, 80 * s)
+  ctx.bezierCurveTo(68 * s, 76 * s, 84 * s, 78 * s, 90 * s, 72 * s)
+  ctx.bezierCurveTo(96 * s, 56 * s, 92 * s, 40 * s, 82 * s, 36 * s)
+  ctx.bezierCurveTo(55 * s, 28 * s, 20 * s, 22 * s, 14 * s, 18 * s)
+  ctx.lineTo(14 * s, 0)
+  ctx.closePath()
+}
+
+/* ── Per-layer canvas (one per layer, embedded in the section) ── */
+
+function LayerCanvas({ layerIndex }: { layerIndex: number }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const c = canvasRef.current
+    if (!c) return
+    const ctx = c.getContext('2d')
+    if (!ctx) return
+    const dpr = window.devicePixelRatio || 1
+
+    const resize = () => { c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0) }
+
+    // Depth multiplier: 0=bright/surface, 2=dim/submerged
+    const depth = layerIndex
+    const opMul = 1 - depth * 0.3 // 1.0, 0.7, 0.4
+
+    function draw() {
+      if (!c || !ctx) return
+      const w = c.offsetWidth, h = c.offsetHeight
+      const t = Date.now() * 0.0001
+      const vmin = Math.min(w, h)
+      ctx.clearRect(0, 0, w, h)
+
+      const s = vmin / 420
+      const cx = w * 0.82 + Math.sin(t * 0.82 + depth * 1.5) * 2
+      const cy = h * 0.5 + Math.sin(t * 1.05 + depth * 1.2) * 4
+
+      ctx.save()
+      ctx.translate(cx, cy)
+      ctx.rotate(Math.sin(t * 0.524 + depth) * 0.01)
+
+      if (depth === 0) {
+        // Layer I: Clear head profile — the knowable subject
+        ctx.save()
+        ctx.shadowColor = `rgba(91,164,201,${0.08 * opMul})`
+        ctx.shadowBlur = 16 * s
+        headPath(ctx, s)
+        ctx.strokeStyle = 'rgba(91,164,201,0.01)'
+        ctx.lineWidth = 1
+        ctx.stroke()
+        ctx.restore()
+
+        headPath(ctx, s)
+        const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, 0, 55 * s)
+        hg.addColorStop(0, `rgba(91,164,201,${0.05 * opMul})`)
+        hg.addColorStop(0.6, `rgba(91,164,201,${0.02 * opMul})`)
+        hg.addColorStop(1, 'rgba(91,164,201,0)')
+        ctx.fillStyle = hg
+        ctx.fill()
+        ctx.strokeStyle = `rgba(91,164,201,${0.1 * opMul})`
+        ctx.lineWidth = 1.2
+        ctx.stroke()
+
+        headPath(ctx, s * 0.75)
+        ctx.strokeStyle = `rgba(139,126,184,${0.05 * opMul})`
+        ctx.lineWidth = 0.6
+        ctx.stroke()
+      } else if (depth === 1) {
+        // Layer II: Fragmenting torso — self-relation destabilised
+        // Draw head smaller, torso prominent, with visible separation
+        const deform = 1 + Math.sin(t * 0.698) * 0.005
+        ctx.scale(deform, 1 / deform)
+
+        ctx.save()
+        ctx.translate(0, 45 * s)
+        torsoPath(ctx, s * 0.7)
+        const tg = ctx.createLinearGradient(0, 0, 0, 135 * s)
+        tg.addColorStop(0, `rgba(139,126,184,${0.035 * opMul})`)
+        tg.addColorStop(0.6, `rgba(139,126,184,${0.015 * opMul})`)
+        tg.addColorStop(1, 'rgba(139,126,184,0)')
+        ctx.fillStyle = tg
+        ctx.fill()
+        ctx.strokeStyle = `rgba(139,126,184,${0.06 * opMul})`
+        ctx.lineWidth = 1
+        ctx.stroke()
+
+        // Fragmenting inner echo — offset, suggesting instability
+        ctx.save()
+        ctx.translate(Math.sin(t * 0.785) * 2, Math.cos(t * 0.628) * 1.5)
+        torsoPath(ctx, s * 0.58)
+        ctx.strokeStyle = `rgba(91,164,201,${0.025 * opMul})`
+        ctx.lineWidth = 0.5
+        ctx.stroke()
+        ctx.restore()
+        ctx.restore()
+
+        // Small head above — slightly displaced
+        ctx.save()
+        ctx.translate(Math.sin(t * 0.628) * 1.5, 0)
+        headPath(ctx, s * 0.55)
+        ctx.fillStyle = `rgba(139,126,184,${0.02 * opMul})`
+        ctx.fill()
+        ctx.strokeStyle = `rgba(139,126,184,${0.05 * opMul})`
+        ctx.lineWidth = 0.8
+        ctx.stroke()
+        ctx.restore()
+      } else {
+        // Layer III: Fading full silhouette — deeply submerged
+        const breathe = 1 + Math.sin(t * 1.57) * 0.003
+        ctx.scale(breathe, breathe)
+
+        // Faint full body
+        ctx.save()
+        ctx.translate(0, 40 * s)
+        torsoPath(ctx, s * 0.6)
+        const tg = ctx.createLinearGradient(0, 0, 0, 115 * s)
+        tg.addColorStop(0, `rgba(91,164,201,${0.02 * opMul})`)
+        tg.addColorStop(1, 'rgba(91,164,201,0)')
+        ctx.fillStyle = tg
+        ctx.fill()
+        ctx.strokeStyle = `rgba(91,164,201,${0.03 * opMul})`
+        ctx.lineWidth = 0.8
+        ctx.stroke()
+        ctx.restore()
+
+        headPath(ctx, s * 0.5)
+        ctx.fillStyle = `rgba(91,164,201,${0.012 * opMul})`
+        ctx.fill()
+        ctx.strokeStyle = `rgba(91,164,201,${0.025 * opMul})`
+        ctx.lineWidth = 0.6
+        ctx.stroke()
+
+        // A faint ring enclosing the form — the governance structure
+        ctx.beginPath()
+        ctx.arc(0, 30 * s, 85 * s, 0, Math.PI * 2)
+        ctx.strokeStyle = `rgba(91,164,201,${0.015 * opMul})`
+        ctx.lineWidth = 0.5
+        ctx.stroke()
+      }
+
+      ctx.restore()
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+    let id: number
+    const loop = () => { draw(); id = requestAnimationFrame(loop) }
+    loop()
+    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
+  }, [layerIndex])
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true" />
+}
 
 export function Layers() {
   return (
     <section id="layers">
       <div className="relative pt-28 md:pt-40 pb-16 md:pb-24 bg-base overflow-hidden">
-        {/* Large floating glass disc behind the header */}
-        <div className="absolute inset-0" aria-hidden="true">
-          <GlassDisc
-            diameter={420}
-            rx={72}
-            ry={-5}
-            opacity={0.1}
-            tint="235,239,248"
-            className="absolute hidden lg:block"
-            style={{ top: '-8%', left: '-5%' }}
-            animation="float-1"
-            duration="30s"
-          />
-        </div>
-
         <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
           <Reveal>
             <SectionLabel>Three-Layer Model</SectionLabel>
@@ -121,8 +244,7 @@ export function Layers() {
           key={layer.depth}
           className={`relative ${i % 2 === 1 ? 'bg-surface' : 'bg-base'} ${i === 2 ? 'pb-28 md:pb-40 pt-16 md:pt-24' : 'py-16 md:py-24'} overflow-hidden`}
         >
-          {/* Per-layer floating object */}
-          {LAYER_OBJECTS[i]}
+          <LayerCanvas layerIndex={i} />
 
           <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
             <Reveal delay={i * 0.08}>

@@ -3,29 +3,234 @@
 import { useEffect, useRef } from 'react'
 import { SectionLabel } from '@/components/ui/section-label'
 import { Reveal } from '@/components/ui/reveal'
-import { GlassRing, GlassSphere, GlassPlane, GlassMonolith } from '@/components/ui/glass-forms'
 
-/* ━━━ Suite Section ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ *  Suite — three distinct object ecologies
+ *
+ *  Observatory : governance ring + small scanning arcs
+ *  Drift       : drifting head contour echoes that slowly separate
+ *  Platformed  : mirrored ghost pair facing each other
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ── shared paths ── */
+
+function headPath(ctx: CanvasRenderingContext2D, s: number) {
+  ctx.beginPath()
+  ctx.moveTo(0, -48 * s)
+  ctx.bezierCurveTo(30 * s, -48 * s, 48 * s, -28 * s, 48 * s, -2 * s)
+  ctx.bezierCurveTo(48 * s, 18 * s, 40 * s, 34 * s, 28 * s, 44 * s)
+  ctx.bezierCurveTo(18 * s, 52 * s, 8 * s, 56 * s, 0, 58 * s)
+  ctx.bezierCurveTo(-8 * s, 56 * s, -18 * s, 52 * s, -28 * s, 44 * s)
+  ctx.bezierCurveTo(-40 * s, 34 * s, -48 * s, 18 * s, -48 * s, -2 * s)
+  ctx.bezierCurveTo(-48 * s, -28 * s, -30 * s, -48 * s, 0, -48 * s)
+  ctx.closePath()
+}
+
+function cranialProfile(ctx: CanvasRenderingContext2D, s: number) {
+  ctx.beginPath()
+  ctx.moveTo(-15 * s, -95 * s)
+  ctx.bezierCurveTo(30 * s, -115 * s, 75 * s, -105 * s, 85 * s, -72 * s)
+  ctx.bezierCurveTo(92 * s, -48 * s, 88 * s, -30 * s, 78 * s, -15 * s)
+  ctx.bezierCurveTo(72 * s, -5 * s, 75 * s, 8 * s, 72 * s, 18 * s)
+  ctx.bezierCurveTo(68 * s, 30 * s, 60 * s, 38 * s, 52 * s, 42 * s)
+  ctx.bezierCurveTo(44 * s, 48 * s, 32 * s, 60 * s, 18 * s, 68 * s)
+  ctx.bezierCurveTo(6 * s, 74 * s, -12 * s, 72 * s, -24 * s, 64 * s)
+  ctx.bezierCurveTo(-36 * s, 56 * s, -42 * s, 40 * s, -44 * s, 22 * s)
+  ctx.bezierCurveTo(-48 * s, -8 * s, -50 * s, -38 * s, -42 * s, -66 * s)
+  ctx.bezierCurveTo(-36 * s, -86 * s, -26 * s, -94 * s, -15 * s, -95 * s)
+  ctx.closePath()
+}
+
+/* ── Observatory canvas: ring + scan arcs ── */
+
+function ObservatoryCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current
+    if (!c) return
+    const ctx = c.getContext('2d')
+    if (!ctx) return
+    const dpr = window.devicePixelRatio || 1
+    const resize = () => { c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0) }
+
+    function draw() {
+      if (!c || !ctx) return
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
+      const r = Math.min(w, h) * 0.38
+      const cx = w * 0.5 + Math.sin(t * 0.82) * 2
+      const cy = h * 0.5 + Math.cos(t * 0.68) * 2
+      ctx.clearRect(0, 0, w, h)
+
+      ctx.save()
+      ctx.translate(cx, cy)
+
+      // Ring bands
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(91,164,201,0.06)'; ctx.lineWidth = r * 0.08; ctx.stroke()
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.76, 0, Math.PI * 2)
+      ctx.strokeStyle = 'rgba(91,164,201,0.03)'; ctx.lineWidth = r * 0.025; ctx.stroke()
+
+      // Markers
+      const rot = t * 0.12
+      ctx.save(); ctx.rotate(rot)
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2
+        const major = i % 6 === 0
+        const len = major ? r * 0.08 : r * 0.035
+        ctx.beginPath()
+        ctx.moveTo(Math.cos(a) * (r - r * 0.04 - len), Math.sin(a) * (r - r * 0.04 - len))
+        ctx.lineTo(Math.cos(a) * (r - r * 0.04), Math.sin(a) * (r - r * 0.04))
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.14 : 0.05})`
+        ctx.lineWidth = major ? 1.3 : 0.6; ctx.lineCap = 'round'; ctx.stroke()
+      }
+      ctx.restore()
+
+      // Hand
+      const ha = t * 0.18
+      ctx.beginPath(); ctx.moveTo(0, 0)
+      ctx.lineTo(Math.cos(ha) * r * 0.68, Math.sin(ha) * r * 0.68)
+      ctx.strokeStyle = 'rgba(91,164,201,0.06)'; ctx.lineWidth = 0.8; ctx.stroke()
+      ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(91,164,201,0.12)'; ctx.fill()
+
+      ctx.restore()
+    }
+
+    resize(); window.addEventListener('resize', resize)
+    let id: number; const loop = () => { draw(); id = requestAnimationFrame(loop) }; loop()
+    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
+  }, [])
+  return <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
+}
+
+/* ── Drift canvas: drifting cranial echoes separating ── */
+
+function DriftCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current
+    if (!c) return
+    const ctx = c.getContext('2d')
+    if (!ctx) return
+    const dpr = window.devicePixelRatio || 1
+    const resize = () => { c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0) }
+
+    function draw() {
+      if (!c || !ctx) return
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
+      const s = Math.min(w, h) / 340
+      ctx.clearRect(0, 0, w, h)
+
+      ctx.save()
+      ctx.translate(w * 0.5, h * 0.48)
+
+      // 5 echoes of the same cranial profile, slowly drifting apart
+      for (let i = 0; i < 5; i++) {
+        const spread = Math.sin(t * 0.524 + i * 0.3) * (3 + i * 2.5)
+        const vertDrift = Math.sin(t * 0.785 + i * 0.7) * (1 + i * 1.2)
+        const scale = 1 - i * 0.08
+        const op = 0.07 - i * 0.012
+        const color = i % 2 === 0 ? '91,164,201' : '139,126,184'
+
+        ctx.save()
+        ctx.translate(spread, vertDrift)
+        cranialProfile(ctx, s * scale)
+        ctx.strokeStyle = `rgba(${color},${op})`
+        ctx.lineWidth = 0.7 - i * 0.08
+        ctx.stroke()
+        if (i === 0) {
+          const fg = ctx.createRadialGradient(10 * s, -20 * s, 0, 0, 0, 80 * s)
+          fg.addColorStop(0, 'rgba(91,164,201,0.02)')
+          fg.addColorStop(1, 'rgba(91,164,201,0)')
+          ctx.fillStyle = fg
+          ctx.fill()
+        }
+        ctx.restore()
+      }
+
+      ctx.restore()
+    }
+
+    resize(); window.addEventListener('resize', resize)
+    let id: number; const loop = () => { draw(); id = requestAnimationFrame(loop) }; loop()
+    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
+  }, [])
+  return <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
+}
+
+/* ── Platformed canvas: mirrored ghost heads facing each other ── */
+
+function PlatformedCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current
+    if (!c) return
+    const ctx = c.getContext('2d')
+    if (!ctx) return
+    const dpr = window.devicePixelRatio || 1
+    const resize = () => { c.width = c.offsetWidth * dpr; c.height = c.offsetHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0) }
+
+    function draw() {
+      if (!c || !ctx) return
+      const w = c.offsetWidth, h = c.offsetHeight, t = Date.now() * 0.0001
+      const s = Math.min(w, h) / 320
+      ctx.clearRect(0, 0, w, h)
+
+      const gap = 28 * s + Math.sin(t * 0.698) * 3 * s // gap oscillates
+      const floatY = Math.sin(t * 1.05) * 3
+
+      // Left-facing head
+      ctx.save()
+      ctx.translate(w * 0.5 - gap, h * 0.48 + floatY)
+      headPath(ctx, s * 0.85)
+      const lg = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 48 * s)
+      lg.addColorStop(0, 'rgba(91,164,201,0.04)')
+      lg.addColorStop(1, 'rgba(91,164,201,0.008)')
+      ctx.fillStyle = lg; ctx.fill()
+      ctx.strokeStyle = 'rgba(91,164,201,0.08)'; ctx.lineWidth = 1; ctx.stroke()
+      headPath(ctx, s * 0.62)
+      ctx.strokeStyle = 'rgba(139,126,184,0.04)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.restore()
+
+      // Right-facing head (mirrored)
+      ctx.save()
+      ctx.translate(w * 0.5 + gap, h * 0.48 + floatY)
+      ctx.scale(-1, 1)
+      headPath(ctx, s * 0.85)
+      const rg = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 48 * s)
+      rg.addColorStop(0, 'rgba(91,164,201,0.035)')
+      rg.addColorStop(1, 'rgba(91,164,201,0.006)')
+      ctx.fillStyle = rg; ctx.fill()
+      ctx.strokeStyle = 'rgba(91,164,201,0.065)'; ctx.lineWidth = 1; ctx.stroke()
+      headPath(ctx, s * 0.62)
+      ctx.strokeStyle = 'rgba(139,126,184,0.03)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.restore()
+
+      // Connecting arc between them — the feedback loop
+      ctx.save()
+      ctx.translate(w * 0.5, h * 0.48 + floatY)
+      ctx.beginPath()
+      ctx.arc(0, -10 * s, gap + 20 * s, Math.PI * 0.15, Math.PI * 0.85)
+      ctx.strokeStyle = 'rgba(91,164,201,0.025)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(0, 10 * s, gap + 20 * s, -Math.PI * 0.85, -Math.PI * 0.15)
+      ctx.strokeStyle = 'rgba(139,126,184,0.02)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.restore()
+    }
+
+    resize(); window.addEventListener('resize', resize)
+    let id: number; const loop = () => { draw(); id = requestAnimationFrame(loop) }; loop()
+    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
+  }, [])
+  return <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
+}
+
+/* ━━━ Suite ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export function Suite() {
   return (
-    <section id="suite" className="relative py-28 md:py-40 bg-surface overflow-hidden">
-      {/* Section-level floating objects */}
-      <div className="absolute inset-0" aria-hidden="true">
-        {/* Large ring behind header */}
-        <GlassRing
-          diameter={400}
-          tube={22}
-          rx={55}
-          ry={-20}
-          tint="91,164,201"
-          opacity={0.06}
-          style={{ top: '-4%', left: '50%', marginLeft: -200 }}
-          duration="40s"
-        />
-      </div>
-
-      <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
+    <section id="suite" className="py-28 md:py-40 bg-surface">
+      <div className="max-w-[1040px] mx-auto px-6 md:px-12">
         <Reveal>
           <SectionLabel>The Suite</SectionLabel>
           <h2 className="font-display text-[1.75rem] md:text-[2.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary max-w-[520px] mb-20">
@@ -35,406 +240,54 @@ export function Suite() {
 
         <div className="space-y-24 md:space-y-32">
           <Reveal delay={0.05}>
-            <ObservatoryCard />
+            <article className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+              <div className="md:col-span-6 relative h-[300px] md:h-[360px] rounded-2xl overflow-hidden bg-base border border-panel-border">
+                <ObservatoryCanvas />
+              </div>
+              <div className="md:col-span-6">
+                <span className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-accent mb-2 block">Analytical</span>
+                <h3 className="font-display text-[1.5rem] md:text-[1.75rem] font-normal leading-[1.2] text-text-primary mb-2">Ontological Governance Observatory</h3>
+                <p className="font-sans text-[0.88rem] text-text-ghost font-light mb-4">Map the governance gap</p>
+                <p className="font-sans text-[0.92rem] md:text-[0.95rem] leading-[1.8] text-text-secondary font-light max-w-[480px]">
+                  A systematic mapping of the gap between existing AI governance frameworks and the deeper epistemic, ontological, and political transformations they fail to address. Where current oversight ends, the Observatory begins.
+                </p>
+              </div>
+            </article>
           </Reveal>
+
           <Reveal delay={0.1}>
-            <DriftCard />
+            <article className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+              <div className="md:col-span-6 md:order-1">
+                <span className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-violet mb-2 block">Experiential</span>
+                <h3 className="font-display text-[1.5rem] md:text-[1.75rem] font-normal leading-[1.2] text-text-primary mb-2">Narrative Drift</h3>
+                <p className="font-sans text-[0.88rem] text-text-ghost font-light mb-4">Experience subject formation</p>
+                <p className="font-sans text-[0.92rem] md:text-[0.95rem] leading-[1.8] text-text-secondary font-light max-w-[480px]">
+                  An experiential instrument that renders the slow, cumulative drift of narrative identity under AI-mediated conditions — making visible how the stories we tell about ourselves fragment, shift, and reform when memory and self-narration are no longer entirely our own.
+                </p>
+              </div>
+              <div className="md:col-span-6 md:order-2 relative h-[300px] md:h-[360px] rounded-2xl overflow-hidden bg-base border border-panel-border">
+                <DriftCanvas />
+              </div>
+            </article>
           </Reveal>
+
           <Reveal delay={0.15}>
-            <PlatformedCard />
+            <article className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+              <div className="md:col-span-6 relative h-[300px] md:h-[360px] rounded-2xl overflow-hidden bg-base border border-panel-border">
+                <PlatformedCanvas />
+              </div>
+              <div className="md:col-span-6">
+                <span className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-text-tertiary mb-2 block">Reflective</span>
+                <h3 className="font-display text-[1.5rem] md:text-[1.75rem] font-normal leading-[1.2] text-text-primary mb-2">The Platformed Self</h3>
+                <p className="font-sans text-[0.88rem] text-text-ghost font-light mb-4">Trace the platformed self</p>
+                <p className="font-sans text-[0.92rem] md:text-[0.95rem] leading-[1.8] text-text-secondary font-light max-w-[480px]">
+                  A reflective instrument that traces how identity is constructed, mirrored, and looped back through platformed and AI-mediated environments — revealing the recursive feedback between the self that performs and the system that shapes what it performs as.
+                </p>
+              </div>
+            </article>
           </Reveal>
         </div>
       </div>
     </section>
-  )
-}
-
-/* ━━━ Observatory ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-function ObservatoryCard() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    const dpr = window.devicePixelRatio || 1
-
-    function resize() {
-      if (!canvas || !ctx) return
-      canvas.width = canvas.offsetWidth * dpr
-      canvas.height = canvas.offsetHeight * dpr
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    }
-
-    function draw() {
-      if (!canvas || !ctx) return
-      const w = canvas.offsetWidth
-      const h = canvas.offsetHeight
-      const time = Date.now() * 0.0003
-
-      ctx.clearRect(0, 0, w, h)
-
-      const cols = 10
-      const rows = 8
-      const cellW = w / cols
-      const cellH = h / rows
-
-      // Vertical lines
-      ctx.lineWidth = 0.6
-      for (let c = 1; c < cols; c++) {
-        ctx.beginPath()
-        ctx.strokeStyle = `rgba(91,164,201,${0.06 + Math.sin(time + c) * 0.015})`
-        for (let y = 0; y <= h; y += 2) {
-          const warp = Math.sin(y * 0.012 + time + c * 0.5) * 8 + Math.sin(y * 0.025 + time * 1.3) * 3
-          const x = c * cellW + warp
-          if (y === 0) ctx.moveTo(x, y)
-          else ctx.lineTo(x, y)
-        }
-        ctx.stroke()
-      }
-
-      // Horizontal lines
-      for (let r = 1; r < rows; r++) {
-        ctx.beginPath()
-        ctx.strokeStyle = `rgba(91,164,201,${0.05 + Math.sin(time * 0.8 + r) * 0.012})`
-        for (let x = 0; x <= w; x += 2) {
-          const warp = Math.cos(x * 0.01 + time * 1.1 + r * 0.6) * 5 + Math.cos(x * 0.022 + time * 0.7) * 2
-          const y = r * cellH + warp
-          if (x === 0) ctx.moveTo(x, y)
-          else ctx.lineTo(x, y)
-        }
-        ctx.stroke()
-      }
-
-      // Intersection nodes with varying sizes
-      for (let c = 1; c < cols; c++) {
-        for (let r = 1; r < rows; r++) {
-          const x = c * cellW + Math.sin(r * cellH * 0.012 + time + c * 0.5) * 8
-          const y = r * cellH + Math.cos(x * 0.01 + time * 1.1 + r * 0.6) * 5
-          const pulse = 0.5 + Math.sin(time * 2 + c * 1.1 + r * 0.7) * 0.5
-          ctx.beginPath()
-          ctx.arc(x, y, 2 * pulse, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(91,164,201,${0.12 * pulse})`
-          ctx.fill()
-        }
-      }
-    }
-
-    resize()
-    window.addEventListener('resize', resize)
-    let id: number
-    const loop = () => { draw(); id = requestAnimationFrame(loop) }
-    loop()
-    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
-  }, [])
-
-  return (
-    <article className="relative">
-      {/* Floating sphere companion */}
-      <GlassSphere
-        size={180}
-        className="absolute hidden lg:block"
-        style={{ top: '-30px', right: '-40px', zIndex: 5 }}
-        animation="float-2"
-        duration="22s"
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
-        <div className="md:col-span-6 relative h-[300px] md:h-[360px] rounded-2xl overflow-hidden bg-base border border-panel-border">
-          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" aria-hidden="true" />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, var(--color-base) 100%)' }} />
-        </div>
-        <div className="md:col-span-6">
-          <span className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-accent mb-2 block">
-            Analytical
-          </span>
-          <h3 className="font-display text-[1.5rem] md:text-[1.75rem] font-normal leading-[1.2] text-text-primary mb-2">
-            Ontological Governance Observatory
-          </h3>
-          <p className="font-sans text-[0.88rem] text-text-ghost font-light mb-4">
-            Map the governance gap
-          </p>
-          <p className="font-sans text-[0.92rem] md:text-[0.95rem] leading-[1.8] text-text-secondary font-light max-w-[480px]">
-            A systematic mapping of the gap between existing AI governance
-            frameworks and the deeper epistemic, ontological, and political
-            transformations they fail to address. Where current oversight ends,
-            the Observatory begins.
-          </p>
-        </div>
-      </div>
-    </article>
-  )
-}
-
-/* ━━━ Narrative Drift ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-function DriftCard() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    const dpr = window.devicePixelRatio || 1
-
-    function resize() {
-      if (!canvas || !ctx) return
-      canvas.width = canvas.offsetWidth * dpr
-      canvas.height = canvas.offsetHeight * dpr
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    }
-
-    function draw() {
-      if (!canvas || !ctx) return
-      const w = canvas.offsetWidth
-      const h = canvas.offsetHeight
-      const time = Date.now() * 0.0002
-
-      ctx.clearRect(0, 0, w, h)
-
-      // Main contour traces
-      for (let i = 0; i < 9; i++) {
-        const baseY = h * 0.08 + i * h * 0.1
-        const drift = Math.sin(time * 0.7 + i * 1.2) * 24
-        const opacity = 0.04 + Math.sin(time + i * 0.6) * 0.015
-
-        ctx.beginPath()
-        ctx.strokeStyle = `rgba(139,126,184,${opacity})`
-        ctx.lineWidth = 0.9
-
-        for (let x = 0; x <= w; x += 2) {
-          const nx = x / w
-          const y = baseY + drift +
-            Math.sin(nx * 4 + time + i * 0.9) * 14 +
-            Math.sin(nx * 9 + time * 1.4 + i * 0.3) * 6 +
-            Math.sin(nx * 2.5 + time * 0.6 + i * 1.5) * 8
-          if (x === 0) ctx.moveTo(x, y)
-          else ctx.lineTo(x, y)
-        }
-        ctx.stroke()
-
-        // Fragmented echo
-        if (i % 2 === 0) {
-          ctx.beginPath()
-          ctx.strokeStyle = `rgba(139,126,184,${opacity * 0.35})`
-          const startX = w * (0.15 + Math.sin(time + i) * 0.08)
-          const endX = w * (0.75 + Math.cos(time + i) * 0.06)
-          for (let x = startX; x <= endX; x += 2) {
-            const nx = x / w
-            const y = baseY + drift + 10 +
-              Math.sin(nx * 4 + time + i * 0.9) * 14 +
-              Math.sin(nx * 9 + time * 1.4 + i * 0.3) * 6
-            if (x === startX) ctx.moveTo(x, y)
-            else ctx.lineTo(x, y)
-          }
-          ctx.stroke()
-        }
-
-        // Second echo — more faded, more offset
-        if (i % 3 === 0) {
-          ctx.beginPath()
-          ctx.strokeStyle = `rgba(139,126,184,${opacity * 0.18})`
-          const startX = w * 0.3
-          const endX = w * 0.6
-          for (let x = startX; x <= endX; x += 2) {
-            const nx = x / w
-            const y = baseY + drift + 18 +
-              Math.sin(nx * 4 + time + i * 0.9) * 14
-            if (x === startX) ctx.moveTo(x, y)
-            else ctx.lineTo(x, y)
-          }
-          ctx.stroke()
-        }
-      }
-    }
-
-    resize()
-    window.addEventListener('resize', resize)
-    let id: number
-    const loop = () => { draw(); id = requestAnimationFrame(loop) }
-    loop()
-    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
-  }, [])
-
-  return (
-    <article className="relative">
-      {/* Floating monolith companion */}
-      <GlassMonolith
-        w={120}
-        h={320}
-        rx={5}
-        ry={8}
-        rz={-2}
-        opacity={0.08}
-        className="absolute hidden lg:block"
-        style={{ top: '-40px', left: '-50px', zIndex: 5 }}
-        animation="float-3"
-        duration="28s"
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
-        <div className="md:col-span-6 md:order-1">
-          <span className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-violet mb-2 block">
-            Experiential
-          </span>
-          <h3 className="font-display text-[1.5rem] md:text-[1.75rem] font-normal leading-[1.2] text-text-primary mb-2">
-            Narrative Drift
-          </h3>
-          <p className="font-sans text-[0.88rem] text-text-ghost font-light mb-4">
-            Experience subject formation
-          </p>
-          <p className="font-sans text-[0.92rem] md:text-[0.95rem] leading-[1.8] text-text-secondary font-light max-w-[480px]">
-            An experiential instrument that renders the slow, cumulative drift
-            of narrative identity under AI-mediated conditions — making visible
-            how the stories we tell about ourselves fragment, shift, and reform
-            when memory and self-narration are no longer entirely our own.
-          </p>
-        </div>
-        <div className="md:col-span-6 md:order-2 relative h-[300px] md:h-[360px] rounded-2xl overflow-hidden bg-base border border-panel-border">
-          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" aria-hidden="true" />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, var(--color-base) 100%)' }} />
-        </div>
-      </div>
-    </article>
-  )
-}
-
-/* ━━━ Platformed Self ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-function PlatformedCard() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    const dpr = window.devicePixelRatio || 1
-
-    function resize() {
-      if (!canvas || !ctx) return
-      canvas.width = canvas.offsetWidth * dpr
-      canvas.height = canvas.offsetHeight * dpr
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    }
-
-    function draw() {
-      if (!canvas || !ctx) return
-      const w = canvas.offsetWidth
-      const h = canvas.offsetHeight
-      const cx = w / 2
-      const cy = h / 2
-      const time = Date.now() * 0.0003
-      const scale = Math.min(w, h) / 300
-
-      ctx.clearRect(0, 0, w, h)
-      ctx.save()
-      ctx.translate(cx, cy)
-
-      // More echoing profiles — 7 layers
-      const profiles = [
-        { offset: 0, opacity: 0.14, scale: 1 },
-        { offset: 16, opacity: 0.07, scale: 0.93 },
-        { offset: -16, opacity: 0.07, scale: 0.93 },
-        { offset: 32, opacity: 0.04, scale: 0.86 },
-        { offset: -32, opacity: 0.04, scale: 0.86 },
-        { offset: 48, opacity: 0.02, scale: 0.78 },
-        { offset: -48, opacity: 0.02, scale: 0.78 },
-      ]
-
-      for (const p of profiles) {
-        const drift = Math.sin(time + p.offset * 0.08) * 3
-        ctx.save()
-        ctx.translate(p.offset * scale + drift, Math.sin(time * 0.7 + p.offset * 0.05) * 2)
-
-        const s = scale * p.scale * 0.75
-        ctx.beginPath()
-        ctx.moveTo(-5 * s, -55 * s)
-        ctx.bezierCurveTo(22 * s, -65 * s, 42 * s, -55 * s, 44 * s, -32 * s)
-        ctx.bezierCurveTo(46 * s, -15 * s, 43 * s, -3 * s, 38 * s, 8 * s)
-        ctx.bezierCurveTo(34 * s, 15 * s, 32 * s, 22 * s, 27 * s, 28 * s)
-        ctx.bezierCurveTo(20 * s, 35 * s, 8 * s, 42 * s, -5 * s, 42 * s)
-        ctx.bezierCurveTo(-20 * s, 41 * s, -28 * s, 30 * s, -30 * s, 16 * s)
-        ctx.bezierCurveTo(-33 * s, 0, -33 * s, -22 * s, -27 * s, -40 * s)
-        ctx.bezierCurveTo(-22 * s, -52 * s, -13 * s, -57 * s, -5 * s, -55 * s)
-        ctx.closePath()
-
-        ctx.strokeStyle = `rgba(91,164,201,${p.opacity})`
-        ctx.lineWidth = (p.offset === 0 ? 1.4 : 0.6) * scale
-        ctx.stroke()
-
-        if (p.offset === 0) {
-          ctx.fillStyle = 'rgba(91,164,201,0.008)'
-          ctx.fill()
-        }
-
-        ctx.restore()
-      }
-
-      // Feedback loops — multiple arcs
-      for (let i = 0; i < 3; i++) {
-        const loopRadius = (55 + i * 18) * scale
-        const startAngle = -Math.PI * 0.3 + time * (0.15 - i * 0.03) + i * 0.8
-        ctx.beginPath()
-        ctx.arc(0, 5 * scale, loopRadius, startAngle, startAngle + Math.PI * (1.0 - i * 0.15))
-        ctx.strokeStyle = `rgba(139,126,184,${0.04 - i * 0.01})`
-        ctx.lineWidth = (0.7 - i * 0.1) * scale
-        ctx.stroke()
-      }
-
-      ctx.restore()
-    }
-
-    resize()
-    window.addEventListener('resize', resize)
-    let id: number
-    const loop = () => { draw(); id = requestAnimationFrame(loop) }
-    loop()
-    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id) }
-  }, [])
-
-  return (
-    <article className="relative">
-      {/* Floating plane companion */}
-      <GlassPlane
-        w={280}
-        h={200}
-        rx={-8}
-        ry={14}
-        opacity={0.07}
-        blur={12}
-        radius={20}
-        className="absolute hidden lg:block"
-        style={{ bottom: '-30px', right: '-40px', zIndex: 5 }}
-        duration="26s"
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
-        <div className="md:col-span-6 relative h-[300px] md:h-[360px] rounded-2xl overflow-hidden bg-base border border-panel-border">
-          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" aria-hidden="true" />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, var(--color-base) 100%)' }} />
-        </div>
-        <div className="md:col-span-6">
-          <span className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-text-tertiary mb-2 block">
-            Reflective
-          </span>
-          <h3 className="font-display text-[1.5rem] md:text-[1.75rem] font-normal leading-[1.2] text-text-primary mb-2">
-            The Platformed Self
-          </h3>
-          <p className="font-sans text-[0.88rem] text-text-ghost font-light mb-4">
-            Trace the platformed self
-          </p>
-          <p className="font-sans text-[0.92rem] md:text-[0.95rem] leading-[1.8] text-text-secondary font-light max-w-[480px]">
-            A reflective instrument that traces how identity is constructed,
-            mirrored, and looped back through platformed and AI-mediated
-            environments — revealing the recursive feedback between the self
-            that performs and the system that shapes what it performs as.
-          </p>
-        </div>
-      </div>
-    </article>
   )
 }
