@@ -45,8 +45,59 @@ body {
   color: var(--color-text-secondary);
   font-family: var(--font-sans);
   line-height: 1.65;
+  overflow-x: hidden;
 }
 
 ::selection {
   background-color: var(--color-accent-glow);
+}
+
+/* ━━━ Glass Object Animations ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@keyframes float-1 {
+  0%, 100% { translate: 0 0; }
+  25% { translate: 8px -18px; }
+  50% { translate: -4px -28px; }
+  75% { translate: 6px -12px; }
+}
+
+@keyframes float-2 {
+  0%, 100% { translate: 0 0; }
+  33% { translate: -12px -22px; }
+  66% { translate: 10px -16px; }
+}
+
+@keyframes float-3 {
+  0%, 100% { translate: 0 0; }
+  50% { translate: -6px -20px; }
+}
+
+@keyframes slow-spin {
+  from { rotate: 0deg; }
+  to { rotate: 360deg; }
+}
+
+@keyframes slow-spin-reverse {
+  from { rotate: 360deg; }
+  to { rotate: 0deg; }
+}
+
+@keyframes breathe {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.04; }
+}
+
+@keyframes tilt-drift {
+  0%, 100% { transform: perspective(800px) rotateX(var(--rx, 12deg)) rotateY(var(--ry, -8deg)); }
+  50% { transform: perspective(800px) rotateX(calc(var(--rx, 12deg) + 4deg)) rotateY(calc(var(--ry, -8deg) - 6deg)); }
+}
+
+@keyframes cube-rotate {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
 }

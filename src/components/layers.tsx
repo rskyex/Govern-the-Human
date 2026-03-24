@@ -2,6 +2,7 @@
 
 import { SectionLabel } from '@/components/ui/section-label'
 import { Reveal } from '@/components/ui/reveal'
+import { GlassDisc, GlassPlane, GlassRing } from '@/components/ui/glass-forms'
 
 interface LayerData {
   depth: string
@@ -35,11 +36,77 @@ const LAYERS: LayerData[] = [
   },
 ]
 
+/* Per-layer floating glass objects */
+const LAYER_OBJECTS = [
+  // Epistemic — bright, clear disc
+  (
+    <div key="l0-objs" className="absolute inset-0 overflow-hidden" aria-hidden="true">
+      <GlassDisc
+        diameter={280}
+        rx={68}
+        ry={-8}
+        opacity={0.18}
+        tint="200,220,240"
+        className="absolute hidden md:block"
+        style={{ top: '10%', right: '5%' }}
+        duration="24s"
+      />
+    </div>
+  ),
+  // Ontological — tilted ring, semi-transparent
+  (
+    <div key="l1-objs" className="absolute inset-0 overflow-hidden" aria-hidden="true">
+      <GlassRing
+        diameter={300}
+        tube={20}
+        rx={50}
+        ry={12}
+        tint="139,126,184"
+        opacity={0.08}
+        style={{ top: '5%', right: '2%' }}
+        duration="32s"
+      />
+    </div>
+  ),
+  // Political — heavy plane, almost opaque edge
+  (
+    <div key="l2-objs" className="absolute inset-0 overflow-hidden" aria-hidden="true">
+      <GlassPlane
+        w={360}
+        h={240}
+        rx={14}
+        ry={-18}
+        opacity={0.08}
+        blur={10}
+        radius={16}
+        className="absolute hidden md:block"
+        style={{ bottom: '8%', right: '0%' }}
+        duration="30s"
+      />
+    </div>
+  ),
+]
+
 export function Layers() {
   return (
     <section id="layers">
-      <div className="pt-28 md:pt-40 pb-16 md:pb-24 bg-base">
-        <div className="max-w-[1040px] mx-auto px-6 md:px-12">
+      <div className="relative pt-28 md:pt-40 pb-16 md:pb-24 bg-base overflow-hidden">
+        {/* Large floating glass disc behind the header */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <GlassDisc
+            diameter={420}
+            rx={72}
+            ry={-5}
+            opacity={0.1}
+            tint="235,239,248"
+            className="absolute hidden lg:block"
+            style={{ top: '-8%', left: '-5%' }}
+            animation="float-1"
+            duration="30s"
+          />
+        </div>
+
+        <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
           <Reveal>
             <SectionLabel>Three-Layer Model</SectionLabel>
             <h2 className="font-display text-[1.75rem] md:text-[2.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary max-w-[540px]">
@@ -50,8 +117,14 @@ export function Layers() {
       </div>
 
       {LAYERS.map((layer, i) => (
-        <div key={layer.depth} className={`${i % 2 === 1 ? 'bg-surface' : 'bg-base'} ${i === 2 ? 'pb-28 md:pb-40 pt-16 md:pt-24' : 'py-16 md:py-24'}`}>
-          <div className="max-w-[1040px] mx-auto px-6 md:px-12">
+        <div
+          key={layer.depth}
+          className={`relative ${i % 2 === 1 ? 'bg-surface' : 'bg-base'} ${i === 2 ? 'pb-28 md:pb-40 pt-16 md:pt-24' : 'py-16 md:py-24'} overflow-hidden`}
+        >
+          {/* Per-layer floating object */}
+          {LAYER_OBJECTS[i]}
+
+          <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
             <Reveal delay={i * 0.08}>
               <div
                 className="relative border-l-2 pl-8 md:pl-12"

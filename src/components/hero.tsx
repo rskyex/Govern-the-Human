@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { GlassPlane, GlassSphere, GlassRing, GlassDisc } from '@/components/ui/glass-forms'
 
 const ease = [0.23, 1, 0.32, 1] as const
 
@@ -49,10 +50,11 @@ export function Hero() {
 
       ctx.clearRect(0, 0, w, h)
 
-      // Ambient glow
-      const ag = ctx.createRadialGradient(cx, cy, 0, cx, cy, 280 * scale)
-      ag.addColorStop(0, 'rgba(91,164,201,0.07)')
-      ag.addColorStop(0.4, 'rgba(139,126,184,0.03)')
+      // Ambient glow — larger
+      const ag = ctx.createRadialGradient(cx, cy, 0, cx, cy, 360 * scale)
+      ag.addColorStop(0, 'rgba(91,164,201,0.08)')
+      ag.addColorStop(0.3, 'rgba(139,126,184,0.04)')
+      ag.addColorStop(0.6, 'rgba(91,164,201,0.02)')
       ag.addColorStop(1, 'rgba(91,164,201,0)')
       ctx.fillStyle = ag
       ctx.fillRect(0, 0, w, h)
@@ -60,18 +62,18 @@ export function Hero() {
       ctx.save()
       ctx.translate(cx, cy)
 
-      // Scan arcs
-      for (let i = 0; i < 4; i++) {
-        const r = (150 + i * 50) * scale
-        const op = 0.055 - i * 0.01
-        const rot = time * (0.12 + i * 0.035) * (i % 2 === 0 ? 1 : -1)
+      // Expanded scan arcs — 6 rings now
+      for (let i = 0; i < 6; i++) {
+        const r = (130 + i * 48) * scale
+        const op = 0.06 - i * 0.007
+        const rot = time * (0.1 + i * 0.03) * (i % 2 === 0 ? 1 : -1)
         ctx.save()
         ctx.rotate(rot)
         const segs = 3 + i
-        const gap = Math.PI * 0.14
+        const gap = Math.PI * 0.12
         const seg = (Math.PI * 2 - segs * gap) / segs
-        ctx.strokeStyle = `rgba(91,164,201,${op})`
-        ctx.lineWidth = Math.max((1.1 - i * 0.12) * scale, 0.5)
+        ctx.strokeStyle = `rgba(91,164,201,${Math.max(op, 0.01)})`
+        ctx.lineWidth = Math.max((1.2 - i * 0.1) * scale, 0.4)
         ctx.lineCap = 'round'
         for (let j = 0; j < segs; j++) {
           const a = j * (seg + gap)
@@ -85,43 +87,54 @@ export function Hero() {
       const breathe = 1 + Math.sin(time * 0.5) * 0.006
       ctx.scale(breathe, breathe)
 
-      const s = scale * 1.1
+      const s = scale * 1.15
       drawCranialPath(ctx, s)
       const fg = ctx.createLinearGradient(-60 * s, -120 * s, 96 * s, 86 * s)
-      fg.addColorStop(0, 'rgba(91,164,201,0.025)')
-      fg.addColorStop(0.4, 'rgba(139,126,184,0.015)')
+      fg.addColorStop(0, 'rgba(91,164,201,0.03)')
+      fg.addColorStop(0.4, 'rgba(139,126,184,0.018)')
       fg.addColorStop(1, 'rgba(91,164,201,0.008)')
       ctx.fillStyle = fg
       ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.16)'
-      ctx.lineWidth = 1.4 * scale
+      ctx.strokeStyle = 'rgba(91,164,201,0.18)'
+      ctx.lineWidth = 1.6 * scale
       ctx.stroke()
 
+      // Inner echo
       drawCranialPath(ctx, s * 0.78)
-      ctx.strokeStyle = 'rgba(139,126,184,0.07)'
-      ctx.lineWidth = 0.7 * scale
+      ctx.strokeStyle = 'rgba(139,126,184,0.08)'
+      ctx.lineWidth = 0.8 * scale
+      ctx.stroke()
+
+      // Second inner echo
+      drawCranialPath(ctx, s * 0.56)
+      ctx.strokeStyle = 'rgba(91,164,201,0.04)'
+      ctx.lineWidth = 0.5 * scale
       ctx.stroke()
 
       // Scan line
-      const sy = Math.sin(time * 0.55) * 75 * s
-      const sg = ctx.createLinearGradient(-110 * s, 0, 110 * s, 0)
+      const sy = Math.sin(time * 0.55) * 85 * s
+      const sg = ctx.createLinearGradient(-130 * s, 0, 130 * s, 0)
       sg.addColorStop(0, 'rgba(91,164,201,0)')
-      sg.addColorStop(0.25, 'rgba(91,164,201,0.1)')
-      sg.addColorStop(0.75, 'rgba(91,164,201,0.1)')
+      sg.addColorStop(0.2, 'rgba(91,164,201,0.12)')
+      sg.addColorStop(0.8, 'rgba(91,164,201,0.12)')
       sg.addColorStop(1, 'rgba(91,164,201,0)')
       ctx.beginPath()
-      ctx.moveTo(-110 * s, sy)
-      ctx.lineTo(110 * s, sy)
+      ctx.moveTo(-130 * s, sy)
+      ctx.lineTo(130 * s, sy)
       ctx.strokeStyle = sg
-      ctx.lineWidth = 0.7 * scale
+      ctx.lineWidth = 0.8 * scale
       ctx.stroke()
 
       // Nodes
-      for (const n of [{ x: 96, y: -88 }, { x: 90, y: -22 }, { x: 68, y: 46 }, { x: -52, y: -82 }, { x: -54, y: 28 }]) {
+      for (const n of [
+        { x: 96, y: -88 }, { x: 90, y: -22 }, { x: 68, y: 46 },
+        { x: -52, y: -82 }, { x: -54, y: 28 }, { x: 22, y: 86 },
+        { x: -32, y: 82 },
+      ]) {
         const p = 1 + Math.sin(time * 1.8 + n.x * 0.05) * 0.35
         ctx.beginPath()
-        ctx.arc(n.x * s, n.y * s, 1.6 * scale * p, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(91,164,201,0.22)'
+        ctx.arc(n.x * s, n.y * s, 1.8 * scale * p, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(91,164,201,0.25)'
         ctx.fill()
       }
       ctx.restore()
@@ -139,6 +152,69 @@ export function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-base">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true" />
 
+      {/* ── Large floating glass objects ── */}
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+        {/* Large tilted plane — upper left */}
+        <GlassPlane
+          w={520}
+          h={380}
+          rx={18}
+          ry={-14}
+          opacity={0.1}
+          blur={20}
+          radius={32}
+          className="absolute"
+          style={{ top: '8%', left: '-8%' }}
+          duration="34s"
+        />
+
+        {/* Medium plane — lower right */}
+        <GlassPlane
+          w={400}
+          h={280}
+          rx={-10}
+          ry={16}
+          opacity={0.08}
+          blur={14}
+          radius={28}
+          className="absolute"
+          animation="tilt-drift"
+          style={{ bottom: '12%', right: '-5%' }}
+          duration="28s"
+        />
+
+        {/* Sphere — right side */}
+        <GlassSphere
+          size={300}
+          className="absolute hidden md:block"
+          style={{ top: '18%', right: '6%' }}
+          duration="22s"
+        />
+
+        {/* Ring — lower left */}
+        <GlassRing
+          diameter={340}
+          tube={18}
+          rx={60}
+          ry={10}
+          opacity={0.08}
+          className="absolute"
+          style={{ bottom: '5%', left: '8%' }}
+          duration="36s"
+        />
+
+        {/* Small disc — top center right */}
+        <GlassDisc
+          diameter={200}
+          rx={70}
+          opacity={0.15}
+          className="absolute hidden lg:block"
+          style={{ top: '6%', right: '28%' }}
+          duration="20s"
+        />
+      </div>
+
+      {/* ── Content ── */}
       <div className="relative z-10 text-center px-6 max-w-[860px] mx-auto pt-14">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}

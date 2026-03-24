@@ -2,11 +2,48 @@
 
 import { SectionLabel } from '@/components/ui/section-label'
 import { Reveal } from '@/components/ui/reveal'
+import { GlassMonolith, GlassSphere } from '@/components/ui/glass-forms'
 
 export function Thesis() {
   return (
-    <section id="thesis" className="py-28 md:py-40 bg-surface">
-      <div className="max-w-[1040px] mx-auto px-6 md:px-12">
+    <section id="thesis" className="relative py-28 md:py-40 bg-surface overflow-hidden">
+      {/* ── Floating objects ── */}
+      <div className="absolute inset-0" aria-hidden="true">
+        {/* Large monolith — right edge, partially off-screen */}
+        <GlassMonolith
+          w={200}
+          h={480}
+          rx={6}
+          ry={-10}
+          rz={2}
+          opacity={0.1}
+          className="absolute hidden md:block"
+          style={{ top: '10%', right: '-3%' }}
+          duration="36s"
+        />
+
+        {/* Small sphere — left side */}
+        <GlassSphere
+          size={160}
+          tint="139,126,184"
+          glowColor="139,126,184"
+          className="absolute"
+          style={{ top: '15%', left: '3%' }}
+          animation="float-2"
+          duration="20s"
+        />
+
+        {/* Medium sphere — bottom right */}
+        <GlassSphere
+          size={220}
+          className="absolute hidden lg:block"
+          style={{ bottom: '5%', right: '15%' }}
+          animation="float-3"
+          duration="26s"
+        />
+      </div>
+
+      <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
         <Reveal>
           <SectionLabel>Why This Exists</SectionLabel>
         </Reveal>

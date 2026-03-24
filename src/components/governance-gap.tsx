@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { SectionLabel } from '@/components/ui/section-label'
 import { Reveal } from '@/components/ui/reveal'
+import { NestedChambers, GlassPlane, GlassSphere } from '@/components/ui/glass-forms'
 
 /* ━━━ Governance Gap Data ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
@@ -31,8 +32,6 @@ const ZONE_META = {
     sublabel: 'Surface-level — visible, legible, regulated',
     color: 'var(--color-accent)',
     borderOpacity: 0.25,
-    bgOpacity: 0,
-    textClass: 'text-text-primary',
     descClass: 'text-text-secondary',
   },
   partial: {
@@ -40,8 +39,6 @@ const ZONE_META = {
     sublabel: 'Unstable — acknowledged, incompletely governed',
     color: 'var(--color-violet)',
     borderOpacity: 0.18,
-    bgOpacity: 0.015,
-    textClass: 'text-text-secondary',
     descClass: 'text-text-tertiary',
   },
   missed: {
@@ -49,8 +46,6 @@ const ZONE_META = {
     sublabel: 'Embedded — structurally hidden, ungoverned',
     color: 'var(--color-text-ghost)',
     borderOpacity: 0.12,
-    bgOpacity: 0.03,
-    textClass: 'text-text-tertiary',
     descClass: 'text-text-ghost',
   },
 } as const
@@ -59,8 +54,41 @@ const ZONE_META = {
 
 export function GovernanceGap() {
   return (
-    <section id="gap" className="py-28 md:py-40 bg-base">
-      <div className="max-w-[1040px] mx-auto px-6 md:px-12">
+    <section id="gap" className="relative py-28 md:py-40 bg-base overflow-hidden">
+      {/* ── Large floating objects ── */}
+      <div className="absolute inset-0" aria-hidden="true">
+        {/* Nested chambers — large, right side */}
+        <div className="absolute hidden lg:block" style={{ top: '8%', right: '2%' }}>
+          <NestedChambers outerSize={300} />
+        </div>
+
+        {/* Glass plane — left, behind content */}
+        <GlassPlane
+          w={440}
+          h={320}
+          rx={10}
+          ry={12}
+          opacity={0.06}
+          blur={14}
+          radius={28}
+          className="absolute hidden md:block"
+          style={{ bottom: '5%', left: '-6%' }}
+          duration="34s"
+        />
+
+        {/* Sphere — bottom right */}
+        <GlassSphere
+          size={200}
+          tint="139,126,184"
+          glowColor="139,126,184"
+          className="absolute hidden lg:block"
+          style={{ bottom: '10%', right: '8%' }}
+          animation="float-3"
+          duration="28s"
+        />
+      </div>
+
+      <div className="relative z-10 max-w-[1040px] mx-auto px-6 md:px-12">
         <Reveal>
           <SectionLabel>The Governance Gap</SectionLabel>
           <h2 className="font-display text-[1.75rem] md:text-[2.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary max-w-[600px] mb-6">
@@ -75,7 +103,6 @@ export function GovernanceGap() {
           </p>
         </Reveal>
 
-        {/* Depth chamber visualization */}
         <DepthChamber />
       </div>
     </section>
@@ -92,11 +119,10 @@ function DepthChamber() {
 
   return (
     <div ref={ref} className="relative">
-      {/* Nesting: each zone is more indented and more enclosed */}
       {zones.map((zone, zoneIndex) => {
         const meta = ZONE_META[zone]
         const items = GAP_ITEMS.filter((i) => i.visibility === zone)
-        const insetPx = zoneIndex * 20
+        const insetPx = zoneIndex * 24
 
         return (
           <motion.div
@@ -116,13 +142,18 @@ function DepthChamber() {
               style={{
                 border: `1px solid rgba(${zone === 'observed' ? '91,164,201' : zone === 'partial' ? '139,126,184' : '168,179,196'},${meta.borderOpacity})`,
                 background: zone === 'missed'
-                  ? `rgba(234,239,245,${meta.bgOpacity * 8})`
+                  ? 'rgba(234,239,245,0.25)'
                   : zone === 'partial'
-                    ? `rgba(243,245,249,${meta.bgOpacity * 15})`
-                    : 'transparent',
+                    ? 'rgba(243,245,249,0.2)'
+                    : 'rgba(255,255,255,0.4)',
+                backdropFilter: zone === 'missed' ? 'blur(8px)' : zone === 'partial' ? 'blur(4px)' : 'none',
+                boxShadow: zone === 'missed'
+                  ? 'inset 0 2px 20px rgba(168,179,196,0.06)'
+                  : zone === 'partial'
+                    ? 'inset 0 1px 12px rgba(139,126,184,0.03)'
+                    : '0 1px 3px rgba(91,164,201,0.04)',
               }}
             >
-              {/* Zone header */}
               <div className="flex items-baseline gap-3 mb-6">
                 <span
                   className="font-sans text-[10px] font-medium tracking-[0.25em] uppercase"
@@ -135,7 +166,6 @@ function DepthChamber() {
                 </span>
               </div>
 
-              {/* Items */}
               <div className={`flex flex-wrap gap-3 ${zone === 'missed' ? 'gap-y-4' : ''}`}>
                 {items.map((item, i) => (
                   <GapChip
@@ -152,8 +182,8 @@ function DepthChamber() {
         )
       })}
 
-      {/* Depth arrow indicator */}
-      <div className="absolute -left-2 md:left-2 top-4 bottom-4 flex flex-col items-center pointer-events-none">
+      {/* Depth arrow */}
+      <div className="absolute -left-2 md:left-0 top-4 bottom-4 flex flex-col items-center pointer-events-none">
         <div className="w-px flex-1 bg-gradient-to-b from-accent/20 via-violet/15 to-text-ghost/10" />
         <span className="font-sans text-[9px] tracking-[0.2em] uppercase text-text-ghost mt-2 [writing-mode:vertical-lr] rotate-180">
           Depth
@@ -179,26 +209,27 @@ function GapChip({
   const meta = ZONE_META[zone]
 
   const chipStyles: Record<string, string> = {
-    observed:
-      'bg-base border-accent/20 text-text-primary',
-    partial:
-      'bg-surface border-violet/15 text-text-secondary',
-    missed:
-      'bg-surface-deep/60 border-text-ghost/10 text-text-tertiary',
+    observed: 'bg-base border-accent/20 text-text-primary',
+    partial: 'bg-surface border-violet/15 text-text-secondary',
+    missed: 'bg-surface-deep/60 border-text-ghost/10 text-text-tertiary',
   }
 
   return (
     <motion.span
       initial={{ opacity: 0, scale: 0.95 }}
-      animate={inView ? { opacity: zone === 'missed' ? 0.55 : zone === 'partial' ? 0.75 : 1, scale: 1 } : {}}
+      animate={inView ? { opacity: zone === 'missed' ? 0.5 : zone === 'partial' ? 0.72 : 1, scale: 1 } : {}}
       transition={{ duration: 0.5, delay, ease: [0.23, 1, 0.32, 1] }}
       className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border font-sans text-[0.82rem] md:text-[0.85rem] font-light ${chipStyles[zone]}`}
+      style={{
+        filter: zone === 'missed' ? 'blur(0.3px)' : 'none',
+      }}
     >
       <span
         className="w-1.5 h-1.5 rounded-full flex-shrink-0"
         style={{
           backgroundColor: meta.color,
           opacity: zone === 'missed' ? 0.3 : zone === 'partial' ? 0.5 : 0.7,
+          animation: zone === 'partial' ? 'pulse-glow 4s ease-in-out infinite' : 'none',
         }}
       />
       {item.label}
