@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Instrument Serif', 'Georgia', serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* ── Background ── */
+  --color-base: #ffffff;
+  --color-surface: #f3f5f9;
+  --color-surface-deep: #eaeff5;
+
+  /* ── Glass ── */
+  --color-panel: rgba(235, 239, 248, 0.55);
+  --color-panel-border: rgba(180, 191, 206, 0.3);
+
+  /* ── Text ── */
+  --color-text-primary: #1a2233;
+  --color-text-secondary: #3d4b5e;
+  --color-text-tertiary: #7a8599;
+  --color-text-ghost: #a8b3c4;
+
+  /* ── Structure ── */
+  --color-rule: #dde2eb;
+
+  /* ── Accent ── */
+  --color-accent: #5ba4c9;
+  --color-accent-glow: rgba(91, 164, 201, 0.12);
+  --color-violet: #8b7eb8;
+  --color-violet-glow: rgba(139, 126, 184, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-base);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-accent-glow);
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
