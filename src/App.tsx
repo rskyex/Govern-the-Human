@@ -5,9 +5,8 @@ function App() {
     <div className="min-h-screen bg-base">
       <Header />
       <Hero />
-      <Premise />
-      <Domains />
-      <Provocation />
+      <Thesis />
+      <Layers />
       <Footer />
     </div>
   )
@@ -23,13 +22,16 @@ function Header() {
           Govern the Human
         </span>
         <nav className="hidden md:flex items-center gap-8">
-          {['Premise', 'Domains', 'Provocation'].map((item) => (
+          {[
+            { label: 'Thesis', href: '#thesis' },
+            { label: 'Framework', href: '#layers' },
+          ].map((item) => (
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               className="font-sans text-[13px] text-text-ghost hover:text-text-secondary transition-colors duration-400"
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </nav>
@@ -57,31 +59,18 @@ function Hero() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
-    // ── Cranial profile path data (unit coordinates, will be scaled) ──
-    // A refined lateral head silhouette facing right.
     function drawCranialPath(ctx: CanvasRenderingContext2D, s: number) {
       ctx.beginPath()
-      // Crown
       ctx.moveTo(-18 * s, -115 * s)
-      // Crown → forehead
       ctx.bezierCurveTo(35 * s, -140 * s, 85 * s, -128 * s, 96 * s, -88 * s)
-      // Forehead → brow ridge
       ctx.bezierCurveTo(103 * s, -58 * s, 100 * s, -38 * s, 90 * s, -22 * s)
-      // Brow → nose bridge
       ctx.bezierCurveTo(84 * s, -10 * s, 87 * s, 6 * s, 84 * s, 18 * s)
-      // Nose bridge → nose tip
       ctx.bezierCurveTo(82 * s, 32 * s, 74 * s, 42 * s, 68 * s, 46 * s)
-      // Nose → upper lip
       ctx.bezierCurveTo(62 * s, 50 * s, 58 * s, 54 * s, 56 * s, 56 * s)
-      // Lip → chin
       ctx.bezierCurveTo(52 * s, 66 * s, 42 * s, 78 * s, 22 * s, 86 * s)
-      // Chin → jaw
       ctx.bezierCurveTo(4 * s, 92 * s, -18 * s, 90 * s, -32 * s, 82 * s)
-      // Jaw → neck
       ctx.bezierCurveTo(-44 * s, 72 * s, -50 * s, 52 * s, -54 * s, 28 * s)
-      // Neck → occiput
       ctx.bezierCurveTo(-58 * s, -8 * s, -60 * s, -48 * s, -52 * s, -82 * s)
-      // Occiput → crown
       ctx.bezierCurveTo(-45 * s, -105 * s, -32 * s, -114 * s, -18 * s, -115 * s)
       ctx.closePath()
     }
@@ -91,16 +80,16 @@ function Hero() {
       const w = canvas.offsetWidth
       const h = canvas.offsetHeight
       const cx = w / 2
-      const cy = h * 0.47
+      const cy = h * 0.44
       const time = Date.now() * 0.0004
-      const scale = Math.min(w / 820, h / 820, 1.15)
+      const scale = Math.min(w / 780, h / 780, 1.2)
 
       ctx.clearRect(0, 0, w, h)
 
-      // ── Radial ambient glow ──
-      const ambientGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 260 * scale)
-      ambientGrad.addColorStop(0, 'rgba(91, 164, 201, 0.06)')
-      ambientGrad.addColorStop(0.5, 'rgba(139, 126, 184, 0.025)')
+      // Radial ambient glow
+      const ambientGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 280 * scale)
+      ambientGrad.addColorStop(0, 'rgba(91, 164, 201, 0.07)')
+      ambientGrad.addColorStop(0.4, 'rgba(139, 126, 184, 0.03)')
       ambientGrad.addColorStop(1, 'rgba(91, 164, 201, 0)')
       ctx.fillStyle = ambientGrad
       ctx.fillRect(0, 0, w, h)
@@ -108,9 +97,9 @@ function Hero() {
       ctx.save()
       ctx.translate(cx, cy)
 
-      // ── Scanning arc rings ──
+      // Scanning arc rings
       for (let i = 0; i < 4; i++) {
-        const radius = (155 + i * 48) * scale
+        const radius = (150 + i * 50) * scale
         const opacity = 0.055 - i * 0.01
         const speed = (0.12 + i * 0.035) * (i % 2 === 0 ? 1 : -1)
         const rotation = time * speed
@@ -132,38 +121,34 @@ function Hero() {
           ctx.arc(0, 0, radius, startAngle, startAngle + segAngle)
           ctx.stroke()
         }
-
         ctx.restore()
       }
 
-      // ── Breathing animation ──
+      // Breathing
       const breathe = 1 + Math.sin(time * 0.5) * 0.006
       ctx.scale(breathe, breathe)
 
-      // ── Cranial contour — outer stroke ──
-      const s = scale * 1.05
+      // Cranial contour — outer
+      const s = scale * 1.1
       drawCranialPath(ctx, s)
 
-      // Glass fill
       const fillGrad = ctx.createLinearGradient(-60 * s, -120 * s, 96 * s, 86 * s)
       fillGrad.addColorStop(0, 'rgba(91, 164, 201, 0.025)')
       fillGrad.addColorStop(0.4, 'rgba(139, 126, 184, 0.015)')
       fillGrad.addColorStop(1, 'rgba(91, 164, 201, 0.008)')
       ctx.fillStyle = fillGrad
       ctx.fill()
-
       ctx.strokeStyle = 'rgba(91, 164, 201, 0.16)'
       ctx.lineWidth = 1.4 * scale
       ctx.stroke()
 
-      // ── Inner echo contour ──
-      const inset = 0.78
-      drawCranialPath(ctx, s * inset)
+      // Inner echo contour
+      drawCranialPath(ctx, s * 0.78)
       ctx.strokeStyle = 'rgba(139, 126, 184, 0.07)'
       ctx.lineWidth = 0.7 * scale
       ctx.stroke()
 
-      // ── Horizontal scan line ──
+      // Scan line
       const scanY = Math.sin(time * 0.55) * 75 * s
       const scanGrad = ctx.createLinearGradient(-110 * s, 0, 110 * s, 0)
       scanGrad.addColorStop(0, 'rgba(91, 164, 201, 0)')
@@ -177,7 +162,7 @@ function Hero() {
       ctx.lineWidth = 0.7 * scale
       ctx.stroke()
 
-      // ── Nodal points on contour ──
+      // Nodal points
       const nodes = [
         { x: 96, y: -88 }, { x: 90, y: -22 }, { x: 68, y: 46 },
         { x: -52, y: -82 }, { x: -54, y: 28 },
@@ -195,18 +180,10 @@ function Hero() {
 
     resize()
     window.addEventListener('resize', resize)
-
     let animId: number
-    function animate() {
-      draw()
-      animId = requestAnimationFrame(animate)
-    }
+    function animate() { draw(); animId = requestAnimationFrame(animate) }
     animate()
-
-    return () => {
-      window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animId)
-    }
+    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(animId) }
   }, [])
 
   return (
@@ -217,201 +194,201 @@ function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 text-center px-6 max-w-[840px] mx-auto pt-14">
-        <p className="font-sans text-[10px] font-medium tracking-[0.4em] uppercase text-text-ghost mb-10 reveal">
-          Research Project
-        </p>
-
-        <h1 className="font-display text-[3.4rem] md:text-[5rem] lg:text-[5.5rem] font-normal leading-[0.92] tracking-[-0.025em] text-text-primary mb-7 reveal reveal-delay-1">
-          Govern<br />
-          <span className="text-text-tertiary">the Human</span>
+      <div className="relative z-10 text-center px-6 max-w-[860px] mx-auto pt-14">
+        {/* Title */}
+        <h1 className="font-display text-[3.2rem] md:text-[4.8rem] lg:text-[5.5rem] font-normal leading-[0.92] tracking-[-0.025em] text-text-primary mb-6 reveal">
+          Govern the Human
         </h1>
 
-        <p className="font-display text-[1.1rem] md:text-[1.3rem] leading-[1.6] text-text-tertiary max-w-[480px] mx-auto mb-16 italic reveal reveal-delay-2">
-          On the formation of the governed subject<br className="hidden md:block" />
-          under conditions of artificial intelligence
+        {/* Hero line */}
+        <p className="font-display text-[1.25rem] md:text-[1.65rem] lg:text-[1.85rem] leading-[1.35] text-text-tertiary max-w-[580px] mx-auto mb-5 italic reveal reveal-delay-1">
+          If AI Governs Your Mind, Who Governs AI?
         </p>
 
-        <a
-          href="#premise"
-          className="group inline-flex items-center gap-2 font-sans text-[10px] font-medium tracking-[0.25em] uppercase text-text-ghost hover:text-accent transition-colors duration-500 reveal reveal-delay-3"
-        >
-          <span>Enter</span>
-          <svg
-            width="10" height="10" viewBox="0 0 10 10" fill="none"
-            className="translate-y-px group-hover:translate-y-0.5 transition-transform duration-500"
+        {/* Supporting line */}
+        <p className="font-sans text-[0.88rem] md:text-[0.95rem] leading-[1.7] text-text-ghost max-w-[520px] mx-auto mb-12 font-light reveal reveal-delay-2">
+          A research suite on second-order AI governance, narrative identity, and democratic subject formation.
+        </p>
+
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 reveal reveal-delay-3">
+          <a
+            href="#layers"
+            className="inline-flex items-center justify-center h-11 px-7 rounded-full bg-text-primary text-base font-sans text-[13px] font-medium tracking-[0.02em] hover:bg-text-secondary transition-colors duration-400"
           >
-            <path d="M5 1.5V8.5M5 8.5L1.5 5M5 8.5L8.5 5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </a>
-      </div>
-    </section>
-  )
-}
-
-/* ━━━ Premise ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-function Premise() {
-  const ref = useRef<HTMLDivElement>(null)
-  const visible = useScrollReveal(ref)
-
-  return (
-    <section id="premise" className="py-28 md:py-40 bg-surface">
-      <div ref={ref} className={`max-w-[680px] mx-auto px-6 md:px-12 ${visible ? 'reveal' : 'opacity-0'}`}>
-        <SectionLabel>Premise</SectionLabel>
-
-        <h2 className="font-display text-[1.85rem] md:text-[2.4rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-12">
-          AI governance asks what rules should constrain machines.{' '}
-          <span className="text-text-tertiary">
-            This project asks a different question.
-          </span>
-        </h2>
-
-        <div className="space-y-7 font-sans text-[1rem] md:text-[1.05rem] leading-[1.8] text-text-secondary font-light">
-          <p>
-            What happens to the human who is governed — not by AI directly, but through the
-            epistemic, affective, and institutional transformations that AI systems produce?
-          </p>
-          <p>
-            When recommendation architectures shape what a person encounters, when generative
-            models mediate how they write and reason, when predictive systems pre-empt their
-            decisions — the question is no longer only about regulating technology. It is about
-            what kind of subject emerges on the other side.
-          </p>
-          <p>
-            <em className="text-text-primary font-normal not-italic">Govern the Human</em>{' '}
-            investigates this second-order problem: the governance of the human subject under
-            AI conditions. It draws on political philosophy, critical theory, philosophy of
-            technology, and democratic theory to ask how selfhood, knowledge, memory, and
-            political agency are being restructured — and what this means for governance that
-            presumes a coherent, autonomous subject.
-          </p>
+            Explore the Suite
+          </a>
+          <a
+            href="#thesis"
+            className="inline-flex items-center justify-center h-11 px-7 rounded-full border border-rule text-text-tertiary font-sans text-[13px] font-medium tracking-[0.02em] hover:border-text-ghost hover:text-text-secondary transition-colors duration-400"
+          >
+            Read the Thesis
+          </a>
         </div>
       </div>
     </section>
   )
 }
 
-/* ━━━ Domains ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ Thesis ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-const domains = [
+function Thesis() {
+  const ref = useRef<HTMLDivElement>(null)
+  const visible = useScrollReveal(ref)
+
+  return (
+    <section id="thesis" className="py-28 md:py-40 bg-surface">
+      <div ref={ref} className={`max-w-[1040px] mx-auto px-6 md:px-12 ${visible ? 'reveal' : 'opacity-0'}`}>
+        <SectionLabel>Why This Exists</SectionLabel>
+
+        {/* Two-column: statement left, elaboration right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+          {/* Core statement — large, clear, immediate */}
+          <div className="lg:col-span-6">
+            <h2 className="font-display text-[1.75rem] md:text-[2.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary">
+              Current AI governance frameworks regulate systems and harms —{' '}
+              <span className="text-text-tertiary">
+                but do not adequately govern what those systems do to the epistemic,
+                ontological, and political conditions of the human beings governance
+                exists to protect.
+              </span>
+            </h2>
+          </div>
+
+          {/* Elaboration — smaller, supporting */}
+          <div className="lg:col-span-6 lg:pt-2">
+            <div className="space-y-6 font-sans text-[0.95rem] md:text-[1rem] leading-[1.8] text-text-secondary font-light">
+              <p>
+                We regulate AI outputs, biases, and deployment risks. But we have not yet
+                built governance for the deeper transformation: the reshaping of the human
+                subject who is supposed to be doing the governing.
+              </p>
+              <p>
+                When AI systems mediate how people form beliefs, perceive themselves,
+                and participate in politics — the foundations of democratic governance
+                are altered at the level of the subject, not just the system.
+              </p>
+              <p>
+                This project asks what governance looks like when it starts not with
+                the machine, but with the question of what kind of human is being
+                produced on the other side.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ━━━ Three-Layer Model ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+const layers: LayerData[] = [
   {
-    number: '01',
-    title: 'Epistemic Intervention',
-    description:
-      'How AI systems reshape what counts as knowledge, what sources are trusted, and how beliefs are formed — producing subjects whose epistemic foundations have been reorganized without their awareness.',
+    depth: 'I',
+    title: 'Epistemic',
+    subtitle: 'What you can know',
+    body: 'AI systems restructure the conditions of knowledge: what counts as credible, how beliefs are formed, which sources are surfaced, and which are suppressed. The epistemic subject — the one who knows, doubts, and judges — is being reorganized at the level of its informational environment, often without awareness that any transformation has occurred.',
+    accent: 'var(--color-accent)',
+    bg: 'bg-base',
   },
   {
-    number: '02',
-    title: 'Ontological Instability',
-    description:
-      'How the boundary between human-generated and machine-generated experience becomes undecidable — destabilizing the subject\'s capacity to locate itself as the author of its own thought and expression.',
+    depth: 'II',
+    title: 'Ontological',
+    subtitle: 'Who you can be',
+    body: 'Beneath the epistemic layer, AI destabilizes the subject\'s relation to itself. When machine-generated content becomes indistinguishable from human expression, when memory is outsourced to retrieval systems, when self-narration is mediated by algorithmic surfaces — the boundary of the self becomes undecidable. The question is no longer what you know, but whether the one who knows is still coherently you.',
+    accent: 'var(--color-violet)',
+    bg: 'bg-surface',
   },
   {
-    number: '03',
-    title: 'Democratic Subject Formation',
-    description:
-      'How the political subject required by democratic governance — capable of deliberation, dissent, and autonomous judgment — is being reshaped by systems that optimize for engagement, consensus, or compliance.',
-  },
-  {
-    number: '04',
-    title: 'Narrative Identity',
-    description:
-      'How the stories people tell about themselves — the temporal coherence of a life — are disrupted when memory is outsourced, attention is captured, and self-narration is mediated by algorithmic surfaces.',
-  },
-  {
-    number: '05',
-    title: 'Technics of Memory',
-    description:
-      'How AI-mediated archives, search, and retrieval reshape not only what is remembered but how remembering works — transforming memory from an act of reconstruction into a function of retrieval.',
-  },
-  {
-    number: '06',
-    title: 'Self-Governance',
-    description:
-      'How the capacity for self-regulation, practical reason, and autonomous choice is altered when decision environments are pre-structured by predictive systems operating beneath the threshold of awareness.',
+    depth: 'III',
+    title: 'Political',
+    subtitle: 'How you can govern',
+    body: 'At the deepest layer, the political subject required by democratic governance — capable of deliberation, dissent, and autonomous judgment — is being reshaped by the same systems democracy is supposed to regulate. If the subject who votes, protests, and consents has been epistemically narrowed and ontologically destabilized, then the foundations of self-governance are not merely threatened. They are structurally altered.',
+    accent: 'var(--color-text-primary)',
+    bg: 'bg-base',
   },
 ]
 
-function Domains() {
-  const ref = useRef<HTMLDivElement>(null)
-  const visible = useScrollReveal(ref)
+interface LayerData {
+  depth: string
+  title: string
+  subtitle: string
+  body: string
+  accent: string
+  bg: string
+}
 
+function Layers() {
   return (
-    <section id="domains" className="py-28 md:py-40 bg-base">
-      <div ref={ref} className={`max-w-[1040px] mx-auto px-6 md:px-12 ${visible ? 'reveal' : 'opacity-0'}`}>
-        <SectionLabel>Research Domains</SectionLabel>
-
-        <h2 className="font-display text-[1.85rem] md:text-[2.3rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-20 max-w-[520px]">
-          Six lines of inquiry into the governed subject
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-16">
-          {domains.map((d) => (
-            <DomainCard key={d.number} {...d} />
-          ))}
+    <section id="layers">
+      {/* Section header */}
+      <div className="pt-28 md:pt-40 pb-16 md:pb-24 bg-base">
+        <div className="max-w-[1040px] mx-auto px-6 md:px-12">
+          <RevealBlock>
+            <SectionLabel>Three-Layer Model</SectionLabel>
+            <h2 className="font-display text-[1.75rem] md:text-[2.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary max-w-[540px]">
+              Descending into the governed subject
+            </h2>
+          </RevealBlock>
         </div>
       </div>
+
+      {/* Cascading strata */}
+      {layers.map((layer, i) => (
+        <LayerStratum key={layer.depth} layer={layer} index={i} />
+      ))}
     </section>
   )
 }
 
-function DomainCard({ number, title, description }: { number: string; title: string; description: string }) {
-  return (
-    <article>
-      <div className="flex items-baseline gap-4 mb-4">
-        <span className="font-sans text-[10px] font-medium tracking-[0.1em] text-accent tabular-nums">
-          {number}
-        </span>
-        <h3 className="font-display text-[1.25rem] md:text-[1.4rem] font-normal text-text-primary leading-snug">
-          {title}
-        </h3>
-      </div>
-      <div className="ml-[calc(20px+1rem)] border-t border-rule pt-5">
-        <p className="font-sans text-[0.9rem] md:text-[0.94rem] leading-[1.8] text-text-tertiary font-light">
-          {description}
-        </p>
-      </div>
-    </article>
-  )
-}
-
-/* ━━━ Provocation ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-function Provocation() {
+function LayerStratum({ layer, index }: { layer: LayerData; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const visible = useScrollReveal(ref)
 
+  // Each layer narrows progressively — visual descent
+  const inset = index * 24 // px per side
+  const paddingBlock = index === 2 ? 'pb-28 md:pb-40 pt-16 md:pt-24' : 'py-16 md:py-24'
+
   return (
-    <section id="provocation" className="py-28 md:py-40 bg-surface">
-      <div ref={ref} className={`max-w-[680px] mx-auto px-6 md:px-12 ${visible ? 'reveal' : 'opacity-0'}`}>
-        <SectionLabel>Provocation</SectionLabel>
+    <div className={`${layer.bg} ${paddingBlock}`}>
+      <div
+        ref={ref}
+        className={`max-w-[1040px] mx-auto px-6 md:px-12 ${visible ? 'reveal' : 'opacity-0'}`}
+      >
+        <div
+          className="relative border-l-2 pl-8 md:pl-12"
+          style={{
+            borderColor: layer.accent,
+            marginLeft: `${inset}px`,
+            marginRight: `${inset}px`,
+          }}
+        >
+          {/* Depth indicator */}
+          <div className="flex items-baseline gap-4 mb-2">
+            <span
+              className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase"
+              style={{ color: layer.accent }}
+            >
+              Layer {layer.depth}
+            </span>
+            <span className="font-sans text-[12px] text-text-ghost font-light">
+              {layer.subtitle}
+            </span>
+          </div>
 
-        <blockquote className="font-display text-[1.45rem] md:text-[1.85rem] font-normal leading-[1.4] text-text-primary mb-12 italic">
-          "The most consequential form of AI governance may not be the regulation of
-          machines — but the transformation of the humans who believe they are doing
-          the governing."
-        </blockquote>
+          {/* Title */}
+          <h3 className="font-display text-[1.6rem] md:text-[2rem] font-normal leading-[1.2] tracking-[-0.01em] text-text-primary mb-6">
+            {layer.title}
+          </h3>
 
-        <div className="w-10 h-px bg-rule mb-12" />
-
-        <div className="space-y-7 font-sans text-[1rem] md:text-[1.05rem] leading-[1.8] text-text-secondary font-light">
-          <p>
-            This project does not propose policy. It does not offer a framework for
-            responsible AI. It asks whether the subject to whom such frameworks are
-            addressed still exists in the form those frameworks assume — and what
-            follows if it does not.
-          </p>
-          <p>
-            The stakes are not technical. They are political, philosophical, and
-            existential. If the human subject is being reshaped by the very systems
-            it seeks to govern, then governance itself requires a new foundation — one
-            that begins not with the machine, but with the question of who, and what,
-            is being governed.
+          {/* Body */}
+          <p className="font-sans text-[0.92rem] md:text-[0.97rem] leading-[1.85] text-text-secondary font-light max-w-[640px]">
+            {layer.body}
           </p>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -432,13 +409,23 @@ function Footer() {
   )
 }
 
-/* ━━━ Shared components ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ Shared ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
     <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-6">
       {children}
     </p>
+  )
+}
+
+function RevealBlock({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const visible = useScrollReveal(ref)
+  return (
+    <div ref={ref} className={visible ? 'reveal' : 'opacity-0'}>
+      {children}
+    </div>
   )
 }
 
@@ -450,17 +437,10 @@ function useScrollReveal(ref: React.RefObject<HTMLElement | null>, threshold = 0
   useEffect(() => {
     const el = ref.current
     if (!el) return
-
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true)
-          observer.disconnect()
-        }
-      },
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
       { threshold },
     )
-
     observer.observe(el)
     return () => observer.disconnect()
   }, [ref, threshold])
