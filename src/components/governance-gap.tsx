@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { SectionLabel } from '@/components/ui/section-label'
 import { Reveal } from '@/components/ui/reveal'
-import { NestedChambers, GlassPlane, GlassSphere } from '@/components/ui/glass-forms'
+import { GhostSilhouette, ShellForm, MemoryOrb } from '@/components/ui/figurative-forms'
 
 /* ━━━ Governance Gap Data ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
@@ -55,36 +55,47 @@ const ZONE_META = {
 export function GovernanceGap() {
   return (
     <section id="gap" className="relative py-28 md:py-40 bg-base overflow-hidden">
-      {/* ── Large floating objects ── */}
+      {/* ── Large figurative objects ── */}
       <div className="absolute inset-0" aria-hidden="true">
-        {/* Nested chambers — large, right side */}
-        <div className="absolute hidden lg:block" style={{ top: '8%', right: '2%' }}>
-          <NestedChambers outerSize={300} />
-        </div>
-
-        {/* Glass plane — left, behind content */}
-        <GlassPlane
-          w={440}
-          h={320}
-          rx={10}
-          ry={12}
-          opacity={0.06}
-          blur={14}
-          radius={28}
-          className="absolute hidden md:block"
-          style={{ bottom: '5%', left: '-6%' }}
-          duration="34s"
+        {/* Ghost silhouette — right side, large, behind the depth chamber.
+            The human subject whose governance layers are being mapped. */}
+        <GhostSilhouette
+          width={520}
+          height={680}
+          className="absolute hidden lg:block"
+          style={{
+            top: '2%',
+            right: '-2%',
+            opacity: 0.75,
+            animation: 'float-1 32s ease-in-out infinite',
+          }}
         />
 
-        {/* Sphere — bottom right */}
-        <GlassSphere
-          size={200}
-          tint="139,126,184"
-          glowColor="139,126,184"
+        {/* Shell form — left side, nested cranial profiles.
+            Visualises the layers-within-layers structure of the gap itself. */}
+        <ShellForm
+          width={400}
+          height={440}
+          className="absolute hidden md:block"
+          style={{
+            bottom: '4%',
+            left: '-3%',
+            opacity: 0.65,
+            animation: 'float-2 28s ease-in-out infinite',
+          }}
+        />
+
+        {/* Memory orb — small, between the two large forms */}
+        <MemoryOrb
+          width={220}
+          height={220}
           className="absolute hidden lg:block"
-          style={{ bottom: '10%', right: '8%' }}
-          animation="float-3"
-          duration="28s"
+          style={{
+            top: '55%',
+            right: '32%',
+            opacity: 0.5,
+            animation: 'float-3 24s ease-in-out infinite',
+          }}
         />
       </div>
 

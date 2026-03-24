@@ -2,9 +2,11 @@
 
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { GlassPlane, GlassSphere, GlassRing, GlassDisc } from '@/components/ui/glass-forms'
+import { TransparentHead, MemoryOrb, GovernanceRing } from '@/components/ui/figurative-forms'
 
 const ease = [0.23, 1, 0.32, 1] as const
+
+/* ── Central cranial motif (canvas, centered) ── */
 
 function drawCranialPath(ctx: CanvasRenderingContext2D, s: number) {
   ctx.beginPath()
@@ -50,7 +52,7 @@ export function Hero() {
 
       ctx.clearRect(0, 0, w, h)
 
-      // Ambient glow — larger
+      // Ambient glow
       const ag = ctx.createRadialGradient(cx, cy, 0, cx, cy, 360 * scale)
       ag.addColorStop(0, 'rgba(91,164,201,0.08)')
       ag.addColorStop(0.3, 'rgba(139,126,184,0.04)')
@@ -62,7 +64,7 @@ export function Hero() {
       ctx.save()
       ctx.translate(cx, cy)
 
-      // Expanded scan arcs — 6 rings now
+      // Scan arcs
       for (let i = 0; i < 6; i++) {
         const r = (130 + i * 48) * scale
         const op = 0.06 - i * 0.007
@@ -99,13 +101,11 @@ export function Hero() {
       ctx.lineWidth = 1.6 * scale
       ctx.stroke()
 
-      // Inner echo
       drawCranialPath(ctx, s * 0.78)
       ctx.strokeStyle = 'rgba(139,126,184,0.08)'
       ctx.lineWidth = 0.8 * scale
       ctx.stroke()
 
-      // Second inner echo
       drawCranialPath(ctx, s * 0.56)
       ctx.strokeStyle = 'rgba(91,164,201,0.04)'
       ctx.lineWidth = 0.5 * scale
@@ -150,67 +150,61 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-base">
+      {/* Central motif canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true" />
 
-      {/* ── Large floating glass objects ── */}
+      {/* ── Large figurative objects ── */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        {/* Large tilted plane — upper left */}
-        <GlassPlane
-          w={520}
-          h={380}
-          rx={18}
-          ry={-14}
-          opacity={0.1}
-          blur={20}
-          radius={32}
-          className="absolute"
-          style={{ top: '8%', left: '-8%' }}
-          duration="34s"
-        />
-
-        {/* Medium plane — lower right */}
-        <GlassPlane
-          w={400}
-          h={280}
-          rx={-10}
-          ry={16}
-          opacity={0.08}
-          blur={14}
-          radius={28}
-          className="absolute"
-          animation="tilt-drift"
-          style={{ bottom: '12%', right: '-5%' }}
-          duration="28s"
-        />
-
-        {/* Sphere — right side */}
-        <GlassSphere
-          size={300}
+        {/* Transparent head — large, upper-right, looking inward */}
+        <TransparentHead
+          width={480}
+          height={520}
           className="absolute hidden md:block"
-          style={{ top: '18%', right: '6%' }}
-          duration="22s"
+          style={{
+            top: '4%',
+            right: '1%',
+            opacity: 0.85,
+            animation: 'float-1 26s ease-in-out infinite',
+          }}
         />
 
-        {/* Ring — lower left */}
-        <GlassRing
-          diameter={340}
-          tube={18}
-          rx={60}
-          ry={10}
-          opacity={0.08}
-          className="absolute"
-          style={{ bottom: '5%', left: '8%' }}
-          duration="36s"
+        {/* Governance ring — lower-left, partially cropped */}
+        <GovernanceRing
+          width={440}
+          height={440}
+          className="absolute hidden md:block"
+          style={{
+            bottom: '-4%',
+            left: '-3%',
+            opacity: 0.7,
+            animation: 'float-3 30s ease-in-out infinite',
+          }}
         />
 
-        {/* Small disc — top center right */}
-        <GlassDisc
-          diameter={200}
-          rx={70}
-          opacity={0.15}
+        {/* Memory orb — upper-left, floating */}
+        <MemoryOrb
+          width={280}
+          height={280}
           className="absolute hidden lg:block"
-          style={{ top: '6%', right: '28%' }}
-          duration="20s"
+          style={{
+            top: '8%',
+            left: '4%',
+            opacity: 0.8,
+            animation: 'float-2 22s ease-in-out infinite',
+          }}
+        />
+
+        {/* Second memory orb — smaller, lower-right */}
+        <MemoryOrb
+          width={200}
+          height={200}
+          className="absolute"
+          style={{
+            bottom: '14%',
+            right: '8%',
+            opacity: 0.6,
+            animation: 'float-1 28s ease-in-out infinite',
+          }}
         />
       </div>
 
