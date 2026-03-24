@@ -4,25 +4,28 @@
   --font-display: 'Instrument Serif', 'Georgia', serif;
   --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
 
-  --color-white: #ffffff;
-  --color-ice: #f4f7fb;
-  --color-silver: #e8ecf2;
-  --color-silver-dark: #cbd2dc;
-  --color-blue-gray-100: #dce3ee;
-  --color-blue-gray-200: #b4bfce;
-  --color-blue-gray-300: #8a99ad;
-  --color-blue-gray-400: #6b7a90;
-  --color-blue-gray-500: #4e5d72;
-  --color-blue-gray-600: #3a4556;
-  --color-blue-gray-700: #2a3342;
-  --color-blue-gray-800: #1b2230;
-  --color-blue-gray-900: #111827;
+  /* ── Background ── */
+  --color-base: #ffffff;
+  --color-surface: #f3f5f9;
 
-  --color-cyan-glow: #7dd3e8;
-  --color-cyan-frost: #a5e4f3;
-  --color-cyan-pale: #d4f1f9;
-  --color-violet-muted: #9b8ec4;
-  --color-violet-faint: #c4bde0;
+  /* ── Glass panels ── */
+  --color-panel: rgba(235, 239, 248, 0.55);
+  --color-panel-border: rgba(180, 191, 206, 0.3);
+
+  /* ── Text ── */
+  --color-text-primary: #1a2233;
+  --color-text-secondary: #3d4b5e;
+  --color-text-tertiary: #7a8599;
+  --color-text-ghost: #a8b3c4;
+
+  /* ── Structure ── */
+  --color-rule: #dde2eb;
+
+  /* ── Accent ── */
+  --color-accent: #5ba4c9;
+  --color-accent-glow: rgba(91, 164, 201, 0.12);
+  --color-violet: #8b7eb8;
+  --color-violet-glow: rgba(139, 126, 184, 0.08);
 }
 
 * {
@@ -39,12 +42,34 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-white);
-  color: var(--color-blue-gray-700);
+  background-color: var(--color-base);
+  color: var(--color-text-secondary);
   font-family: var(--font-sans);
   line-height: 1.65;
 }
 
 ::selection {
-  background-color: rgba(125, 211, 232, 0.2);
+  background-color: var(--color-accent-glow);
 }
+
+/* ── Scroll reveal animation ── */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  animation: reveal 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.reveal-delay-1 { animation-delay: 0.1s; }
+.reveal-delay-2 { animation-delay: 0.2s; }
+.reveal-delay-3 { animation-delay: 0.3s; }
+.reveal-delay-4 { animation-delay: 0.4s; }
