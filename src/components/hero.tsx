@@ -6,17 +6,16 @@ import { motion } from 'framer-motion'
 const ease = [0.23, 1, 0.32, 1] as const
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- *  Hero — single unified canvas composition
+ *  Hero — single composed canvas
  *
- *  Centre-left : large ghost silhouette (head + shoulders + torso)
- *  Right       : governance ring (clock / timing instrument)
- *  Scattered   : 3 memory orbs at different sizes / depths
- *  Background  : ambient glow + faint scan arcs
+ *  Centre-left : ghost silhouette (head + shoulders + torso)
+ *  Right       : governance ring
+ *  Scattered   : 3 memory orbs
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* ── shared path helpers ── */
+/* ── paths ── */
 
-function drawHead(ctx: CanvasRenderingContext2D, s: number) {
+function headPath(ctx: CanvasRenderingContext2D, s: number) {
   ctx.beginPath()
   ctx.moveTo(0, -48 * s)
   ctx.bezierCurveTo(30 * s, -48 * s, 48 * s, -28 * s, 48 * s, -2 * s)
@@ -28,7 +27,7 @@ function drawHead(ctx: CanvasRenderingContext2D, s: number) {
   ctx.closePath()
 }
 
-function drawTorso(ctx: CanvasRenderingContext2D, s: number) {
+function torsoPath(ctx: CanvasRenderingContext2D, s: number) {
   ctx.beginPath()
   ctx.moveTo(-14 * s, 0)
   ctx.lineTo(-14 * s, 18 * s)
@@ -46,7 +45,7 @@ function drawTorso(ctx: CanvasRenderingContext2D, s: number) {
   ctx.closePath()
 }
 
-/* ── draw sub-scenes ── */
+/* ── ghost silhouette ── */
 
 function drawGhost(
   ctx: CanvasRenderingContext2D,
@@ -55,112 +54,146 @@ function drawGhost(
   s: number,
   t: number,
 ) {
-  const breathe = 1 + Math.sin(t * 4) * 0.007
-  const drift = Math.sin(t * 2.5) * 5
+  // Organic breathing: two overlaid sine waves at irrational ratios
+  const breathe = 1 + Math.sin(t * 3.7) * 0.005 + Math.sin(t * 5.3) * 0.003
+  const driftX = Math.sin(t * 2.1) * 4 + Math.sin(t * 3.4) * 2
+  const driftY = Math.cos(t * 1.7) * 3 + Math.sin(t * 2.9) * 1.5
 
   ctx.save()
-  ctx.translate(cx + drift, cy + Math.sin(t * 1.6) * 3)
+  ctx.translate(cx + driftX, cy + driftY)
   ctx.scale(breathe, breathe)
 
   // ── Torso ──
   ctx.save()
   ctx.translate(0, 50 * s)
 
-  // Outermost echo
-  drawTorso(ctx, s * 1.08)
-  ctx.fillStyle = 'rgba(91,164,201,0.01)'
-  ctx.fill()
+  // Luminous edge glow (drawn first, wider, blurred via shadow)
+  ctx.save()
+  ctx.shadowColor = 'rgba(91,164,201,0.12)'
+  ctx.shadowBlur = 18 * s
+  torsoPath(ctx, s)
+  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
+  ctx.lineWidth = 2
+  ctx.stroke()
+  ctx.restore()
 
-  // Main torso
-  drawTorso(ctx, s)
+  // Main fill — gradient that dissolves toward waist
+  torsoPath(ctx, s)
   const tg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  tg.addColorStop(0, 'rgba(91,164,201,0.045)')
-  tg.addColorStop(0.4, 'rgba(91,164,201,0.028)')
+  tg.addColorStop(0, 'rgba(91,164,201,0.05)')
+  tg.addColorStop(0.35, 'rgba(91,164,201,0.032)')
+  tg.addColorStop(0.7, 'rgba(91,164,201,0.012)')
   tg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg
   ctx.fill()
-  ctx.strokeStyle = 'rgba(91,164,201,0.07)'
-  ctx.lineWidth = 1.3
+
+  // Edge stroke — thin, bright at shoulders, fading at waist
+  torsoPath(ctx, s)
+  const eg = ctx.createLinearGradient(0, 0, 0, 192 * s)
+  eg.addColorStop(0, 'rgba(91,164,201,0.1)')
+  eg.addColorStop(0.5, 'rgba(91,164,201,0.05)')
+  eg.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.strokeStyle = eg
+  ctx.lineWidth = 1.2
   ctx.stroke()
 
-  // Inner echo
-  drawTorso(ctx, s * 0.88)
-  ctx.strokeStyle = 'rgba(139,126,184,0.035)'
+  // Inner echo — violet tint
+  torsoPath(ctx, s * 0.86)
+  const ig = ctx.createLinearGradient(0, 0, 0, 165 * s)
+  ig.addColorStop(0, 'rgba(139,126,184,0.04)')
+  ig.addColorStop(0.6, 'rgba(139,126,184,0.015)')
+  ig.addColorStop(1, 'rgba(139,126,184,0)')
+  ctx.strokeStyle = ig
   ctx.lineWidth = 0.7
-  ctx.stroke()
-
-  // Deep inner echo
-  drawTorso(ctx, s * 0.74)
-  ctx.strokeStyle = 'rgba(91,164,201,0.015)'
-  ctx.lineWidth = 0.5
   ctx.stroke()
 
   ctx.restore()
 
   // ── Head ──
-  // Glow halo
-  drawHead(ctx, s * 1.2)
-  ctx.fillStyle = 'rgba(91,164,201,0.012)'
-  ctx.fill()
 
-  // Main head
-  drawHead(ctx, s)
-  const hg = ctx.createRadialGradient(0, -4 * s, 0, 0, -4 * s, 55 * s)
-  hg.addColorStop(0, 'rgba(91,164,201,0.055)')
-  hg.addColorStop(0.5, 'rgba(91,164,201,0.03)')
-  hg.addColorStop(1, 'rgba(91,164,201,0.012)')
+  // Halo glow
+  ctx.save()
+  ctx.shadowColor = 'rgba(91,164,201,0.15)'
+  ctx.shadowBlur = 24 * s
+  headPath(ctx, s)
+  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
+  ctx.lineWidth = 1
+  ctx.stroke()
+  ctx.restore()
+
+  // Main fill — radial gradient, brighter at centre
+  headPath(ctx, s)
+  const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, -2 * s, 56 * s)
+  hg.addColorStop(0, 'rgba(91,164,201,0.06)')
+  hg.addColorStop(0.4, 'rgba(91,164,201,0.035)')
+  hg.addColorStop(0.8, 'rgba(91,164,201,0.015)')
+  hg.addColorStop(1, 'rgba(91,164,201,0.005)')
   ctx.fillStyle = hg
   ctx.fill()
-  ctx.strokeStyle = 'rgba(91,164,201,0.12)'
-  ctx.lineWidth = 1.5
+
+  // Edge
+  headPath(ctx, s)
+  ctx.strokeStyle = 'rgba(91,164,201,0.13)'
+  ctx.lineWidth = 1.4
   ctx.stroke()
 
-  // Inner echoes
-  drawHead(ctx, s * 0.78)
-  ctx.strokeStyle = 'rgba(139,126,184,0.06)'
-  ctx.lineWidth = 0.9
+  // Inner echo 1 — violet
+  headPath(ctx, s * 0.76)
+  ctx.strokeStyle = 'rgba(139,126,184,0.065)'
+  ctx.lineWidth = 0.8
   ctx.stroke()
 
-  drawHead(ctx, s * 0.55)
-  ctx.strokeStyle = 'rgba(91,164,201,0.03)'
+  // Inner echo 2 — faintest
+  headPath(ctx, s * 0.52)
+  ctx.strokeStyle = 'rgba(91,164,201,0.025)'
   ctx.lineWidth = 0.5
   ctx.stroke()
 
-  // ── Thought-stream traces ──
+  // ── Glass highlight (clipped to head) ──
+  ctx.save()
+  headPath(ctx, s)
+  ctx.clip()
+  const hl = ctx.createRadialGradient(-14 * s, -24 * s, 0, -14 * s, -24 * s, 30 * s)
+  hl.addColorStop(0, 'rgba(255,255,255,0.12)')
+  hl.addColorStop(0.4, 'rgba(255,255,255,0.04)')
+  hl.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = hl
+  ctx.fillRect(-50 * s, -55 * s, 100 * s, 80 * s)
+  ctx.restore()
+
+  // ── Thought-stream traces — varied weight + opacity ──
   for (let i = 0; i < 7; i++) {
-    const angle = (i / 7) * Math.PI * 2 + t * 0.7
-    const r1 = 8 * s
-    const r2 = 30 * s + Math.sin(t * 2.8 + i * 1.4) * 8 * s
-    const a2 = angle + 0.7 + Math.sin(t * 2 + i) * 0.3
+    const angle = (i / 7) * Math.PI * 2 + t * 0.6
+    const r1 = 7 * s
+    const r2 = (24 + i * 2.5) * s + Math.sin(t * 2.5 + i * 1.6) * 7 * s
+    const a2 = angle + 0.65 + Math.sin(t * 1.8 + i) * 0.35
+    const weight = 0.35 + (i % 3) * 0.15 // vary line weight
+    const op = 0.032 + Math.sin(t * 2.8 + i * 0.9) * 0.014
+
     ctx.beginPath()
     ctx.moveTo(Math.cos(angle) * r1, Math.sin(angle) * r1)
     ctx.quadraticCurveTo(
-      Math.cos(angle + 0.35) * r2 * 0.65,
-      Math.sin(angle + 0.35) * r2 * 0.65,
+      Math.cos(angle + 0.3) * r2 * 0.6,
+      Math.sin(angle + 0.3) * r2 * 0.6,
       Math.cos(a2) * r2,
       Math.sin(a2) * r2,
     )
-    ctx.strokeStyle = `rgba(91,164,201,${0.04 + Math.sin(t * 3 + i) * 0.015})`
-    ctx.lineWidth = 0.6
+    ctx.strokeStyle = `rgba(91,164,201,${op})`
+    ctx.lineWidth = weight
     ctx.stroke()
 
-    // Endpoint dot
-    const pulse = 0.5 + Math.sin(t * 4 + i * 1.2) * 0.5
+    // Endpoint node — pulses
+    const pulse = 0.4 + Math.sin(t * 4.5 + i * 1.3) * 0.6
     ctx.beginPath()
-    ctx.arc(Math.cos(a2) * r2, Math.sin(a2) * r2, 1.1 * pulse, 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(91,164,201,${0.08 * pulse})`
+    ctx.arc(Math.cos(a2) * r2, Math.sin(a2) * r2, 1.2 * pulse, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(91,164,201,${0.07 * pulse})`
     ctx.fill()
   }
 
-  // ── Glass highlight ──
-  const hlg = ctx.createRadialGradient(-14 * s, -22 * s, 0, -14 * s, -22 * s, 26 * s)
-  hlg.addColorStop(0, 'rgba(255,255,255,0.09)')
-  hlg.addColorStop(1, 'rgba(255,255,255,0)')
-  ctx.fillStyle = hlg
-  ctx.fillRect(-45 * s, -55 * s, 90 * s, 70 * s)
-
   ctx.restore()
 }
+
+/* ── governance ring ── */
 
 function drawRing(
   ctx: CanvasRenderingContext2D,
@@ -169,76 +202,106 @@ function drawRing(
   r: number,
   t: number,
 ) {
-  ctx.save()
-  ctx.translate(cx, cy)
+  const driftX = Math.sin(t * 1.5) * 7 + Math.sin(t * 2.6) * 3
+  const driftY = Math.cos(t * 1.2) * 5 + Math.cos(t * 2.1) * 2
 
-  // Outer band
+  ctx.save()
+  ctx.translate(cx + driftX, cy + driftY)
+
+  // ── Disc fill — faint radial gradient giving the ring a glass-disc body ──
+  ctx.beginPath()
+  ctx.arc(0, 0, r * 1.02, 0, Math.PI * 2)
+  const df = ctx.createRadialGradient(0, 0, r * 0.3, 0, 0, r * 1.02)
+  df.addColorStop(0, 'rgba(91,164,201,0.012)')
+  df.addColorStop(0.6, 'rgba(91,164,201,0.006)')
+  df.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.fillStyle = df
+  ctx.fill()
+
+  // ── Outer band — luminous edge ──
+  ctx.save()
+  ctx.shadowColor = 'rgba(91,164,201,0.08)'
+  ctx.shadowBlur = 12
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.07)'
+  ctx.strokeStyle = 'rgba(91,164,201,0.06)'
   ctx.lineWidth = r * 0.1
   ctx.stroke()
+  ctx.restore()
 
   // Middle band
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.78, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.035)'
-  ctx.lineWidth = r * 0.035
+  ctx.strokeStyle = 'rgba(91,164,201,0.03)'
+  ctx.lineWidth = r * 0.03
   ctx.stroke()
 
   // Inner band
   ctx.beginPath()
   ctx.arc(0, 0, r * 0.58, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(139,126,184,0.025)'
-  ctx.lineWidth = 1
+  ctx.strokeStyle = 'rgba(139,126,184,0.022)'
+  ctx.lineWidth = 0.8
   ctx.stroke()
 
-  // 24 outer markers, rotating
-  const rot = t * 0.3
+  // ── 24 outer markers ──
+  const rot = t * 0.28
   ctx.save()
   ctx.rotate(rot)
   for (let i = 0; i < 24; i++) {
     const a = (i / 24) * Math.PI * 2
     const major = i % 6 === 0
-    const len = major ? r * 0.08 : r * 0.04
+    const mid = i % 3 === 0 && !major
+    const len = major ? r * 0.09 : mid ? r * 0.055 : r * 0.035
     const inner = r - r * 0.05 - len
     const outer = r - r * 0.05
 
     ctx.beginPath()
     ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner)
     ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer)
-    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.15 : 0.06})`
-    ctx.lineWidth = major ? 1.5 : 0.8
+    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.16 : mid ? 0.08 : 0.045})`
+    ctx.lineWidth = major ? 1.5 : mid ? 1 : 0.6
+    ctx.lineCap = 'round'
     ctx.stroke()
 
     if (major) {
       ctx.beginPath()
-      ctx.arc(Math.cos(a) * (r * 1.025), Math.sin(a) * (r * 1.025), 1.8, 0, Math.PI * 2)
+      ctx.arc(Math.cos(a) * (r * 1.03), Math.sin(a) * (r * 1.03), 1.8, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(91,164,201,0.1)'
       ctx.fill()
     }
   }
   ctx.restore()
 
-  // 12 inner markers, counter-rotating
+  // ── 12 inner markers (counter-rotating) ──
   ctx.save()
-  ctx.rotate(-rot * 0.6)
+  ctx.rotate(-rot * 0.55)
   for (let i = 0; i < 12; i++) {
     const a = (i / 12) * Math.PI * 2
-    const inner = r * 0.78 - r * 0.035
+    const inner = r * 0.78 - r * 0.03
     const outer = r * 0.78 - r * 0.005
 
     ctx.beginPath()
     ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner)
     ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer)
-    ctx.strokeStyle = 'rgba(91,164,201,0.05)'
-    ctx.lineWidth = 0.7
+    ctx.strokeStyle = 'rgba(91,164,201,0.045)'
+    ctx.lineWidth = 0.6
+    ctx.lineCap = 'round'
     ctx.stroke()
   }
   ctx.restore()
 
-  // Sweeping hand
-  const handA = t * 0.45
+  // ── Sweeping hand with trail ──
+  const handA = t * 0.4
+  // Trail (faint arc behind the hand)
+  ctx.beginPath()
+  ctx.arc(0, 0, r * 0.55, handA - 0.8, handA)
+  const trailG = ctx.createConicGradient(handA - 0.8, 0, 0)
+  // ConicGradient offsets are 0-1, but the arc draws from handA-0.8 to handA
+  ctx.strokeStyle = 'rgba(91,164,201,0.025)'
+  ctx.lineWidth = 1.5
+  ctx.stroke()
+
+  // Hand line
   ctx.beginPath()
   ctx.moveTo(0, 0)
   ctx.lineTo(Math.cos(handA) * r * 0.72, Math.sin(handA) * r * 0.72)
@@ -247,20 +310,32 @@ function drawRing(
     Math.cos(handA) * r * 0.72,
     Math.sin(handA) * r * 0.72,
   )
-  hg.addColorStop(0, 'rgba(91,164,201,0.07)')
-  hg.addColorStop(1, 'rgba(91,164,201,0.01)')
+  hg.addColorStop(0, 'rgba(91,164,201,0.08)')
+  hg.addColorStop(1, 'rgba(91,164,201,0.015)')
   ctx.strokeStyle = hg
   ctx.lineWidth = 1
+  ctx.lineCap = 'round'
   ctx.stroke()
 
   // Centre
   ctx.beginPath()
-  ctx.arc(0, 0, 2.5, 0, Math.PI * 2)
-  ctx.fillStyle = 'rgba(91,164,201,0.12)'
+  ctx.arc(0, 0, 2.2, 0, Math.PI * 2)
+  ctx.fillStyle = 'rgba(91,164,201,0.14)'
+  ctx.fill()
+
+  // ── Disc highlight ──
+  const dhl = ctx.createRadialGradient(-r * 0.2, -r * 0.22, 0, -r * 0.2, -r * 0.22, r * 0.6)
+  dhl.addColorStop(0, 'rgba(255,255,255,0.04)')
+  dhl.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = dhl
+  ctx.beginPath()
+  ctx.arc(0, 0, r, 0, Math.PI * 2)
   ctx.fill()
 
   ctx.restore()
 }
+
+/* ── memory orb ── */
 
 function drawOrb(
   ctx: CanvasRenderingContext2D,
@@ -270,51 +345,66 @@ function drawOrb(
   t: number,
   phase: number,
 ) {
-  const breathe = 1 + Math.sin(t * 3 + phase) * 0.01
+  const breathe = 1 + Math.sin(t * 2.8 + phase) * 0.008 + Math.sin(t * 4.1 + phase) * 0.004
+  const dx = Math.sin(t * 1.9 + phase) * 5 + Math.sin(t * 3.2 + phase) * 2
+  const dy = Math.cos(t * 1.5 + phase) * 4 + Math.cos(t * 2.7 + phase) * 1.5
 
   ctx.save()
-  ctx.translate(cx + Math.sin(t * 2 + phase) * 6, cy + Math.cos(t * 1.7 + phase) * 5)
+  ctx.translate(cx + dx, cy + dy)
   ctx.scale(breathe, breathe)
 
   // Glow
-  const og = ctx.createRadialGradient(0, 0, r * 0.7, 0, 0, r * 1.35)
-  og.addColorStop(0, 'rgba(91,164,201,0.02)')
-  og.addColorStop(1, 'rgba(91,164,201,0)')
-  ctx.fillStyle = og
-  ctx.beginPath()
-  ctx.arc(0, 0, r * 1.35, 0, Math.PI * 2)
-  ctx.fill()
-
-  // Main sphere
+  ctx.save()
+  ctx.shadowColor = 'rgba(91,164,201,0.06)'
+  ctx.shadowBlur = r * 0.6
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  const sg = ctx.createRadialGradient(-r * 0.2, -r * 0.25, 0, 0, 0, r)
-  sg.addColorStop(0, 'rgba(91,164,201,0.04)')
-  sg.addColorStop(0.5, 'rgba(91,164,201,0.02)')
-  sg.addColorStop(1, 'rgba(91,164,201,0.008)')
+  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
+  ctx.lineWidth = 1
+  ctx.stroke()
+  ctx.restore()
+
+  // Main sphere fill
+  ctx.beginPath()
+  ctx.arc(0, 0, r, 0, Math.PI * 2)
+  const sg = ctx.createRadialGradient(-r * 0.18, -r * 0.22, 0, 0, 0, r)
+  sg.addColorStop(0, 'rgba(91,164,201,0.045)')
+  sg.addColorStop(0.4, 'rgba(91,164,201,0.022)')
+  sg.addColorStop(0.8, 'rgba(91,164,201,0.008)')
+  sg.addColorStop(1, 'rgba(91,164,201,0.003)')
   ctx.fillStyle = sg
   ctx.fill()
-  ctx.strokeStyle = 'rgba(91,164,201,0.09)'
-  ctx.lineWidth = 1.2
+
+  // Edge
+  ctx.beginPath()
+  ctx.arc(0, 0, r, 0, Math.PI * 2)
+  ctx.strokeStyle = 'rgba(91,164,201,0.08)'
+  ctx.lineWidth = 1
   ctx.stroke()
 
-  // Inner shell
+  // Inner shells — two
   ctx.beginPath()
-  ctx.arc(0, 0, r * 0.7, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(139,126,184,0.04)'
+  ctx.arc(0, 0, r * 0.68, 0, Math.PI * 2)
+  ctx.strokeStyle = 'rgba(139,126,184,0.035)'
   ctx.lineWidth = 0.6
   ctx.stroke()
 
-  // Internal traces
-  for (let i = 0; i < 5; i++) {
-    const p = (i / 5) * Math.PI * 2 + t * (0.5 + i * 0.06) + phase
-    const oA = r * (0.3 + i * 0.06)
-    const oB = r * (0.18 + i * 0.04)
-    const tilt = i * 0.45 + phase * 0.3
+  ctx.beginPath()
+  ctx.arc(0, 0, r * 0.42, 0, Math.PI * 2)
+  ctx.strokeStyle = 'rgba(91,164,201,0.02)'
+  ctx.lineWidth = 0.4
+  ctx.stroke()
+
+  // Internal traces — tilted elliptical arcs
+  for (let i = 0; i < 4; i++) {
+    const p = (i / 4) * Math.PI * 2 + t * (0.45 + i * 0.06) + phase
+    const oA = r * (0.28 + i * 0.07)
+    const oB = r * (0.16 + i * 0.04)
+    const tilt = i * 0.5 + phase * 0.25
 
     ctx.beginPath()
-    for (let j = 0; j <= 35; j++) {
-      const a = p + (j / 35) * Math.PI * 1.1
+    for (let j = 0; j <= 30; j++) {
+      const a = p + (j / 30) * Math.PI * 1.05
       const x = Math.cos(a) * oA
       const y = Math.sin(a) * oB
       const rx = x * Math.cos(tilt) - y * Math.sin(tilt)
@@ -322,25 +412,28 @@ function drawOrb(
       if (j === 0) ctx.moveTo(rx, ry)
       else ctx.lineTo(rx, ry)
     }
-    ctx.strokeStyle = `rgba(139,126,184,${0.025 + Math.sin(t * 2.5 + i + phase) * 0.01})`
-    ctx.lineWidth = 0.5
+    ctx.strokeStyle = `rgba(139,126,184,${0.022 + Math.sin(t * 2.2 + i + phase) * 0.008})`
+    ctx.lineWidth = 0.45
     ctx.stroke()
   }
 
-  // Highlight
-  const hlg = ctx.createRadialGradient(-r * 0.25, -r * 0.3, 0, -r * 0.25, -r * 0.3, r * 0.5)
-  hlg.addColorStop(0, 'rgba(255,255,255,0.1)')
-  hlg.addColorStop(0.5, 'rgba(255,255,255,0.03)')
-  hlg.addColorStop(1, 'rgba(255,255,255,0)')
-  ctx.fillStyle = hlg
+  // Highlight — clipped to sphere
+  ctx.save()
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.fill()
+  ctx.clip()
+  const hl = ctx.createRadialGradient(-r * 0.25, -r * 0.3, 0, -r * 0.25, -r * 0.3, r * 0.55)
+  hl.addColorStop(0, 'rgba(255,255,255,0.11)')
+  hl.addColorStop(0.35, 'rgba(255,255,255,0.03)')
+  hl.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = hl
+  ctx.fillRect(-r, -r, r * 2, r * 2)
+  ctx.restore()
 
   ctx.restore()
 }
 
-/* ━━━ Hero Component ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ Hero ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -368,28 +461,28 @@ export function Hero() {
 
       ctx.clearRect(0, 0, w, h)
 
-      // ── Ambient glow (behind everything) ──
-      const ag = ctx.createRadialGradient(w * 0.38, h * 0.4, 0, w * 0.38, h * 0.4, vmin * 0.7)
-      ag.addColorStop(0, 'rgba(91,164,201,0.06)')
-      ag.addColorStop(0.35, 'rgba(139,126,184,0.03)')
-      ag.addColorStop(0.7, 'rgba(91,164,201,0.012)')
+      // ── Ambient glow ──
+      const ag = ctx.createRadialGradient(w * 0.36, h * 0.38, 0, w * 0.36, h * 0.38, vmin * 0.75)
+      ag.addColorStop(0, 'rgba(91,164,201,0.055)')
+      ag.addColorStop(0.3, 'rgba(139,126,184,0.025)')
+      ag.addColorStop(0.65, 'rgba(91,164,201,0.01)')
       ag.addColorStop(1, 'rgba(91,164,201,0)')
       ctx.fillStyle = ag
       ctx.fillRect(0, 0, w, h)
 
-      // ── Faint scan arcs (atmosphere) ──
+      // ── Faint scan arcs ──
       ctx.save()
-      ctx.translate(w * 0.38, h * 0.38)
+      ctx.translate(w * 0.36, h * 0.36)
       for (let i = 0; i < 4; i++) {
-        const r = (vmin * 0.22 + i * vmin * 0.1)
-        const rot = t * (1.2 + i * 0.3) * (i % 2 === 0 ? 1 : -1)
+        const r = vmin * 0.22 + i * vmin * 0.1
+        const rot = t * (1.1 + i * 0.25) * (i % 2 === 0 ? 1 : -1)
         ctx.save()
         ctx.rotate(rot)
         const segs = 3 + i
         const gap = Math.PI * 0.14
         const seg = (Math.PI * 2 - segs * gap) / segs
-        ctx.strokeStyle = `rgba(91,164,201,${0.03 - i * 0.005})`
-        ctx.lineWidth = 0.6
+        ctx.strokeStyle = `rgba(91,164,201,${0.025 - i * 0.004})`
+        ctx.lineWidth = 0.5
         ctx.lineCap = 'round'
         for (let j = 0; j < segs; j++) {
           const a = j * (seg + gap)
@@ -401,23 +494,16 @@ export function Hero() {
       }
       ctx.restore()
 
-      // ── Ghost silhouette — dominant, left-of-centre ──
-      const ghostScale = vmin / 550
-      drawGhost(ctx, w * 0.34, h * 0.3, ghostScale, t)
+      // ── Ghost — dominant, left-of-centre ──
+      drawGhost(ctx, w * 0.34, h * 0.28, vmin / 520, t)
 
-      // ── Governance ring — right side ──
-      const ringR = vmin * 0.2
-      const ringX = w * 0.76 + Math.sin(t * 1.5) * 8
-      const ringY = h * 0.48 + Math.cos(t * 1.2) * 6
-      drawRing(ctx, ringX, ringY, ringR, t)
+      // ── Ring — right side ──
+      drawRing(ctx, w * 0.76, h * 0.48, vmin * 0.2, t)
 
-      // ── Memory orbs — cluster of 3 at different depths ──
-      // Large orb — upper-left area
+      // ── Orbs — 3 at different depths ──
       drawOrb(ctx, w * 0.12, h * 0.22, vmin * 0.08, t, 0)
-      // Medium orb — between ghost and ring
-      drawOrb(ctx, w * 0.58, h * 0.18, vmin * 0.055, t, 2.1)
-      // Small orb — lower-right
-      drawOrb(ctx, w * 0.82, h * 0.78, vmin * 0.045, t, 4.3)
+      drawOrb(ctx, w * 0.58, h * 0.16, vmin * 0.055, t, 2.1)
+      drawOrb(ctx, w * 0.83, h * 0.78, vmin * 0.042, t, 4.3)
     }
 
     resize()
