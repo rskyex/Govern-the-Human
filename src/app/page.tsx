@@ -1,23 +1,18 @@
-import { Header } from '@/components/header'
-import { Hero } from '@/components/hero'
-import { Thesis } from '@/components/thesis'
-import { Layers } from '@/components/layers'
-import { Suite } from '@/components/suite'
-import { GovernanceGap } from '@/components/governance-gap'
-import { Closing } from '@/components/closing'
-import { Footer } from '@/components/footer'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { ClientPage } from '@/components/client-page'
 
 export default function Home() {
-  return (
-    <div className="min-h-screen bg-base">
-      <Header />
-      <Hero />
-      <Thesis />
-      <Layers />
-      <Suite />
-      <GovernanceGap />
-      <Closing />
-      <Footer />
-    </div>
-  )
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-base" />
+  }
+
+  return <ClientPage />
 }
