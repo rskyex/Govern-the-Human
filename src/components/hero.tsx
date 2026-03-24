@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { TransparentHead, MemoryOrb, GovernanceRing } from '@/components/ui/figurative-forms'
+import { GhostSilhouette, MemoryOrb, GovernanceRing } from '@/components/ui/figurative-forms'
 
 const ease = [0.23, 1, 0.32, 1] as const
 
@@ -155,16 +155,16 @@ export function Hero() {
 
       {/* ── Large figurative objects ── */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        {/* Transparent head — large, upper-right, looking inward */}
-        <TransparentHead
-          width={480}
-          height={520}
+        {/* Ghost silhouette — large, upper-right, the governed subject */}
+        <GhostSilhouette
+          width={460}
+          height={600}
           className="absolute hidden md:block"
           style={{
-            top: '4%',
-            right: '1%',
-            opacity: 0.85,
-            animation: 'float-1 26s ease-in-out infinite',
+            top: '2%',
+            right: '0%',
+            opacity: 0.8,
+            animation: 'float-1 30s ease-in-out infinite',
           }}
         />
 

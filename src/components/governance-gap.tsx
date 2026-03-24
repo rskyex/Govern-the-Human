@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { SectionLabel } from '@/components/ui/section-label'
 import { Reveal } from '@/components/ui/reveal'
-import { GhostSilhouette, ShellForm, MemoryOrb } from '@/components/ui/figurative-forms'
+import { GhostSilhouette, GovernanceRing, MemoryOrb } from '@/components/ui/figurative-forms'
 
 /* ━━━ Governance Gap Data ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
@@ -71,15 +71,15 @@ export function GovernanceGap() {
           }}
         />
 
-        {/* Shell form — left side, nested cranial profiles.
-            Visualises the layers-within-layers structure of the gap itself. */}
-        <ShellForm
-          width={400}
-          height={440}
+        {/* Governance ring — left side, the analytical clock measuring
+            what frameworks track and what they miss. */}
+        <GovernanceRing
+          width={420}
+          height={420}
           className="absolute hidden md:block"
           style={{
             bottom: '4%',
-            left: '-3%',
+            left: '-4%',
             opacity: 0.65,
             animation: 'float-2 28s ease-in-out infinite',
           }}
