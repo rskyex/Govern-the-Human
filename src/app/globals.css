@@ -7,8 +7,9 @@
   /* ── Background ── */
   --color-base: #ffffff;
   --color-surface: #f3f5f9;
+  --color-surface-deep: #eaeff5;
 
-  /* ── Glass panels ── */
+  /* ── Glass ── */
   --color-panel: rgba(235, 239, 248, 0.55);
   --color-panel-border: rgba(180, 191, 206, 0.3);
 
@@ -28,9 +29,7 @@
   --color-violet-glow: rgba(139, 126, 184, 0.08);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html {
   font-size: 17px;
@@ -51,25 +50,3 @@ body {
 ::selection {
   background-color: var(--color-accent-glow);
 }
-
-/* ── Scroll reveal animation ── */
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.reveal {
-  opacity: 0;
-  animation: reveal 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-.reveal-delay-1 { animation-delay: 0.1s; }
-.reveal-delay-2 { animation-delay: 0.2s; }
-.reveal-delay-3 { animation-delay: 0.3s; }
-.reveal-delay-4 { animation-delay: 0.4s; }

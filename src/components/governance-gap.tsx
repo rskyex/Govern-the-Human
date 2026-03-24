@@ -1,0 +1,207 @@
+'use client'
+
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { SectionLabel } from '@/components/ui/section-label'
+import { Reveal } from '@/components/ui/reveal'
+
+/* ━━━ Governance Gap Data ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+interface GapItem {
+  label: string
+  visibility: 'observed' | 'partial' | 'missed'
+}
+
+const GAP_ITEMS: GapItem[] = [
+  { label: 'System Outputs', visibility: 'observed' },
+  { label: 'Model Risk', visibility: 'observed' },
+  { label: 'Explainability', visibility: 'observed' },
+  { label: 'Transparency', visibility: 'observed' },
+  { label: 'Epistemic Conditioning', visibility: 'partial' },
+  { label: 'Narrative Identity Effects', visibility: 'partial' },
+  { label: 'Memory Outsourcing', visibility: 'missed' },
+  { label: 'Cumulative Personalised Drift', visibility: 'missed' },
+  { label: 'Democratic Subject Formation', visibility: 'missed' },
+  { label: 'Self-Governance Erosion', visibility: 'missed' },
+]
+
+const ZONE_META = {
+  observed: {
+    label: 'Observed',
+    sublabel: 'Surface-level — visible, legible, regulated',
+    color: 'var(--color-accent)',
+    borderOpacity: 0.25,
+    bgOpacity: 0,
+    textClass: 'text-text-primary',
+    descClass: 'text-text-secondary',
+  },
+  partial: {
+    label: 'Partial',
+    sublabel: 'Unstable — acknowledged, incompletely governed',
+    color: 'var(--color-violet)',
+    borderOpacity: 0.18,
+    bgOpacity: 0.015,
+    textClass: 'text-text-secondary',
+    descClass: 'text-text-tertiary',
+  },
+  missed: {
+    label: 'Missed',
+    sublabel: 'Embedded — structurally hidden, ungoverned',
+    color: 'var(--color-text-ghost)',
+    borderOpacity: 0.12,
+    bgOpacity: 0.03,
+    textClass: 'text-text-tertiary',
+    descClass: 'text-text-ghost',
+  },
+} as const
+
+/* ━━━ Main Section ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+export function GovernanceGap() {
+  return (
+    <section id="gap" className="py-28 md:py-40 bg-base">
+      <div className="max-w-[1040px] mx-auto px-6 md:px-12">
+        <Reveal>
+          <SectionLabel>The Governance Gap</SectionLabel>
+          <h2 className="font-display text-[1.75rem] md:text-[2.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary max-w-[600px] mb-6">
+            What current frameworks see —{' '}
+            <span className="text-text-tertiary">
+              and what remains structurally invisible
+            </span>
+          </h2>
+          <p className="font-sans text-[0.92rem] leading-[1.8] text-text-tertiary font-light max-w-[560px] mb-20">
+            Governance operates at the surface. The deeper the effect is embedded
+            in the subject, the less visible it becomes to existing frameworks.
+          </p>
+        </Reveal>
+
+        {/* Depth chamber visualization */}
+        <DepthChamber />
+      </div>
+    </section>
+  )
+}
+
+/* ━━━ Depth Chamber ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+function DepthChamber() {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const zones: Array<'observed' | 'partial' | 'missed'> = ['observed', 'partial', 'missed']
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Nesting: each zone is more indented and more enclosed */}
+      {zones.map((zone, zoneIndex) => {
+        const meta = ZONE_META[zone]
+        const items = GAP_ITEMS.filter((i) => i.visibility === zone)
+        const insetPx = zoneIndex * 20
+
+        return (
+          <motion.div
+            key={zone}
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{
+              duration: 0.8,
+              delay: zoneIndex * 0.2,
+              ease: [0.23, 1, 0.32, 1],
+            }}
+            className="relative mb-4 last:mb-0"
+            style={{ marginLeft: insetPx, marginRight: insetPx }}
+          >
+            <div
+              className="rounded-xl px-6 md:px-10 py-8 md:py-10"
+              style={{
+                border: `1px solid rgba(${zone === 'observed' ? '91,164,201' : zone === 'partial' ? '139,126,184' : '168,179,196'},${meta.borderOpacity})`,
+                background: zone === 'missed'
+                  ? `rgba(234,239,245,${meta.bgOpacity * 8})`
+                  : zone === 'partial'
+                    ? `rgba(243,245,249,${meta.bgOpacity * 15})`
+                    : 'transparent',
+              }}
+            >
+              {/* Zone header */}
+              <div className="flex items-baseline gap-3 mb-6">
+                <span
+                  className="font-sans text-[10px] font-medium tracking-[0.25em] uppercase"
+                  style={{ color: meta.color }}
+                >
+                  {meta.label}
+                </span>
+                <span className={`font-sans text-[12px] font-light ${meta.descClass}`}>
+                  {meta.sublabel}
+                </span>
+              </div>
+
+              {/* Items */}
+              <div className={`flex flex-wrap gap-3 ${zone === 'missed' ? 'gap-y-4' : ''}`}>
+                {items.map((item, i) => (
+                  <GapChip
+                    key={item.label}
+                    item={item}
+                    zone={zone}
+                    inView={inView}
+                    delay={zoneIndex * 0.2 + i * 0.06 + 0.3}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )
+      })}
+
+      {/* Depth arrow indicator */}
+      <div className="absolute -left-2 md:left-2 top-4 bottom-4 flex flex-col items-center pointer-events-none">
+        <div className="w-px flex-1 bg-gradient-to-b from-accent/20 via-violet/15 to-text-ghost/10" />
+        <span className="font-sans text-[9px] tracking-[0.2em] uppercase text-text-ghost mt-2 [writing-mode:vertical-lr] rotate-180">
+          Depth
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/* ━━━ Gap Chip ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+function GapChip({
+  item,
+  zone,
+  inView,
+  delay,
+}: {
+  item: GapItem
+  zone: 'observed' | 'partial' | 'missed'
+  inView: boolean
+  delay: number
+}) {
+  const meta = ZONE_META[zone]
+
+  const chipStyles: Record<string, string> = {
+    observed:
+      'bg-base border-accent/20 text-text-primary',
+    partial:
+      'bg-surface border-violet/15 text-text-secondary',
+    missed:
+      'bg-surface-deep/60 border-text-ghost/10 text-text-tertiary',
+  }
+
+  return (
+    <motion.span
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={inView ? { opacity: zone === 'missed' ? 0.55 : zone === 'partial' ? 0.75 : 1, scale: 1 } : {}}
+      transition={{ duration: 0.5, delay, ease: [0.23, 1, 0.32, 1] }}
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border font-sans text-[0.82rem] md:text-[0.85rem] font-light ${chipStyles[zone]}`}
+    >
+      <span
+        className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+        style={{
+          backgroundColor: meta.color,
+          opacity: zone === 'missed' ? 0.3 : zone === 'partial' ? 0.5 : 0.7,
+        }}
+      />
+      {item.label}
+    </motion.span>
+  )
+}
