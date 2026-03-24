@@ -265,7 +265,7 @@ function drawGhost(
     ctx.stroke()
 
     // Endpoint node — slow pulse (~45s)
-    const pulse = 0.4 + Math.sin(t * 0.698 + i * 1.3) * 0.6
+    const pulse = 0.5 + Math.sin(t * 0.698 + i * 1.3) * 0.4
     ctx.beginPath()
     ctx.arc(Math.cos(a2) * r2, Math.sin(a2) * r2, 1.2 * pulse, 0, Math.PI * 2)
     ctx.fillStyle = `rgba(91,164,201,${0.07 * pulse})`
