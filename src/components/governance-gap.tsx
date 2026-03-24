@@ -59,12 +59,16 @@ function drawSinkingGhost(
   t: number,
   h: number,
 ) {
-  const drift = Math.sin(t * 2) * 4
-  const breathe = 1 + Math.sin(t * 3.5) * 0.006
+  // Very slow vertical float (~60s) and drift (~80s)
+  const drift = Math.sin(t * 0.785) * 3 + Math.sin(t * 0.47) * 1.5
+  const floatY = Math.sin(t * 1.05) * 5 + Math.cos(t * 0.62) * 2
+  const breathe = 1 + Math.sin(t * 1.57) * 0.004 + Math.sin(t * 1.05) * 0.002
+  // Subtle deformation (~90s)
+  const deformX = 1 + Math.sin(t * 0.698) * 0.003
 
   ctx.save()
-  ctx.translate(cx + drift, cy + Math.sin(t * 1.4) * 3)
-  ctx.scale(breathe, breathe)
+  ctx.translate(cx + drift, cy + floatY)
+  ctx.scale(breathe * deformX, breathe / deformX)
 
   // Calculate vertical fade — ghost gets more transparent as it goes deeper
   const depthRatio = Math.max(0, Math.min(1, (cy / h)))
@@ -119,10 +123,10 @@ function drawSinkingGhost(
 
   // ── Thought traces ──
   for (let i = 0; i < 5; i++) {
-    const angle = (i / 5) * Math.PI * 2 + t * 0.7
+    const angle = (i / 5) * Math.PI * 2 + t * 0.3
     const r1 = 8 * s
-    const r2 = 26 * s + Math.sin(t * 2.5 + i * 1.3) * 6 * s
-    const a2 = angle + 0.6 + Math.sin(t * 1.8 + i) * 0.3
+    const r2 = 26 * s + Math.sin(t * 0.785 + i * 1.3) * 6 * s
+    const a2 = angle + 0.6 + Math.sin(t * 0.628 + i) * 0.3
     ctx.beginPath()
     ctx.moveTo(Math.cos(angle) * r1, Math.sin(angle) * r1)
     ctx.quadraticCurveTo(
@@ -131,7 +135,7 @@ function drawSinkingGhost(
       Math.cos(a2) * r2,
       Math.sin(a2) * r2,
     )
-    ctx.strokeStyle = `rgba(91,164,201,${(0.035 + Math.sin(t * 3 + i) * 0.012) * fadeMultiplier})`
+    ctx.strokeStyle = `rgba(91,164,201,${(0.035 + Math.sin(t * 0.9 + i) * 0.012) * fadeMultiplier})`
     ctx.lineWidth = 0.5
     ctx.stroke()
   }
@@ -176,7 +180,7 @@ function drawRing(
   ctx.lineWidth = 1
   ctx.stroke()
 
-  const rot = t * 0.25
+  const rot = t * 0.12 // ~8.5min/revolution
   ctx.save()
   ctx.rotate(rot)
   for (let i = 0; i < 24; i++) {
@@ -209,7 +213,7 @@ function drawRing(
   }
   ctx.restore()
 
-  const handA = t * 0.4
+  const handA = t * 0.18 // ~6min/revolution
   ctx.beginPath()
   ctx.moveTo(0, 0)
   ctx.lineTo(Math.cos(handA) * r * 0.7, Math.sin(handA) * r * 0.7)
@@ -239,7 +243,9 @@ function drawOrb(
   phase: number,
 ) {
   ctx.save()
-  ctx.translate(cx + Math.sin(t * 2 + phase) * 5, cy + Math.cos(t * 1.5 + phase) * 4)
+  // Slow orbital drift (~60s)
+  const orbA = t * 0.524 + phase
+  ctx.translate(cx + Math.cos(orbA) * r * 0.6 + Math.sin(t * 0.35 + phase) * 1, cy + Math.sin(orbA) * r * 0.4 + Math.cos(t * 0.28 + phase) * 0.8)
 
   const og = ctx.createRadialGradient(0, 0, r * 0.6, 0, 0, r * 1.2)
   og.addColorStop(0, 'rgba(91,164,201,0.018)')
@@ -262,7 +268,7 @@ function drawOrb(
   ctx.stroke()
 
   for (let i = 0; i < 3; i++) {
-    const p = (i / 3) * Math.PI * 2 + t * (0.5 + i * 0.07) + phase
+    const p = (i / 3) * Math.PI * 2 + t * (0.2 + i * 0.03) + phase
     const oA = r * (0.3 + i * 0.06)
     const oB = r * (0.16 + i * 0.04)
     const tilt = i * 0.5 + phase * 0.2
@@ -276,7 +282,7 @@ function drawOrb(
       if (j === 0) ctx.moveTo(rx, ry)
       else ctx.lineTo(rx, ry)
     }
-    ctx.strokeStyle = `rgba(139,126,184,${0.022 + Math.sin(t * 2 + i + phase) * 0.008})`
+    ctx.strokeStyle = `rgba(139,126,184,${0.022 + Math.sin(t * 0.7 + i + phase) * 0.008})`
     ctx.lineWidth = 0.5
     ctx.stroke()
   }
@@ -364,12 +370,12 @@ function GapCanvas() {
 
       ctx.clearRect(0, 0, w, h)
 
-      // ── Ring — upper-left, the analytical lens ──
+      // ── Ring — upper-left, slow drift (~60s / ~85s) ──
       const ringR = vmin * 0.17
       drawRing(
         ctx,
-        w * 0.15 + Math.sin(t * 1.2) * 5,
-        h * 0.12 + Math.cos(t * 1.0) * 4,
+        w * 0.15 + Math.sin(t * 1.05) * 3 + Math.sin(t * 0.47) * 1.5,
+        h * 0.12 + Math.cos(t * 0.74) * 2.5 + Math.cos(t * 0.37) * 1,
         ringR,
         t,
       )

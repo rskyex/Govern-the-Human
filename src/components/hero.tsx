@@ -54,20 +54,34 @@ function drawGhost(
   s: number,
   t: number,
 ) {
-  // Organic breathing: two overlaid sine waves at irrational ratios
-  const breathe = 1 + Math.sin(t * 3.7) * 0.005 + Math.sin(t * 5.3) * 0.003
-  const driftX = Math.sin(t * 2.1) * 4 + Math.sin(t * 3.4) * 2
-  const driftY = Math.cos(t * 1.7) * 3 + Math.sin(t * 2.9) * 1.5
+  // ── Motion: very slow, layered, barely perceptible ──
+  // Dominant vertical float: ~55s cycle
+  const floatY = Math.sin(t * 1.14) * 8 + Math.sin(t * 0.67) * 3
+  // Gentle horizontal drift: ~70s cycle
+  const driftX = Math.sin(t * 0.9) * 3 + Math.sin(t * 0.53) * 1.5
+  // Breathing: ~30s cycle, barely visible
+  const breathe = 1 + Math.sin(t * 2.09) * 0.004 + Math.sin(t * 1.37) * 0.002
+  // Subtle non-uniform deformation: body shifts shape (~80s, ~110s)
+  const deformX = 1 + Math.sin(t * 0.785) * 0.003
+  const deformY = 1 + Math.cos(t * 0.571) * 0.004
+  // Very slight head tilt: ~100s
+  const headTilt = Math.sin(t * 0.628) * 0.012
+
+  // Inner echo lag — echoes trail the outer form by a time offset
+  const lagDriftX = Math.sin(t * 0.9 - 0.15) * 3 + Math.sin(t * 0.53 - 0.1) * 1.5
+  const lagFloatY = Math.sin(t * 1.14 - 0.12) * 8 + Math.sin(t * 0.67 - 0.08) * 3
+  const echoOffsetX = (driftX - lagDriftX) * 0.6
+  const echoOffsetY = (floatY - lagFloatY) * 0.6
 
   ctx.save()
-  ctx.translate(cx + driftX, cy + driftY)
-  ctx.scale(breathe, breathe)
+  ctx.translate(cx + driftX, cy + floatY)
+  ctx.scale(breathe * deformX, breathe * deformY)
 
   // ── Torso ──
   ctx.save()
   ctx.translate(0, 50 * s)
 
-  // Luminous edge glow (drawn first, wider, blurred via shadow)
+  // Luminous edge glow
   ctx.save()
   ctx.shadowColor = 'rgba(91,164,201,0.12)'
   ctx.shadowBlur = 18 * s
@@ -77,7 +91,7 @@ function drawGhost(
   ctx.stroke()
   ctx.restore()
 
-  // Main fill — gradient that dissolves toward waist
+  // Main fill — dissolves toward waist
   torsoPath(ctx, s)
   const tg = ctx.createLinearGradient(0, 0, 0, 192 * s)
   tg.addColorStop(0, 'rgba(91,164,201,0.05)')
@@ -87,7 +101,7 @@ function drawGhost(
   ctx.fillStyle = tg
   ctx.fill()
 
-  // Edge stroke — thin, bright at shoulders, fading at waist
+  // Edge stroke — fades at waist
   torsoPath(ctx, s)
   const eg = ctx.createLinearGradient(0, 0, 0, 192 * s)
   eg.addColorStop(0, 'rgba(91,164,201,0.1)')
@@ -97,7 +111,9 @@ function drawGhost(
   ctx.lineWidth = 1.2
   ctx.stroke()
 
-  // Inner echo — violet tint
+  // Inner echo — lags behind outer form
+  ctx.save()
+  ctx.translate(echoOffsetX * 0.7, echoOffsetY * 0.7)
   torsoPath(ctx, s * 0.86)
   const ig = ctx.createLinearGradient(0, 0, 0, 165 * s)
   ig.addColorStop(0, 'rgba(139,126,184,0.04)')
@@ -106,10 +122,15 @@ function drawGhost(
   ctx.strokeStyle = ig
   ctx.lineWidth = 0.7
   ctx.stroke()
+  ctx.restore()
 
   ctx.restore()
 
   // ── Head ──
+
+  // Slight tilt
+  ctx.save()
+  ctx.rotate(headTilt)
 
   // Halo glow
   ctx.save()
@@ -121,7 +142,7 @@ function drawGhost(
   ctx.stroke()
   ctx.restore()
 
-  // Main fill — radial gradient, brighter at centre
+  // Main fill
   headPath(ctx, s)
   const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, -2 * s, 56 * s)
   hg.addColorStop(0, 'rgba(91,164,201,0.06)')
@@ -137,19 +158,25 @@ function drawGhost(
   ctx.lineWidth = 1.4
   ctx.stroke()
 
-  // Inner echo 1 — violet
+  // Inner echo 1 — lags behind
+  ctx.save()
+  ctx.translate(echoOffsetX, echoOffsetY)
   headPath(ctx, s * 0.76)
   ctx.strokeStyle = 'rgba(139,126,184,0.065)'
   ctx.lineWidth = 0.8
   ctx.stroke()
+  ctx.restore()
 
-  // Inner echo 2 — faintest
+  // Inner echo 2 — lags more
+  ctx.save()
+  ctx.translate(echoOffsetX * 1.5, echoOffsetY * 1.5)
   headPath(ctx, s * 0.52)
   ctx.strokeStyle = 'rgba(91,164,201,0.025)'
   ctx.lineWidth = 0.5
   ctx.stroke()
+  ctx.restore()
 
-  // ── Glass highlight (clipped to head) ──
+  // Glass highlight (clipped)
   ctx.save()
   headPath(ctx, s)
   ctx.clip()
@@ -161,14 +188,19 @@ function drawGhost(
   ctx.fillRect(-50 * s, -55 * s, 100 * s, 80 * s)
   ctx.restore()
 
-  // ── Thought-stream traces — varied weight + opacity ──
+  ctx.restore() // end head tilt
+
+  // ── Thought-stream traces — slow rotation, varied weight ──
   for (let i = 0; i < 7; i++) {
-    const angle = (i / 7) * Math.PI * 2 + t * 0.6
+    // Very slow rotation: ~90s per revolution
+    const angle = (i / 7) * Math.PI * 2 + t * 0.35
     const r1 = 7 * s
-    const r2 = (24 + i * 2.5) * s + Math.sin(t * 2.5 + i * 1.6) * 7 * s
-    const a2 = angle + 0.65 + Math.sin(t * 1.8 + i) * 0.35
-    const weight = 0.35 + (i % 3) * 0.15 // vary line weight
-    const op = 0.032 + Math.sin(t * 2.8 + i * 0.9) * 0.014
+    // Reach oscillates slowly (~40s)
+    const r2 = (24 + i * 2.5) * s + Math.sin(t * 0.785 + i * 1.6) * 7 * s
+    const a2 = angle + 0.65 + Math.sin(t * 0.628 + i) * 0.3
+    const weight = 0.35 + (i % 3) * 0.15
+    // Opacity pulses slowly (~35s, phase-offset per trace)
+    const op = 0.032 + Math.sin(t * 0.9 + i * 0.9) * 0.014
 
     ctx.beginPath()
     ctx.moveTo(Math.cos(angle) * r1, Math.sin(angle) * r1)
@@ -182,8 +214,8 @@ function drawGhost(
     ctx.lineWidth = weight
     ctx.stroke()
 
-    // Endpoint node — pulses
-    const pulse = 0.4 + Math.sin(t * 4.5 + i * 1.3) * 0.6
+    // Endpoint node — slow pulse (~45s)
+    const pulse = 0.4 + Math.sin(t * 0.698 + i * 1.3) * 0.6
     ctx.beginPath()
     ctx.arc(Math.cos(a2) * r2, Math.sin(a2) * r2, 1.2 * pulse, 0, Math.PI * 2)
     ctx.fillStyle = `rgba(91,164,201,${0.07 * pulse})`
@@ -202,13 +234,20 @@ function drawRing(
   r: number,
   t: number,
 ) {
-  const driftX = Math.sin(t * 1.5) * 7 + Math.sin(t * 2.6) * 3
-  const driftY = Math.cos(t * 1.2) * 5 + Math.cos(t * 2.1) * 2
+  // ── Motion: suspended instrument, barely drifting ──
+  // Slow drift: ~60s / ~90s cycles
+  const driftX = Math.sin(t * 1.05) * 4 + Math.sin(t * 0.44) * 2
+  const driftY = Math.cos(t * 0.82) * 3 + Math.cos(t * 0.37) * 1.5
+  // Subtle tilt — circle becomes barely oval (~90s)
+  const tiltX = 1 + Math.sin(t * 0.698) * 0.015
+  // Slow pulse: ~40s
+  const pulse = 1 + Math.sin(t * 1.57) * 0.003
 
   ctx.save()
   ctx.translate(cx + driftX, cy + driftY)
+  ctx.scale(tiltX * pulse, (1 / tiltX) * pulse) // tilt preserves area
 
-  // ── Disc fill — faint radial gradient giving the ring a glass-disc body ──
+  // ── Disc fill ──
   ctx.beginPath()
   ctx.arc(0, 0, r * 1.02, 0, Math.PI * 2)
   const df = ctx.createRadialGradient(0, 0, r * 0.3, 0, 0, r * 1.02)
@@ -218,7 +257,7 @@ function drawRing(
   ctx.fillStyle = df
   ctx.fill()
 
-  // ── Outer band — luminous edge ──
+  // ── Outer band — luminous ──
   ctx.save()
   ctx.shadowColor = 'rgba(91,164,201,0.08)'
   ctx.shadowBlur = 12
@@ -243,8 +282,8 @@ function drawRing(
   ctx.lineWidth = 0.8
   ctx.stroke()
 
-  // ── 24 outer markers ──
-  const rot = t * 0.28
+  // ── 24 outer markers — very slow rotation: ~7min/revolution ──
+  const rot = t * 0.15
   ctx.save()
   ctx.rotate(rot)
   for (let i = 0; i < 24; i++) {
@@ -272,9 +311,9 @@ function drawRing(
   }
   ctx.restore()
 
-  // ── 12 inner markers (counter-rotating) ──
+  // ── 12 inner markers — counter-rotating, even slower ──
   ctx.save()
-  ctx.rotate(-rot * 0.55)
+  ctx.rotate(-rot * 0.4)
   for (let i = 0; i < 12; i++) {
     const a = (i / 12) * Math.PI * 2
     const inner = r * 0.78 - r * 0.03
@@ -290,14 +329,12 @@ function drawRing(
   }
   ctx.restore()
 
-  // ── Sweeping hand with trail ──
-  const handA = t * 0.4
-  // Trail (faint arc behind the hand)
+  // ── Sweeping hand — very slow: ~5min/revolution ──
+  const handA = t * 0.2
+  // Trail (longer, fainter)
   ctx.beginPath()
-  ctx.arc(0, 0, r * 0.55, handA - 0.8, handA)
-  const trailG = ctx.createConicGradient(handA - 0.8, 0, 0)
-  // ConicGradient offsets are 0-1, but the arc draws from handA-0.8 to handA
-  ctx.strokeStyle = 'rgba(91,164,201,0.025)'
+  ctx.arc(0, 0, r * 0.55, handA - 1.0, handA)
+  ctx.strokeStyle = 'rgba(91,164,201,0.02)'
   ctx.lineWidth = 1.5
   ctx.stroke()
 
@@ -345,9 +382,15 @@ function drawOrb(
   t: number,
   phase: number,
 ) {
-  const breathe = 1 + Math.sin(t * 2.8 + phase) * 0.008 + Math.sin(t * 4.1 + phase) * 0.004
-  const dx = Math.sin(t * 1.9 + phase) * 5 + Math.sin(t * 3.2 + phase) * 2
-  const dy = Math.cos(t * 1.5 + phase) * 4 + Math.cos(t * 2.7 + phase) * 1.5
+  // ── Slow elliptical orbit around anchor: ~60s, phase-offset ──
+  const orbSpeed = 0.523 + phase * 0.03 // slightly different per orb
+  const orbAngle = t * orbSpeed + phase
+  const orbRx = r * 0.8  // orbit width proportional to orb size
+  const orbRy = r * 0.5
+  const dx = Math.cos(orbAngle) * orbRx + Math.sin(t * 0.37 + phase) * 1
+  const dy = Math.sin(orbAngle) * orbRy + Math.cos(t * 0.29 + phase) * 0.8
+  // Breathing: ~30s, phase-offset
+  const breathe = 1 + Math.sin(t * 1.05 + phase) * 0.006 + Math.sin(t * 0.73 + phase) * 0.003
 
   ctx.save()
   ctx.translate(cx + dx, cy + dy)
@@ -395,9 +438,9 @@ function drawOrb(
   ctx.lineWidth = 0.4
   ctx.stroke()
 
-  // Internal traces — tilted elliptical arcs
+  // Internal traces — very slow orbital drift
   for (let i = 0; i < 4; i++) {
-    const p = (i / 4) * Math.PI * 2 + t * (0.45 + i * 0.06) + phase
+    const p = (i / 4) * Math.PI * 2 + t * (0.2 + i * 0.03) + phase
     const oA = r * (0.28 + i * 0.07)
     const oB = r * (0.16 + i * 0.04)
     const tilt = i * 0.5 + phase * 0.25
@@ -412,7 +455,7 @@ function drawOrb(
       if (j === 0) ctx.moveTo(rx, ry)
       else ctx.lineTo(rx, ry)
     }
-    ctx.strokeStyle = `rgba(139,126,184,${0.022 + Math.sin(t * 2.2 + i + phase) * 0.008})`
+    ctx.strokeStyle = `rgba(139,126,184,${0.022 + Math.sin(t * 0.785 + i + phase) * 0.008})`
     ctx.lineWidth = 0.45
     ctx.stroke()
   }
@@ -470,12 +513,13 @@ export function Hero() {
       ctx.fillStyle = ag
       ctx.fillRect(0, 0, w, h)
 
-      // ── Faint scan arcs ──
+      // ── Faint scan arcs — glacial rotation ──
       ctx.save()
       ctx.translate(w * 0.36, h * 0.36)
       for (let i = 0; i < 4; i++) {
         const r = vmin * 0.22 + i * vmin * 0.1
-        const rot = t * (1.1 + i * 0.25) * (i % 2 === 0 ? 1 : -1)
+        // ~3-5min per revolution
+        const rot = t * (0.35 + i * 0.08) * (i % 2 === 0 ? 1 : -1)
         ctx.save()
         ctx.rotate(rot)
         const segs = 3 + i
