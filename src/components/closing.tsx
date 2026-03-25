@@ -4,16 +4,16 @@ import { Reveal } from '@/components/ui/reveal'
 
 export function Closing() {
   return (
-    <section id="closing" className="bg-base py-40 md:py-56">
-      <div className="max-w-[640px] mx-auto px-6 md:px-12 text-center">
+    <section id="closing" className="bg-base py-44 md:py-60">
+      <div className="max-w-[800px] mx-auto px-8 md:px-16 text-center">
         <Reveal>
-          <p className="font-display text-[1.6rem] md:text-[2.2rem] lg:text-[2.5rem] font-normal leading-[1.3] tracking-[-0.015em] text-text-primary mb-6">
+          <p className="font-display text-[1.8rem] md:text-[2.6rem] lg:text-[3.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-text-primary mb-8">
             The system can be governed.
           </p>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="font-display text-[1.3rem] md:text-[1.8rem] lg:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] text-text-ghost italic">
+          <p className="font-display text-[1.5rem] md:text-[2.1rem] lg:text-[2.5rem] font-normal leading-[1.3] tracking-[-0.01em] text-text-ghost italic">
             But what governs the human it reshapes?
           </p>
         </Reveal>
