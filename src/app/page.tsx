@@ -1,8 +1,9 @@
 import { Header } from '@/components/header'
 import { Hero } from '@/components/hero'
-import { Premise } from '@/components/premise'
-import { Domains } from '@/components/domains'
-import { Framework } from '@/components/framework'
+import { Thesis } from '@/components/thesis'
+import { ThreeLayerModel } from '@/components/three-layer-model'
+import { Suite } from '@/components/suite'
+import { GovernanceGap } from '@/components/governance-gap'
 import { Closing } from '@/components/closing'
 import { Footer } from '@/components/footer'
 
@@ -11,9 +12,10 @@ export default function Home() {
     <div className="min-h-screen bg-base">
       <Header />
       <Hero />
-      <Premise />
-      <Domains />
-      <Framework />
+      <Thesis />
+      <ThreeLayerModel />
+      <Suite />
+      <GovernanceGap />
       <Closing />
       <Footer />
     </div>
