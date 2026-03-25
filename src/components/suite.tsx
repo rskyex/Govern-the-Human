@@ -90,95 +90,83 @@ function drawGlassRibbon(
 
   ctx.save()
 
-  // ── Outer glow — the luminous halo around the ribbon ──
+  // ── Luminous fog interior — soft trapped light ──
   ctx.save()
-  ctx.shadowColor = `rgba(${c.r},${0.15 * op})`
-  ctx.shadowBlur = rw * 1.5
+  ctx.shadowColor = `rgba(${c.r},${0.1 * op})`
+  ctx.shadowBlur = rw * 1.2
   ctx.beginPath()
   ctx.moveTo(sx, sy)
   ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ex, ey)
-  ctx.strokeStyle = `rgba(${c.r},${0.008 * op})`
-  ctx.lineWidth = rw * 0.8
+  ctx.strokeStyle = `rgba(${c.r},${0.005 * op})`
+  ctx.lineWidth = rw * 0.7
   ctx.lineCap = 'round'
   ctx.stroke()
   ctx.restore()
 
-  // ── Main ribbon body — wide, translucent glass fill ──
-  // Draw as thick stroke with glass-like gradient
+  // ── Liquid crystal body — prismatic colour shift along the flow ──
   ctx.beginPath()
   ctx.moveTo(sx, sy)
   ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ex, ey)
-
-  // Glass gradient along the path (approximated with linear gradient)
   const grad = ctx.createLinearGradient(sx, sy, ex, ey)
-  grad.addColorStop(0, `rgba(${c.r},${0.0})`)
-  grad.addColorStop(0.15, `rgba(${c.r},${0.06 * op})`)
-  grad.addColorStop(0.4, `rgba(${c.g},${0.08 * op})`)
-  grad.addColorStop(0.6, `rgba(${c.r},${0.07 * op})`)
-  grad.addColorStop(0.85, `rgba(${c.g},${0.05 * op})`)
-  grad.addColorStop(1, `rgba(${c.r},${0.0})`)
+  grad.addColorStop(0, `rgba(${c.r},0)`)
+  grad.addColorStop(0.1, `rgba(${c.h},${0.03 * op})`)
+  grad.addColorStop(0.3, `rgba(${c.r},${0.05 * op})`)
+  grad.addColorStop(0.5, `rgba(${c.g},${0.055 * op})`)
+  grad.addColorStop(0.7, `rgba(${c.r},${0.04 * op})`)
+  grad.addColorStop(0.9, `rgba(${c.h},${0.025 * op})`)
+  grad.addColorStop(1, `rgba(${c.r},0)`)
   ctx.strokeStyle = grad
   ctx.lineWidth = rw
   ctx.lineCap = 'round'
   ctx.stroke()
 
-  // ── Secondary fill layer — warmer, offset, creates depth ──
-  ctx.beginPath()
-  ctx.moveTo(sx, sy)
-  ctx.bezierCurveTo(cx1 + rw * 0.1, cy1 - rw * 0.05, cx2 - rw * 0.1, cy2 + rw * 0.05, ex, ey)
-  const grad2 = ctx.createLinearGradient(sx, sy, ex, ey)
-  grad2.addColorStop(0, `rgba(${c.h},0)`)
-  grad2.addColorStop(0.3, `rgba(${c.h},${0.04 * op})`)
-  grad2.addColorStop(0.7, `rgba(${c.h},${0.035 * op})`)
-  grad2.addColorStop(1, `rgba(${c.h},0)`)
-  ctx.strokeStyle = grad2
-  ctx.lineWidth = rw * 0.6
-  ctx.lineCap = 'round'
-  ctx.stroke()
-
-  // ── Rim edges — surface tension lines on both sides of the ribbon ──
+  // ── Chrome rim edges — thin, bright, tensile ──
   for (const offset of [-1, 1]) {
-    // Approximate offset by shifting control points perpendicular to path
-    const nx1 = cx1 + offset * rw * 0.35
-    const ny1 = cy1 + offset * rw * 0.15
-    const nx2 = cx2 + offset * rw * 0.25
-    const ny2 = cy2 - offset * rw * 0.2
+    const nx1 = cx1 + offset * rw * 0.38
+    const ny1 = cy1 + offset * rw * 0.12
+    const nx2 = cx2 + offset * rw * 0.28
+    const ny2 = cy2 - offset * rw * 0.18
 
     ctx.beginPath()
-    ctx.moveTo(sx + offset * rw * 0.2, sy)
-    ctx.bezierCurveTo(nx1, ny1, nx2, ny2, ex + offset * rw * 0.15, ey)
+    ctx.moveTo(sx + offset * rw * 0.22, sy)
+    ctx.bezierCurveTo(nx1, ny1, nx2, ny2, ex + offset * rw * 0.18, ey)
     const rimGrad = ctx.createLinearGradient(sx, sy, ex, ey)
-    rimGrad.addColorStop(0, `rgba(${c.h},0)`)
-    rimGrad.addColorStop(0.2, `rgba(${c.h},${0.12 * op})`)
-    rimGrad.addColorStop(0.5, `rgba(${c.h},${0.15 * op})`)
-    rimGrad.addColorStop(0.8, `rgba(${c.h},${0.1 * op})`)
-    rimGrad.addColorStop(1, `rgba(${c.h},0)`)
+    rimGrad.addColorStop(0, 'rgba(255,255,255,0)')
+    rimGrad.addColorStop(0.15, `rgba(255,255,255,${0.06 * op})`)
+    rimGrad.addColorStop(0.35, `rgba(${c.h},${0.14 * op})`)
+    rimGrad.addColorStop(0.5, `rgba(255,255,255,${0.1 * op})`)
+    rimGrad.addColorStop(0.65, `rgba(${c.h},${0.12 * op})`)
+    rimGrad.addColorStop(0.85, `rgba(255,255,255,${0.05 * op})`)
+    rimGrad.addColorStop(1, 'rgba(255,255,255,0)')
     ctx.strokeStyle = rimGrad
-    ctx.lineWidth = 0.8
+    ctx.lineWidth = 0.45
     ctx.stroke()
   }
 
-  // ── Centre structural line — elegant thin line through the middle ──
+  // ── Specular highlight line — white chrome spine ──
   ctx.beginPath()
   ctx.moveTo(sx, sy)
   ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ex, ey)
-  const centreGrad = ctx.createLinearGradient(sx, sy, ex, ey)
-  centreGrad.addColorStop(0, `rgba(${c.h},0)`)
-  centreGrad.addColorStop(0.25, `rgba(${c.h},${0.08 * op})`)
-  centreGrad.addColorStop(0.5, `rgba(255,255,255,${0.06 * op})`)
-  centreGrad.addColorStop(0.75, `rgba(${c.h},${0.07 * op})`)
-  centreGrad.addColorStop(1, `rgba(${c.h},0)`)
-  ctx.strokeStyle = centreGrad
-  ctx.lineWidth = 0.5
+  const specGrad = ctx.createLinearGradient(sx, sy, ex, ey)
+  specGrad.addColorStop(0, 'rgba(255,255,255,0)')
+  specGrad.addColorStop(0.2, `rgba(255,255,255,${0.04 * op})`)
+  specGrad.addColorStop(0.4, `rgba(255,255,255,${0.09 * op})`)
+  specGrad.addColorStop(0.5, `rgba(255,255,255,${0.12 * op})`)
+  specGrad.addColorStop(0.6, `rgba(255,255,255,${0.08 * op})`)
+  specGrad.addColorStop(0.8, `rgba(255,255,255,${0.03 * op})`)
+  specGrad.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.strokeStyle = specGrad
+  ctx.lineWidth = 0.3
   ctx.stroke()
 
-  // ── Caustic highlight — bright spot where light collects ──
-  const midX = (sx + ex) / 2 + (cx1 + cx2) / 2 - (sx + ex) / 2
-  const midY = (sy + ey) / 2 + (cy1 + cy2) / 2 - (sy + ey) / 2
-  const hlR = rw * 0.8
+  // ── Concentrated specular — polished resin refraction point ──
+  const midX = (cx1 + cx2) / 2
+  const midY = (cy1 + cy2) / 2
+  const hlR = rw * 0.5
   const hl = ctx.createRadialGradient(midX, midY, 0, midX, midY, hlR)
-  hl.addColorStop(0, `rgba(255,255,255,${0.08 * op})`)
-  hl.addColorStop(0.4, `rgba(255,255,255,${0.025 * op})`)
+  hl.addColorStop(0, `rgba(255,255,255,${0.1 * op})`)
+  hl.addColorStop(0.25, `rgba(255,255,255,${0.04 * op})`)
+  hl.addColorStop(0.6, `rgba(${c.h},${0.015 * op})`)
   hl.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hl
   ctx.beginPath()
@@ -248,7 +236,7 @@ function drawMembrane(
   ctx.fill()
   ctx.restore()
 
-  // Edge rim
+  // Chrome rim — thin, bright, tensile edge
   ctx.beginPath()
   ctx.moveTo(pts[0].x, pts[0].y)
   for (let i = 0; i < pts.length; i++) {
@@ -259,17 +247,29 @@ function drawMembrane(
     ctx.quadraticCurveTo(curr.x, curr.y, mx, my)
   }
   ctx.closePath()
-  ctx.strokeStyle = `rgba(${c.h},${0.08 * op})`
-  ctx.lineWidth = 0.8
+  ctx.strokeStyle = `rgba(255,255,255,${0.07 * op})`
+  ctx.lineWidth = 0.4
   ctx.stroke()
 
-  // Caustic
-  const hl = ctx.createRadialGradient(cx - gr * 0.15, cy - gr * 0.2, 0, cx, cy, gr * 0.5)
-  hl.addColorStop(0, `rgba(255,255,255,${0.05 * op})`)
+  // Tension lines — structural threads across the membrane surface
+  for (let i = 0; i < pts.length; i++) {
+    const opp = (i + Math.floor(pts.length / 2)) % pts.length
+    ctx.beginPath()
+    ctx.moveTo(pts[i].x, pts[i].y)
+    ctx.quadraticCurveTo(cx + Math.sin(t * 0.15 + i) * 4, cy + Math.cos(t * 0.12 + i) * 3, pts[opp].x, pts[opp].y)
+    ctx.strokeStyle = `rgba(${c.h},${0.03 * op})`
+    ctx.lineWidth = 0.25
+    ctx.stroke()
+  }
+
+  // Concentrated specular — polished surface refraction
+  const hl = ctx.createRadialGradient(cx - gr * 0.12, cy - gr * 0.15, 0, cx, cy, gr * 0.35)
+  hl.addColorStop(0, `rgba(255,255,255,${0.07 * op})`)
+  hl.addColorStop(0.3, `rgba(255,255,255,${0.025 * op})`)
   hl.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hl
   ctx.beginPath()
-  ctx.arc(cx - gr * 0.1, cy - gr * 0.1, gr * 0.4, 0, Math.PI * 2)
+  ctx.arc(cx - gr * 0.08, cy - gr * 0.1, gr * 0.3, 0, Math.PI * 2)
   ctx.fill()
 
   ctx.restore()
@@ -410,7 +410,7 @@ function ObservatoryCanvas() {
 
       // Ring bands
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.055)'; ctx.lineWidth = r * 0.08; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.055)'; ctx.lineWidth = r * 0.04; ctx.stroke()
       ctx.restore()
       ctx.beginPath(); ctx.arc(0, 0, r * 0.76, 0, Math.PI * 2)
       ctx.strokeStyle = 'rgba(91,164,201,0.028)'; ctx.lineWidth = r * 0.025; ctx.stroke()
@@ -546,9 +546,9 @@ function PlatformedCanvas() {
       lg.addColorStop(0, 'rgba(91,164,201,0.041)')
       lg.addColorStop(1, 'rgba(91,164,201,0.008)')
       ctx.fillStyle = lg; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.082)'; ctx.lineWidth = 1; ctx.stroke()
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 0.4; ctx.stroke()
       headPath(ctx, s * 0.62)
-      ctx.strokeStyle = 'rgba(139,126,184,0.041)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 0.4; ctx.stroke()
       ctx.restore()
 
       // Right-facing head (mirrored)
@@ -560,9 +560,9 @@ function PlatformedCanvas() {
       rg.addColorStop(0, 'rgba(91,164,201,0.036)')
       rg.addColorStop(1, 'rgba(91,164,201,0.006)')
       ctx.fillStyle = rg; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.066)'; ctx.lineWidth = 1; ctx.stroke()
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 0.4; ctx.stroke()
       headPath(ctx, s * 0.62)
-      ctx.strokeStyle = 'rgba(139,126,184,0.031)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(255,255,255,0.025)'; ctx.lineWidth = 0.4; ctx.stroke()
       ctx.restore()
 
       // Connecting arc between them — the feedback loop
@@ -663,14 +663,14 @@ function SuiteAmbientCanvas() {
       const tg = ctx.createLinearGradient(0, 0, 0, 192 * gs)
       tg.addColorStop(0, 'rgba(91,164,201,0.0255)'); tg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
       tg.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = tg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.041)'; ctx.lineWidth = 1.04; ctx.stroke()
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.restore()
       // Head
       headPath(ctx, gs)
       const hfg = ctx.createRadialGradient(0, -6 * gs, 0, 0, 0, 52 * gs)
       hfg.addColorStop(0, 'rgba(91,164,201,0.031)'); hfg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
       hfg.addColorStop(1, 'rgba(91,164,201,0.003)'); ctx.fillStyle = hfg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.056)'; ctx.lineWidth = 1.3; ctx.stroke()
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 0.4; ctx.stroke()
       headPath(ctx, gs * 0.72); ctx.strokeStyle = 'rgba(139,126,184,0.0255)'; ctx.lineWidth = 0.65; ctx.stroke()
       ctx.restore()
 
