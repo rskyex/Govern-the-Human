@@ -27,24 +27,24 @@ function VerticalArrow({ label, emphasized = false, className = '' }: { label?: 
 function CurrentGovernanceDiagram() {
   return (
     <div className="flex flex-col items-center w-full">
-      <p className="font-sans text-[13px] font-semibold tracking-[0.2em] uppercase text-white/70 text-center mb-5">
+      <p className="font-sans text-[15px] font-semibold tracking-[0.2em] uppercase text-[#1e3a5f] text-center mb-5">
         Current governance
       </p>
-      <div className="flex flex-col items-center gap-3 w-full max-w-[280px]">
-        <div className="border border-white/20 bg-white/10 backdrop-blur-sm rounded px-6 py-4 text-center w-full">
-          <p className="font-sans text-[15px] tracking-[0.06em] uppercase text-white/95 leading-tight font-medium">
+      <div className="flex flex-col items-center gap-3 w-full max-w-[300px]">
+        <div className="border border-[#1e3a5f]/20 bg-white rounded-md px-7 py-5 text-center w-full shadow-sm">
+          <p className="font-sans text-[17px] tracking-[0.06em] uppercase text-[#1e3a5f] leading-tight font-semibold">
             Governance
           </p>
-          <p className="font-sans text-[13px] text-white/60 mt-1.5">safety, fairness, accountability</p>
+          <p className="font-sans text-[14px] text-[#1e3a5f]/70 mt-2">safety, fairness, accountability</p>
         </div>
         <VerticalArrow label="regulates" />
-        <div className="border border-white/20 bg-white/10 backdrop-blur-sm rounded px-6 py-4 text-center w-full">
-          <p className="font-sans text-[15px] tracking-[0.06em] uppercase text-white/95 leading-tight font-medium">
+        <div className="border border-[#1e3a5f]/20 bg-white rounded-md px-7 py-5 text-center w-full shadow-sm">
+          <p className="font-sans text-[17px] tracking-[0.06em] uppercase text-[#1e3a5f] leading-tight font-semibold">
             AI System
           </p>
-          <p className="font-sans text-[13px] text-white/60 mt-1.5">behaviour &amp; outputs</p>
+          <p className="font-sans text-[14px] text-[#1e3a5f]/70 mt-2">behaviour &amp; outputs</p>
         </div>
-        <p className="font-sans text-[13px] text-white/50 italic mt-2">assumes a stable subject</p>
+        <p className="font-sans text-[14px] text-white/70 italic mt-2">assumes a stable subject</p>
       </div>
     </div>
   )
@@ -73,13 +73,13 @@ function SecondOrderDonut() {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <p className="font-sans text-[13px] font-semibold tracking-[0.2em] uppercase text-white/70 text-center mb-5">
+      <p className="font-sans text-[15px] font-semibold tracking-[0.2em] uppercase text-[#1e3a5f] text-center mb-5">
         Govern the Human
       </p>
 
       {/* AI System box */}
-      <div className="border border-white/20 bg-white/10 backdrop-blur-sm rounded px-5 py-3.5 text-center mb-1">
-        <p className="font-sans text-[15px] tracking-[0.06em] uppercase text-white/95 leading-tight font-medium">
+      <div className="border border-[#1e3a5f]/20 bg-white rounded-md px-6 py-4 text-center mb-1 shadow-sm">
+        <p className="font-sans text-[17px] tracking-[0.06em] uppercase text-[#1e3a5f] leading-tight font-semibold">
           AI System
         </p>
       </div>
@@ -103,36 +103,36 @@ function SecondOrderDonut() {
         <path d={arcD(30 + gap, 150 - gap)} fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" markerEnd="url(#darrow)" />
         <path d={arcD(150 + gap, 270 - gap)} fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" markerEnd="url(#darrow)" />
 
-        {/* Node ellipses */}
+        {/* Node ellipses — white bg */}
         {nodes.map((n) => (
           <ellipse
             key={n.name}
             cx={ptX(n.angle)}
             cy={ptY(n.angle)}
-            rx="46"
-            ry="23"
-            fill="rgba(255,255,255,0.12)"
-            stroke="rgba(255,255,255,0.25)"
+            rx="54"
+            ry="28"
+            fill="rgba(255,255,255,0.95)"
+            stroke="rgba(30,58,95,0.25)"
             strokeWidth="1"
           />
         ))}
 
-        {/* Node labels */}
+        {/* Node labels — navy text */}
         {nodes.map((n) => (
           <g key={`t-${n.name}`}>
             <text
               x={ptX(n.angle)}
-              y={ptY(n.angle) - 2}
+              y={ptY(n.angle) - 3}
               textAnchor="middle"
-              style={{ fontSize: '13px', fontStyle: 'italic', fill: 'rgba(255,255,255,0.95)', fontWeight: 500, fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+              style={{ fontSize: '16px', fontStyle: 'italic', fill: '#1e3a5f', fontWeight: 600, fontFamily: "'Cormorant Garamond', Georgia, serif" }}
             >
               {n.name}
             </text>
             <text
               x={ptX(n.angle)}
-              y={ptY(n.angle) + 11}
+              y={ptY(n.angle) + 13}
               textAnchor="middle"
-              style={{ fontSize: '10.5px', fill: 'rgba(255,255,255,0.6)', fontFamily: "'Inter', system-ui, sans-serif" }}
+              style={{ fontSize: '12px', fill: 'rgba(30,58,95,0.7)', fontFamily: "'Inter', system-ui, sans-serif" }}
             >
               {n.gloss}
             </text>
@@ -144,15 +144,15 @@ function SecondOrderDonut() {
           x={cx}
           y={cy - 6}
           textAnchor="middle"
-          style={{ fontSize: '14px', fontWeight: 600, fill: 'rgba(255,255,255,0.95)', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.06em' }}
+          style={{ fontSize: '16px', fontWeight: 700, fill: '#1e3a5f', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.06em' }}
         >
           HUMAN SUBJECT
         </text>
         <text
           x={cx}
-          y={cy + 10}
+          y={cy + 12}
           textAnchor="middle"
-          style={{ fontSize: '12px', fill: 'rgba(255,255,255,0.6)', fontFamily: "'Inter', system-ui, sans-serif" }}
+          style={{ fontSize: '13px', fill: 'rgba(30,58,95,0.6)', fontFamily: "'Inter', system-ui, sans-serif" }}
         >
           under transformation
         </text>
@@ -179,8 +179,8 @@ function SecondOrderDonut() {
       </svg>
 
       {/* Governance gap label */}
-      <div className="border-2 border-white/25 rounded px-5 py-2.5 -mt-1">
-        <p className="font-sans text-[13px] tracking-[0.12em] uppercase text-white/80 font-semibold">
+      <div className="border-2 border-[#1e3a5f]/25 bg-white rounded-md px-6 py-3 -mt-1 shadow-sm">
+        <p className="font-sans text-[15px] tracking-[0.12em] uppercase text-[#1e3a5f] font-semibold">
           the governance gap
         </p>
       </div>
@@ -264,22 +264,14 @@ export function GovernanceGap() {
               <CurrentGovernanceDiagram />
 
               {/* ⇔ connector — desktop */}
-              <div className="hidden md:flex flex-col items-center gap-1">
-                <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-white/60 font-medium mb-1">
-                  reframed as
-                </p>
-                <span className="text-[1.6rem] text-white/50 leading-none">⇔</span>
+              <div className="hidden md:flex flex-col items-center">
+                <span className="text-[3rem] text-white/80 leading-none font-light">⇔</span>
               </div>
 
               {/* ⇔ connector — mobile */}
               <div className="flex md:hidden items-center justify-center gap-3 w-full">
                 <div className="flex-1 h-px bg-white/15" />
-                <div className="flex flex-col items-center">
-                  <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-white/60 font-medium mb-0.5">
-                    reframed as
-                  </p>
-                  <span className="text-[1.2rem] text-white/50 leading-none">⇔</span>
-                </div>
+                <span className="text-[2.4rem] text-white/80 leading-none font-light">⇔</span>
                 <div className="flex-1 h-px bg-white/15" />
               </div>
 

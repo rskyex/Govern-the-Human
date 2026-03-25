@@ -65,7 +65,7 @@ export function Hero() {
         {/* Supporting line — clear and immediate */}
         <Reveal delay={0.26}>
           <p
-            className="font-display text-[1.1rem] md:text-[1.25rem] leading-[1.8] text-[#1e3a5f] font-light max-w-[720px] italic whitespace-nowrap"
+            className="font-sans text-[0.95rem] leading-[1.9] text-[#1e3a5f] font-light max-w-[720px]"
           >
             AI governance asks what systems do. This project asks what they do to the human subject.
           </p>

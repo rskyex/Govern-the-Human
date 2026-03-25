@@ -26,17 +26,10 @@ export function Thesis() {
       </div>
 
       <div className="relative max-w-[1120px] mx-auto px-8 md:px-16">
-        <Reveal>
-          <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
-            01
-          </p>
-          <div className="w-10 h-px bg-rule mb-10" />
-        </Reveal>
-
         <div className="max-w-[740px]">
           {/* Central question — with narrow image motif */}
           <Reveal delay={0.05}>
-            <div className="flex items-start gap-5 mb-10">
+            <div className="flex items-start gap-5 mb-6">
               {/* Thin architectural shard beside heading */}
               <div
                 className="hidden md:block flex-shrink-0 w-[4px] min-h-[80px] self-stretch rounded-full overflow-hidden"
