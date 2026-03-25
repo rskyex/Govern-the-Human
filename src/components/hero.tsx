@@ -18,14 +18,14 @@ export function Hero() {
 
       {/* Bottom gradient dissolve into white */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-[30%] pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-[55%] pointer-events-none"
         style={{
-          background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.5) 40%, rgba(255,255,255,0.85) 70%, #ffffff)',
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.25) 20%, rgba(255,255,255,0.55) 40%, rgba(255,255,255,0.78) 55%, rgba(255,255,255,0.92) 70%, #ffffff 90%)',
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 md:px-12 pt-20 pb-32">
+      <div className="relative z-10 flex flex-col items-center text-center px-6 md:px-12 pt-28 pb-20 mt-12">
         {/* Logo glyph — moderate scale, part of the world */}
         <Reveal>
           <Image
