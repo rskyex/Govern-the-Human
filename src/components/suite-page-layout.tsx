@@ -304,12 +304,14 @@ export function SuitePageHero({
 export function SuitePageSection({
   children,
   background = 'base',
+  className = '',
 }: {
   children: ReactNode
   background?: 'base' | 'surface'
+  className?: string
 }) {
   return (
-    <section className={`${background === 'surface' ? 'bg-surface' : 'bg-base'} py-24 md:py-36`}>
+    <section className={`${background === 'surface' ? 'bg-surface' : 'bg-base'} py-24 md:py-36 ${className}`}>
       <div className="max-w-[1120px] mx-auto px-8 md:px-16">{children}</div>
     </section>
   )

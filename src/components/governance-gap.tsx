@@ -6,16 +6,16 @@ import { IMAGES } from '@/lib/images'
 
 // ── Vertical arrow ──
 function VerticalArrow({ label, emphasized = false, className = '' }: { label?: string; emphasized?: boolean; className?: string }) {
-  const color = emphasized ? 'text-text-secondary' : 'text-text-ghost/60'
-  const weight = emphasized ? 1.5 : 1
+  const color = emphasized ? 'text-text-primary' : 'text-text-tertiary'
+  const weight = emphasized ? 2 : 1.5
   return (
-    <div className={`flex flex-col items-center gap-1 ${className}`}>
-      <svg width="12" height="28" viewBox="0 0 12 28" className={color} aria-hidden="true">
-        <line x1="6" y1="0" x2="6" y2="22" stroke="currentColor" strokeWidth={weight} />
-        <polyline points="2,20 6,26 10,20" fill="none" stroke="currentColor" strokeWidth={weight} />
+    <div className={`flex flex-col items-center gap-1.5 py-1 ${className}`}>
+      <svg width="14" height="32" viewBox="0 0 14 32" className={color} aria-hidden="true">
+        <line x1="7" y1="0" x2="7" y2="25" stroke="currentColor" strokeWidth={weight} />
+        <polyline points="2,23 7,30 12,23" fill="none" stroke="currentColor" strokeWidth={weight} strokeLinejoin="round" />
       </svg>
       {label && (
-        <p className={`font-sans text-[10px] italic leading-tight ${emphasized ? 'text-text-secondary font-medium' : 'text-text-ghost'}`}>
+        <p className={`font-sans text-[11px] italic leading-tight ${emphasized ? 'text-text-primary font-medium' : 'text-text-secondary'}`}>
           {label}
         </p>
       )}
