@@ -279,6 +279,105 @@ function drawMembrane(
   ctx.restore()
 }
 
+/* ── identity-shell membrane points — echoes human outline at larger scale ── */
+
+function ghostShellPoints(
+  gx: number, gy: number, s: number,
+): Array<[number, number]> {
+  return [
+    [gx, gy - 0.18 * s],
+    [gx + 0.12 * s, gy - 0.12 * s],
+    [gx + 0.16 * s, gy + 0.02 * s],
+    [gx + 0.14 * s, gy + 0.18 * s],
+    [gx, gy + 0.24 * s],
+    [gx - 0.14 * s, gy + 0.18 * s],
+    [gx - 0.16 * s, gy + 0.02 * s],
+    [gx - 0.12 * s, gy - 0.12 * s],
+  ]
+}
+
+/* ── infrastructure lines — soft control network between objects ── */
+
+function drawInfrastructureLines(
+  ctx: CanvasRenderingContext2D,
+  t: number,
+  nodes: Array<{ x: number; y: number; r?: number }>,
+  config: { opacity: number; hue: 'blue' | 'silver' | 'violet'; phaseOffset?: number },
+) {
+  const p = config.phaseOffset ?? 0
+  const op = config.opacity
+  const colors = { blue: '91,164,201', silver: '180,195,210', violet: '139,126,184' }
+  const c = colors[config.hue]
+
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const a = nodes[i], b = nodes[i + 1]
+    const mx = (a.x + b.x) / 2 + Math.sin(t * 0.2 + p + i) * 8
+    const my = (a.y + b.y) / 2 + Math.cos(t * 0.15 + p + i) * 6
+
+    ctx.beginPath()
+    ctx.moveTo(a.x, a.y)
+    ctx.quadraticCurveTo(mx, my, b.x, b.y)
+    const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y)
+    grad.addColorStop(0, `rgba(${c},0)`)
+    grad.addColorStop(0.2, `rgba(${c},${0.04 * op})`)
+    grad.addColorStop(0.5, `rgba(${c},${0.06 * op})`)
+    grad.addColorStop(0.8, `rgba(${c},${0.04 * op})`)
+    grad.addColorStop(1, `rgba(${c},0)`)
+    ctx.strokeStyle = grad
+    ctx.lineWidth = 0.6
+    ctx.stroke()
+  }
+
+  for (const node of nodes) {
+    const pulse = 0.6 + Math.sin(t * 0.5 + p + node.x * 0.01) * 0.4
+    const nr = (node.r ?? 2) * pulse
+
+    ctx.save()
+    ctx.shadowColor = `rgba(${c},${0.3 * op * pulse})`
+    ctx.shadowBlur = 6
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, nr, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(${c},${0.15 * op * pulse})`
+    ctx.fill()
+    ctx.restore()
+
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, nr * 0.4, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(255,255,255,${0.12 * op * pulse})`
+    ctx.fill()
+  }
+}
+
+/* ── dissolution zone — where ribbons meet the ghost, forms blur together ── */
+
+function drawDissolutionZone(
+  ctx: CanvasRenderingContext2D,
+  ghostX: number, ghostY: number, ghostScale: number,
+  ribbonMidX: number, ribbonMidY: number,
+  t: number, opacity: number,
+) {
+  const dx = ribbonMidX - ghostX, dy = ribbonMidY - ghostY
+  const dist = Math.sqrt(dx * dx + dy * dy)
+  const maxDist = ghostScale * 200
+  if (dist > maxDist) return
+
+  const proximity = 1 - dist / maxDist
+  const pulse = 0.7 + Math.sin(t * 0.3) * 0.3
+  const op = opacity * proximity * pulse * 0.15
+
+  const ix = ghostX + dx * 0.3, iy = ghostY + dy * 0.3
+  const ir = ghostScale * 60
+
+  const g = ctx.createRadialGradient(ix, iy, 0, ix, iy, ir)
+  g.addColorStop(0, `rgba(145,195,225,${op})`)
+  g.addColorStop(0.5, `rgba(91,164,201,${op * 0.4})`)
+  g.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.fillStyle = g
+  ctx.beginPath()
+  ctx.arc(ix, iy, ir, 0, Math.PI * 2)
+  ctx.fill()
+}
+
 /* ── ghost silhouette ── */
 
 function drawGhost(
@@ -842,46 +941,64 @@ export function Hero() {
       ctx.fillStyle = ag
       ctx.fillRect(0, 0, w, h)
 
-      // ── Glass-wave ribbons — large sculptural forms flowing through the space ──
+      // ── Key positions for spatial composition ──
+      const gx = w * 0.34, gy = h * 0.26  // primary ghost
+      const gs = vmin / 340               // ghost scale
+      const rx = w * 0.76, ry = h * 0.48  // primary ring
 
-      // Primary ribbon: sweeps from upper-left to lower-right, the dominant flow
+      // ── Glass-wave ribbons — contour-tracing, body-aware flows ──
+
+      // Primary ribbon: traces cranial crown → shoulder line of ghost
       drawGlassRibbon(ctx, w, h, t, {
-        x0: -0.08, y0: 0.15, x1: 1.1, y1: 0.75,
-        cp1x: 0.25, cp1y: -0.05, cp2x: 0.72, cp2y: 0.95,
+        x0: -0.08, y0: 0.15, x1: 1.1, y1: 0.65,
+        cp1x: 0.32, cp1y: 0.18,  // near ghost crown
+        cp2x: 0.50, cp2y: 0.42,  // near ghost shoulder line
         width: vmin * 0.12, opacity: 1, hue: 'blue', phaseOffset: 0, speed: 0.8,
       })
 
-      // Silver ribbon: counter-flow, upper-right to centre-left
+      // Silver ribbon: flows past ring, counter-tracing the governance structure
       drawGlassRibbon(ctx, w, h, t, {
         x0: 1.05, y0: -0.05, x1: -0.05, y1: 0.55,
-        cp1x: 0.78, cp1y: 0.3, cp2x: 0.2, cp2y: 0.25,
+        cp1x: 0.74, cp1y: 0.35,  // near ring centre
+        cp2x: 0.20, cp2y: 0.25,
         width: vmin * 0.08, opacity: 0.7, hue: 'silver', phaseOffset: 2.5, speed: 0.6,
       })
 
-      // Mint ribbon: smaller, flowing through lower area
+      // Mint ribbon: rises through lower body zone
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.15, y0: 1.08, x1: 0.92, y1: 0.35,
-        cp1x: 0.35, cp1y: 0.65, cp2x: 0.65, cp2y: 0.55,
+        cp1x: 0.30, cp1y: 0.60,  // torso region
+        cp2x: 0.55, cp2y: 0.45,
         width: vmin * 0.06, opacity: 0.55, hue: 'mint', phaseOffset: 5.0, speed: 0.7,
       })
 
-      // Violet thread: thin structural line weaving through
+      // Body-wrapping ribbon: curves around the ghost silhouette
       drawGlassRibbon(ctx, w, h, t, {
-        x0: -0.04, y0: 0.62, x1: 1.06, y1: 0.18,
-        cp1x: 0.3, cp1y: 0.45, cp2x: 0.7, cp2y: 0.38,
-        width: vmin * 0.035, opacity: 0.45, hue: 'violet', phaseOffset: 7.5, speed: 0.5,
+        x0: 0.24, y0: 0.10,   // above-left of ghost
+        x1: 0.44, y1: 0.58,   // below-right of ghost
+        cp1x: 0.50, cp1y: 0.18,  // swings right of head
+        cp2x: 0.52, cp2y: 0.44,  // swings right of torso
+        width: vmin * 0.04, opacity: 0.5, hue: 'violet', phaseOffset: 8.0, speed: 0.5,
+      })
+
+      // Violet structural thread: weaves between ghost and ring
+      drawGlassRibbon(ctx, w, h, t, {
+        x0: -0.04, y0: 0.52, x1: 1.06, y1: 0.18,
+        cp1x: 0.34, cp1y: 0.38,  // near ghost torso
+        cp2x: 0.72, cp2y: 0.40,  // near ring
+        width: vmin * 0.03, opacity: 0.4, hue: 'violet', phaseOffset: 7.5, speed: 0.5,
+      })
+
+      // ── Identity-shell membrane — preserved outline of selfhood ──
+      drawMembrane(ctx, w, h, t, {
+        points: ghostShellPoints(0.34, 0.32, 1.8),
+        opacity: 0.25, hue: 'silver', phaseOffset: 5.0,
       })
 
       // ── Membrane surface — translucent area behind centre text ──
       drawMembrane(ctx, w, h, t, {
         points: [[0.18, 0.2], [0.55, 0.08], [0.82, 0.25], [0.75, 0.65], [0.4, 0.72], [0.12, 0.5]],
-        opacity: 0.6, hue: 'blue', phaseOffset: 1.2,
-      })
-
-      // Silver membrane — right side, partially off-screen
-      drawMembrane(ctx, w, h, t, {
-        points: [[0.65, 0.05], [0.95, 0.15], [1.08, 0.5], [0.88, 0.78], [0.6, 0.55]],
-        opacity: 0.35, hue: 'silver', phaseOffset: 4.0,
+        opacity: 0.5, hue: 'blue', phaseOffset: 1.2,
       })
 
       // ── Scan arcs — glacial rotation, larger ──
@@ -926,6 +1043,28 @@ export function Hero() {
       drawOrb(ctx, w * 0.85, h * 0.76, vmin * 0.065, t, 4.3)
       drawOrb(ctx, w * 0.04, h * 0.74, vmin * 0.055, t, 5.8)
       drawOrb(ctx, w * 0.93, h * 0.3, vmin * 0.048, t, 7.2)
+
+      // ── Infrastructure lines — soft control network ──
+      drawInfrastructureLines(ctx, t, [
+        { x: gx, y: gy },
+        { x: gx, y: gy + 50 * gs },
+        { x: (gx + rx) / 2, y: (gy + ry) / 2, r: 2.5 },
+        { x: rx, y: ry },
+      ], { opacity: 0.5, hue: 'silver', phaseOffset: 0 })
+
+      drawInfrastructureLines(ctx, t, [
+        { x: gx, y: gy - 30 * gs },
+        { x: w * 0.1, y: h * 0.2 },
+      ], { opacity: 0.3, hue: 'blue', phaseOffset: 2.0 })
+
+      drawInfrastructureLines(ctx, t, [
+        { x: rx, y: ry },
+        { x: w * 0.85, y: h * 0.76 },
+      ], { opacity: 0.25, hue: 'violet', phaseOffset: 4.0 })
+
+      // ── Dissolution zones — where ribbons meet the ghost ──
+      drawDissolutionZone(ctx, gx, gy, gs, w * 0.34, h * 0.22, t, 0.5)
+      drawDissolutionZone(ctx, gx, gy, gs, w * 0.44, h * 0.45, t, 0.4)
     }
 
     resize()

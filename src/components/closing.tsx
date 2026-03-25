@@ -274,6 +274,105 @@ function drawMembrane(
   ctx.restore()
 }
 
+/* ── identity-shell membrane points — echoes human outline at larger scale ── */
+
+function ghostShellPoints(
+  gx: number, gy: number, s: number,
+): Array<[number, number]> {
+  return [
+    [gx, gy - 0.18 * s],
+    [gx + 0.12 * s, gy - 0.12 * s],
+    [gx + 0.16 * s, gy + 0.02 * s],
+    [gx + 0.14 * s, gy + 0.18 * s],
+    [gx, gy + 0.24 * s],
+    [gx - 0.14 * s, gy + 0.18 * s],
+    [gx - 0.16 * s, gy + 0.02 * s],
+    [gx - 0.12 * s, gy - 0.12 * s],
+  ]
+}
+
+/* ── infrastructure lines — soft control network between objects ── */
+
+function drawInfrastructureLines(
+  ctx: CanvasRenderingContext2D,
+  t: number,
+  nodes: Array<{ x: number; y: number; r?: number }>,
+  config: { opacity: number; hue: 'blue' | 'silver' | 'violet'; phaseOffset?: number },
+) {
+  const p = config.phaseOffset ?? 0
+  const op = config.opacity
+  const colors = { blue: '91,164,201', silver: '180,195,210', violet: '139,126,184' }
+  const c = colors[config.hue]
+
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const a = nodes[i], b = nodes[i + 1]
+    const mx = (a.x + b.x) / 2 + Math.sin(t * 0.2 + p + i) * 8
+    const my = (a.y + b.y) / 2 + Math.cos(t * 0.15 + p + i) * 6
+
+    ctx.beginPath()
+    ctx.moveTo(a.x, a.y)
+    ctx.quadraticCurveTo(mx, my, b.x, b.y)
+    const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y)
+    grad.addColorStop(0, `rgba(${c},0)`)
+    grad.addColorStop(0.2, `rgba(${c},${0.04 * op})`)
+    grad.addColorStop(0.5, `rgba(${c},${0.06 * op})`)
+    grad.addColorStop(0.8, `rgba(${c},${0.04 * op})`)
+    grad.addColorStop(1, `rgba(${c},0)`)
+    ctx.strokeStyle = grad
+    ctx.lineWidth = 0.6
+    ctx.stroke()
+  }
+
+  for (const node of nodes) {
+    const pulse = 0.6 + Math.sin(t * 0.5 + p + node.x * 0.01) * 0.4
+    const nr = (node.r ?? 2) * pulse
+
+    ctx.save()
+    ctx.shadowColor = `rgba(${c},${0.3 * op * pulse})`
+    ctx.shadowBlur = 6
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, nr, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(${c},${0.15 * op * pulse})`
+    ctx.fill()
+    ctx.restore()
+
+    ctx.beginPath()
+    ctx.arc(node.x, node.y, nr * 0.4, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(255,255,255,${0.12 * op * pulse})`
+    ctx.fill()
+  }
+}
+
+/* ── dissolution zone — where ribbons meet the ghost, forms blur together ── */
+
+function drawDissolutionZone(
+  ctx: CanvasRenderingContext2D,
+  ghostX: number, ghostY: number, ghostScale: number,
+  ribbonMidX: number, ribbonMidY: number,
+  t: number, opacity: number,
+) {
+  const dx = ribbonMidX - ghostX, dy = ribbonMidY - ghostY
+  const dist = Math.sqrt(dx * dx + dy * dy)
+  const maxDist = ghostScale * 200
+  if (dist > maxDist) return
+
+  const proximity = 1 - dist / maxDist
+  const pulse = 0.7 + Math.sin(t * 0.3) * 0.3
+  const op = opacity * proximity * pulse * 0.15
+
+  const ix = ghostX + dx * 0.3, iy = ghostY + dy * 0.3
+  const ir = ghostScale * 60
+
+  const g = ctx.createRadialGradient(ix, iy, 0, ix, iy, ir)
+  g.addColorStop(0, `rgba(145,195,225,${op})`)
+  g.addColorStop(0.5, `rgba(91,164,201,${op * 0.4})`)
+  g.addColorStop(1, 'rgba(91,164,201,0)')
+  ctx.fillStyle = g
+  ctx.beginPath()
+  ctx.arc(ix, iy, ir, 0, Math.PI * 2)
+  ctx.fill()
+}
+
 function ClosingCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -295,7 +394,7 @@ function ClosingCanvas() {
       // ── Glass-wave ribbons — distant, fading, the structures that persist ──
       drawGlassRibbon(ctx, w, h, t, {
         x0: -0.08, y0: 0.3, x1: 1.08, y1: 0.6,
-        cp1x: 0.3, cp1y: 0.1, cp2x: 0.7, cp2y: 0.8,
+        cp1x: 0.45, cp1y: 0.30, cp2x: 0.55, cp2y: 0.50,
         width: vmin * 0.08, opacity: 0.5, hue: 'silver', phaseOffset: 0, speed: 0.4,
       })
       drawGlassRibbon(ctx, w, h, t, {
@@ -303,9 +402,18 @@ function ClosingCanvas() {
         cp1x: 0.65, cp1y: 0.45, cp2x: 0.35, cp2y: 0.35,
         width: vmin * 0.05, opacity: 0.35, hue: 'blue', phaseOffset: 4.0, speed: 0.35,
       })
+      drawGlassRibbon(ctx, w, h, t, {
+        x0: 0.38, y0: 0.2, x1: 0.62, y1: 0.65,
+        cp1x: 0.62, cp1y: 0.28, cp2x: 0.64, cp2y: 0.52,
+        width: vmin * 0.035, opacity: 0.3, hue: 'violet', phaseOffset: 9.5, speed: 0.35,
+      })
       drawMembrane(ctx, w, h, t, {
         points: [[0.2, 0.2], [0.6, 0.12], [0.85, 0.35], [0.78, 0.65], [0.4, 0.72], [0.15, 0.48]],
         opacity: 0.25, hue: 'silver', phaseOffset: 2.5,
+      })
+      drawMembrane(ctx, w, h, t, {
+        points: ghostShellPoints(0.5, 0.42, 1.4),
+        opacity: 0.15, hue: 'silver', phaseOffset: 6.0,
       })
 
       // ── Large governance ring — centre, the structure that persists ──
@@ -403,6 +511,14 @@ function ClosingCanvas() {
         ctx.strokeStyle = 'rgba(139,126,184,0.026)'; ctx.lineWidth = 0.39; ctx.stroke()
         ctx.restore()
       }
+
+      drawInfrastructureLines(ctx, t, [
+        { x: w * 0.5, y: h * 0.4 },
+        { x: ringCx, y: ringCy },
+        { x: w * 0.12, y: h * 0.3 },
+      ], { opacity: 0.2, hue: 'silver', phaseOffset: 0 })
+
+      drawDissolutionZone(ctx, w * 0.5, h * 0.4, vmin / 420, w * 0.52, h * 0.38, t, 0.3)
     }
 
     resize()
