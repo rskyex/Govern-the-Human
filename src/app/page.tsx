@@ -1,9 +1,6 @@
 import { Header } from '@/components/header'
 import { Hero } from '@/components/hero'
-import { Premise } from '@/components/premise'
-import { Domains } from '@/components/domains'
-import { Framework } from '@/components/framework'
-import { Closing } from '@/components/closing'
+import { SectionPlaceholder } from '@/components/section-placeholder'
 import { Footer } from '@/components/footer'
 
 export default function Home() {
@@ -11,10 +8,11 @@ export default function Home() {
     <div className="min-h-screen bg-base">
       <Header />
       <Hero />
-      <Premise />
-      <Domains />
-      <Framework />
-      <Closing />
+      <SectionPlaceholder number="01" label="Thesis" bg="base" />
+      <SectionPlaceholder number="02" label="Three-Layer Model" bg="surface" />
+      <SectionPlaceholder number="03" label="The Suite" bg="base" />
+      <SectionPlaceholder number="04" label="Governance Gap" bg="surface" />
+      <SectionPlaceholder number="05" label="Closing" bg="base" />
       <Footer />
     </div>
   )
