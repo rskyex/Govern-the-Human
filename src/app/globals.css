@@ -1,21 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: 'Instrument Serif', 'Georgia', serif;
-  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Cormorant Garamond', 'Georgia', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
   --color-base: #ffffff;
-  --color-surface: #f7f8fa;
+  --color-surface: #f5f6f8;
 
-  --color-panel: rgba(255, 255, 255, 0.65);
-  --color-panel-border: rgba(160, 175, 195, 0.18);
+  --color-panel: rgba(255, 255, 255, 0.7);
+  --color-panel-border: rgba(140, 155, 175, 0.15);
 
-  --color-text-primary: #111318;
-  --color-text-secondary: #3b3f4a;
+  --color-text-primary: #0e1117;
+  --color-text-secondary: #363a45;
   --color-text-tertiary: #6b7080;
-  --color-text-ghost: #a0a4b0;
+  --color-text-ghost: #9da2b0;
 
-  --color-rule: rgba(0, 0, 0, 0.07);
+  --color-rule: rgba(0, 0, 0, 0.06);
+  --color-accent: rgba(100, 120, 160, 0.08);
 }
 
 * { box-sizing: border-box; }
@@ -33,10 +34,10 @@ body {
   background-color: var(--color-base);
   color: var(--color-text-secondary);
   font-family: var(--font-sans);
-  line-height: 1.7;
+  line-height: 1.75;
   overflow-x: hidden;
 }
 
 ::selection {
-  background-color: rgba(74, 111, 165, 0.08);
+  background-color: rgba(74, 111, 165, 0.1);
 }
