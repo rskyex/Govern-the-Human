@@ -1,6 +1,8 @@
 'use client'
 
+import Image from 'next/image'
 import { Reveal } from '@/components/ui/reveal'
+import { IMAGES } from '@/lib/images'
 
 const LAYERS = [
   {
@@ -22,8 +24,25 @@ const LAYERS = [
 
 export function ThreeLayerModel() {
   return (
-    <section id="three-layer-model" className="bg-surface py-20 md:py-28">
-      <div className="max-w-[1120px] mx-auto px-8 md:px-16">
+    <section id="three-layer-model" className="relative bg-surface py-20 md:py-28 overflow-hidden">
+      {/* Architectural side strip — left margin */}
+      <div
+        className="hidden lg:block absolute top-24 left-0 w-[50px] xl:w-[70px] bottom-24 pointer-events-none"
+        style={{
+          maskImage: 'linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 100%)',
+        }}
+      >
+        <Image
+          src={IMAGES.selfTrace}
+          alt=""
+          fill
+          className="object-cover object-center opacity-35"
+          sizes="70px"
+        />
+      </div>
+
+      <div className="relative max-w-[1120px] mx-auto px-8 md:px-16">
         <Reveal>
           <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
             02
@@ -32,9 +51,26 @@ export function ThreeLayerModel() {
         </Reveal>
 
         <Reveal delay={0.05}>
-          <h2 className="font-display text-[1.8rem] md:text-[2.4rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-6">
-            Three conditions of the governed subject.
-          </h2>
+          <div className="flex items-start gap-5 mb-6">
+            <div
+              className="hidden md:block flex-shrink-0 w-[4px] min-h-[40px] self-stretch rounded-full overflow-hidden"
+              style={{
+                maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+              }}
+            >
+              <Image
+                src={IMAGES.selfTrace}
+                alt=""
+                fill
+                className="object-cover opacity-50"
+                sizes="4px"
+              />
+            </div>
+            <h2 className="font-display text-[1.8rem] md:text-[2.4rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary">
+              Three conditions of the governed subject.
+            </h2>
+          </div>
         </Reveal>
 
         <Reveal delay={0.08}>

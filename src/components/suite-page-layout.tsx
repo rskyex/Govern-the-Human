@@ -278,7 +278,7 @@ export function SuitePageHero({
       <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
         {number && (
           <Reveal>
-            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
+            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-6">
               {number}
             </p>
           </Reveal>
@@ -304,12 +304,14 @@ export function SuitePageHero({
 export function SuitePageSection({
   children,
   background = 'base',
+  className = '',
 }: {
   children: ReactNode
   background?: 'base' | 'surface'
+  className?: string
 }) {
   return (
-    <section className={`${background === 'surface' ? 'bg-surface' : 'bg-base'} py-24 md:py-36`}>
+    <section className={`${background === 'surface' ? 'bg-surface' : 'bg-base'} py-24 md:py-36 ${className}`}>
       <div className="max-w-[1120px] mx-auto px-8 md:px-16">{children}</div>
     </section>
   )
