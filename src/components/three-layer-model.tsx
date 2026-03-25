@@ -74,7 +74,7 @@ export function ThreeLayerModel() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-16 max-w-[640px]">
+          <p className="font-sans text-[0.95rem] leading-[1.9] text-text-subtitle font-light mb-16 max-w-[640px]">
             The human subject under AI conditions is not a fixed entity. It is
             shaped along three dimensions — each operating quietly, each altering
             the capacity for self-governance.
