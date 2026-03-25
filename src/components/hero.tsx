@@ -38,23 +38,30 @@ export function Hero() {
           />
         </Reveal>
 
-        {/* Title — monumental */}
+        {/* Title — monumental two-line lockup */}
         <Reveal delay={0.12}>
-          <h1 className="font-display text-[3rem] md:text-[4.5rem] lg:text-[5.5rem] font-normal leading-[1.05] tracking-[-0.02em] text-text-primary mb-7">
-            Govern <span className="italic text-text-tertiary">the Human</span>
+          <h1
+            className="font-display font-semibold uppercase leading-[0.95] tracking-[0.06em] text-text-primary mb-8"
+            style={{
+              fontSize: 'clamp(3.5rem, 8vw, 7.5rem)',
+              textShadow: '0 1px 2px rgba(0,0,0,0.06)',
+            }}
+          >
+            <span className="block">Govern</span>
+            <span className="block text-[0.6em] tracking-[0.14em] mt-1">the</span>
+            <span className="block">Human</span>
           </h1>
         </Reveal>
 
         {/* Thin rule */}
         <Reveal delay={0.2}>
-          <div className="w-16 h-px bg-text-ghost/25 mb-7" />
+          <div className="w-16 h-px bg-text-ghost/25 mb-8" />
         </Reveal>
 
-        {/* Subtitle */}
+        {/* Supporting line — clear and immediate */}
         <Reveal delay={0.26}>
-          <p className="font-sans text-[0.95rem] md:text-[1.05rem] leading-[1.8] text-text-tertiary font-light max-w-[560px]">
-            On second-order AI governance, subject formation, and the
-            conditions of self-governance under AI-mediated environments.
+          <p className="font-sans text-[0.95rem] md:text-[1.08rem] leading-[1.8] text-text-secondary font-light max-w-[560px]">
+            AI governance asks what systems do. This project asks what they do to the human subject.
           </p>
         </Reveal>
       </div>
