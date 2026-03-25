@@ -7,16 +7,19 @@ export function Footer() {
         <Image
           src="/logo.png"
           alt="Govern the Human"
-          width={56}
-          height={56}
-          className="object-contain mb-6"
+          width={80}
+          height={80}
+          className="object-contain mb-7 md:w-[96px] md:h-[96px]"
         />
-        <p className="font-sans text-[11px] font-medium tracking-[0.25em] uppercase text-text-ghost mb-6">
+        <p className="font-sans text-[14px] md:text-[16px] font-medium tracking-[0.25em] uppercase text-text-secondary mb-6">
           Govern the Human
         </p>
-        <div className="w-8 h-px bg-rule mb-6" />
-        <p className="font-sans text-[12px] text-text-ghost/60 font-light">
+        <div className="w-10 h-px bg-rule mb-6" />
+        <p className="font-sans text-[13px] text-text-ghost font-light mb-4">
           Research in progress
+        </p>
+        <p className="font-sans text-[11px] text-text-ghost/60 font-light">
+          &copy; risakoyanagi
         </p>
       </div>
     </footer>

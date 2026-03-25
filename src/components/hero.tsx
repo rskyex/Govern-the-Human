@@ -64,23 +64,11 @@ export function Hero() {
 
         {/* Supporting line — clear and immediate */}
         <Reveal delay={0.26}>
-          <div className="relative max-w-[560px]">
-            {/* Soft translucent backing panel for subtitle legibility */}
-            <div
-              className="absolute -inset-x-6 -inset-y-4 rounded-lg pointer-events-none"
-              style={{
-                background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.18) 60%, transparent 100%)',
-                backdropFilter: 'blur(6px)',
-                WebkitBackdropFilter: 'blur(6px)',
-              }}
-            />
-            <p
-              className="relative font-sans text-[0.95rem] md:text-[1.08rem] leading-[1.8] text-white font-light"
-              style={{ textShadow: '0 1px 10px rgba(0,0,0,0.4), 0 0px 3px rgba(0,0,0,0.2)' }}
-            >
-              AI governance asks what systems do. This project asks what they do to the human subject.
-            </p>
-          </div>
+          <p
+            className="font-sans text-[0.95rem] md:text-[1.08rem] leading-[1.8] text-[#1e3a5f] font-light max-w-[560px]"
+          >
+            AI governance asks what systems do. This project asks what they do to the human subject.
+          </p>
         </Reveal>
       </div>
     </section>

@@ -6,7 +6,7 @@ import { IMAGES } from '@/lib/images'
 
 export function Thesis() {
   return (
-    <section id="thesis" className="relative bg-base py-36 md:py-48 overflow-hidden">
+    <section id="thesis" className="relative bg-base py-20 md:py-28 overflow-hidden">
       {/* Architectural side strip — right margin */}
       <div
         className="hidden lg:block absolute top-16 right-0 w-[60px] xl:w-[80px] bottom-16 pointer-events-none"

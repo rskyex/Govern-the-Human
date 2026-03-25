@@ -24,7 +24,7 @@ const LAYERS = [
 
 export function ThreeLayerModel() {
   return (
-    <section id="three-layer-model" className="relative bg-surface py-36 md:py-48 overflow-hidden">
+    <section id="three-layer-model" className="relative bg-surface py-20 md:py-28 overflow-hidden">
       {/* Architectural side strip — left margin */}
       <div
         className="hidden lg:block absolute top-24 left-0 w-[50px] xl:w-[70px] bottom-24 pointer-events-none"
