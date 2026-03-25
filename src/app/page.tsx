@@ -1,18 +1,21 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { ClientPage } from '@/components/client-page'
+import { Header } from '@/components/header'
+import { Hero } from '@/components/hero'
+import { Premise } from '@/components/premise'
+import { Domains } from '@/components/domains'
+import { Framework } from '@/components/framework'
+import { Closing } from '@/components/closing'
+import { Footer } from '@/components/footer'
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return <div className="min-h-screen bg-base" />
-  }
-
-  return <ClientPage />
+  return (
+    <div className="min-h-screen bg-base">
+      <Header />
+      <Hero />
+      <Premise />
+      <Domains />
+      <Framework />
+      <Closing />
+      <Footer />
+    </div>
+  )
 }

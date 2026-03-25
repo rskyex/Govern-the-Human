@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Govern the Human — Research Suite',
+  title: 'Govern the Human',
   description:
-    'A research suite on second-order AI governance, narrative identity, and democratic subject formation.',
+    'A research project on second-order AI governance, subject formation, and the human under AI conditions.',
   icons: { icon: '/favicon.svg' },
 }
 
