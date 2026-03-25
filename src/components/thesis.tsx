@@ -62,15 +62,13 @@ export function Thesis() {
           {/* Supporting context */}
           <Reveal delay={0.1}>
             <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              AI governance addresses what systems do. It does not yet address what they do to the human who encounters them.
+              The current AI governance frameworks addresses what systems do. It does not yet address what they do to the human who encounters them.
             </p>
           </Reveal>
 
           <Reveal delay={0.14}>
             <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              Current governance frameworks regulate AI outputs, enforce fairness
-              constraints, and manage systemic risks. These are necessary. But they
-              operate on a single plane: the behaviour of the system itself.
+              Current AI governance regulate AI outputs, enforce fairness constraints, and manage systemic risks. However, they operate on a single plane: the behaviour of the system itself.
             </p>
           </Reveal>
 
