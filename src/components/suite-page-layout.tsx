@@ -235,3 +235,84 @@ export function SuitePageWrapper({ children }: { children: ReactNode }) {
     </div>
   )
 }
+
+/* ── Aliases used by suite sub-pages ── */
+
+export const SuitePageShell = SuitePageWrapper
+
+export function SuitePageHero({
+  number,
+  title,
+  subtitle,
+  imageSrc,
+  imageOpacity = 0.12,
+}: {
+  number?: string
+  title: string
+  subtitle: string
+  imageSrc?: string
+  imageOpacity?: number
+}) {
+  return (
+    <section className="relative min-h-[70svh] flex items-end overflow-hidden">
+      {imageSrc && (
+        <>
+          <Image
+            src={imageSrc}
+            alt=""
+            fill
+            priority
+            className="object-cover object-center"
+            style={{ opacity: imageOpacity }}
+            sizes="100vw"
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.85) 65%, #ffffff 90%)',
+            }}
+          />
+        </>
+      )}
+      <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
+        {number && (
+          <Reveal>
+            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-6">
+              {number}
+            </p>
+          </Reveal>
+        )}
+        <Reveal>
+          <h1
+            className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-6"
+            style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
+          >
+            {title}
+          </h1>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px]">
+            {subtitle}
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+export function SuitePageSection({
+  children,
+  background = 'base',
+  className = '',
+}: {
+  children: ReactNode
+  background?: 'base' | 'surface'
+  className?: string
+}) {
+  return (
+    <section className={`${background === 'surface' ? 'bg-surface' : 'bg-base'} py-24 md:py-36 ${className}`}>
+      <div className="max-w-[1120px] mx-auto px-8 md:px-16">{children}</div>
+    </section>
+  )
+}

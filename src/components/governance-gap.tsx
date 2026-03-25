@@ -4,18 +4,18 @@ import Image from 'next/image'
 import { Reveal } from '@/components/ui/reveal'
 import { IMAGES } from '@/lib/images'
 
-// ── Vertical arrow ──
+// ── Vertical arrow (improved styling from main) ──
 function VerticalArrow({ label, emphasized = false, className = '' }: { label?: string; emphasized?: boolean; className?: string }) {
-  const color = emphasized ? 'text-text-secondary' : 'text-text-ghost/60'
-  const weight = emphasized ? 1.5 : 1
+  const color = emphasized ? 'text-text-primary' : 'text-text-tertiary'
+  const weight = emphasized ? 2 : 1.5
   return (
-    <div className={`flex flex-col items-center gap-1 ${className}`}>
-      <svg width="12" height="28" viewBox="0 0 12 28" className={color} aria-hidden="true">
-        <line x1="6" y1="0" x2="6" y2="22" stroke="currentColor" strokeWidth={weight} />
-        <polyline points="2,20 6,26 10,20" fill="none" stroke="currentColor" strokeWidth={weight} />
+    <div className={`flex flex-col items-center gap-1.5 py-1 ${className}`}>
+      <svg width="14" height="32" viewBox="0 0 14 32" className={color} aria-hidden="true">
+        <line x1="7" y1="0" x2="7" y2="25" stroke="currentColor" strokeWidth={weight} />
+        <polyline points="2,23 7,30 12,23" fill="none" stroke="currentColor" strokeWidth={weight} strokeLinejoin="round" />
       </svg>
       {label && (
-        <p className={`font-sans text-[10px] italic leading-tight ${emphasized ? 'text-text-secondary font-medium' : 'text-text-ghost'}`}>
+        <p className={`font-sans text-[11px] italic leading-tight ${emphasized ? 'text-text-primary font-medium' : 'text-text-secondary'}`}>
           {label}
         </p>
       )}
@@ -23,28 +23,28 @@ function VerticalArrow({ label, emphasized = false, className = '' }: { label?: 
   )
 }
 
-// ── Current Governance Diagram (formerly First-order) ──
+// ── Current Governance Diagram (renamed from First-order) ──
 function CurrentGovernanceDiagram() {
   return (
     <div className="flex flex-col items-center w-full">
-      <p className="font-sans text-[10px] font-medium tracking-[0.22em] uppercase text-text-subtitle text-center mb-4">
+      <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-text-subtitle text-center mb-5">
         Current governance
       </p>
-      <div className="flex flex-col items-center gap-2 w-full max-w-[220px]">
-        <div className="border border-panel-border bg-panel rounded-sm px-5 py-3 text-center w-full">
-          <p className="font-sans text-[12px] tracking-[0.06em] uppercase text-text-tertiary leading-tight font-medium">
+      <div className="flex flex-col items-center gap-3 w-full max-w-[260px]">
+        <div className="border border-text-primary/10 bg-base rounded px-6 py-3.5 text-center w-full shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+          <p className="font-sans text-[13px] tracking-[0.06em] uppercase text-text-primary leading-tight font-medium">
             Governance
           </p>
-          <p className="font-sans text-[10px] text-text-ghost mt-1">safety, fairness, accountability</p>
+          <p className="font-sans text-[11px] text-text-secondary mt-1.5">safety, fairness, accountability</p>
         </div>
         <VerticalArrow label="regulates" />
-        <div className="border border-panel-border bg-panel rounded-sm px-5 py-3 text-center w-full">
-          <p className="font-sans text-[12px] tracking-[0.06em] uppercase text-text-tertiary leading-tight font-medium">
+        <div className="border border-text-primary/10 bg-base rounded px-6 py-3.5 text-center w-full shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+          <p className="font-sans text-[13px] tracking-[0.06em] uppercase text-text-primary leading-tight font-medium">
             AI System
           </p>
-          <p className="font-sans text-[10px] text-text-ghost mt-1">behaviour &amp; outputs</p>
+          <p className="font-sans text-[11px] text-text-secondary mt-1.5">behaviour &amp; outputs</p>
         </div>
-        <p className="font-sans text-[10px] text-text-ghost italic mt-1">assumes a stable subject</p>
+        <p className="font-sans text-[11px] text-text-tertiary italic mt-2">assumes a stable subject</p>
       </div>
     </div>
   )
@@ -57,14 +57,13 @@ function SecondOrderDonut() {
   const ptX = (a: number) => cx + r * Math.cos(toRad(a))
   const ptY = (a: number) => cy + r * Math.sin(toRad(a))
 
-  // Node positions: top, bottom-right, bottom-left
   const nodes = [
-    { name: 'epistemic', gloss: 'knowing', angle: -90 },
-    { name: 'ontological', gloss: 'being', angle: 30 },
-    { name: 'political', gloss: 'acting', angle: 150 },
+    { name: 'Epistemic', gloss: 'how we know', angle: -90 },
+    { name: 'Ontological', gloss: 'how we are', angle: 30 },
+    { name: 'Political', gloss: 'how we act', angle: 150 },
   ]
 
-  const gap = 24 // degrees of gap near each node for arcs
+  const gap = 24
   const arcD = (a1: number, a2: number) => {
     let a2adj = a2
     if (a2adj <= a1) a2adj += 360
@@ -74,13 +73,13 @@ function SecondOrderDonut() {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <p className="font-sans text-[10px] font-medium tracking-[0.22em] uppercase text-text-subtitle text-center mb-4">
+      <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-text-subtitle text-center mb-5">
         Second-order governance
       </p>
 
       {/* AI System box */}
-      <div className="border border-panel-border bg-panel rounded-sm px-4 py-2 text-center mb-1">
-        <p className="font-sans text-[11px] tracking-[0.06em] uppercase text-text-tertiary leading-tight font-medium">
+      <div className="border border-text-primary/10 bg-base rounded px-5 py-3 text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)] mb-1">
+        <p className="font-sans text-[13px] tracking-[0.06em] uppercase text-text-primary leading-tight font-medium">
           AI System
         </p>
       </div>
@@ -90,19 +89,19 @@ function SecondOrderDonut() {
       {/* Donut SVG */}
       <svg viewBox="0 0 300 260" className="w-full max-w-[300px] -mt-1">
         {/* Dashed ring */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth="1.5" strokeDasharray="4 3" />
 
         {/* Arrowhead marker */}
         <defs>
           <marker id="darrow" viewBox="0 0 8 6" refX="7" refY="3" markerWidth="5" markerHeight="4" orient="auto">
-            <polyline points="0,0.5 7,3 0,5.5" fill="none" stroke="rgba(0,0,0,0.18)" strokeWidth="1" />
+            <polyline points="0,0.5 7,3 0,5.5" fill="none" stroke="rgba(0,0,0,0.22)" strokeWidth="1.2" />
           </marker>
         </defs>
 
         {/* Arc arrows between nodes */}
-        <path d={arcD(-90 + gap, 30 - gap)} fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="1" markerEnd="url(#darrow)" />
-        <path d={arcD(30 + gap, 150 - gap)} fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="1" markerEnd="url(#darrow)" />
-        <path d={arcD(150 + gap, 270 - gap)} fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="1" markerEnd="url(#darrow)" />
+        <path d={arcD(-90 + gap, 30 - gap)} fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="1.5" markerEnd="url(#darrow)" />
+        <path d={arcD(30 + gap, 150 - gap)} fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="1.5" markerEnd="url(#darrow)" />
+        <path d={arcD(150 + gap, 270 - gap)} fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="1.5" markerEnd="url(#darrow)" />
 
         {/* Node ellipses */}
         {nodes.map((n) => (
@@ -111,9 +110,9 @@ function SecondOrderDonut() {
             cx={ptX(n.angle)}
             cy={ptY(n.angle)}
             rx="38"
-            ry="18"
+            ry="19"
             fill="white"
-            stroke="rgba(140,155,175,0.15)"
+            stroke="rgba(14,17,23,0.1)"
             strokeWidth="1"
           />
         ))}
@@ -125,7 +124,7 @@ function SecondOrderDonut() {
               x={ptX(n.angle)}
               y={ptY(n.angle) - 2}
               textAnchor="middle"
-              style={{ fontSize: '10px', fontStyle: 'italic', fill: '#363a45', fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+              style={{ fontSize: '10.5px', fontStyle: 'italic', fill: '#0e1117', fontWeight: 500, fontFamily: "'Cormorant Garamond', Georgia, serif" }}
             >
               {n.name}
             </text>
@@ -133,7 +132,7 @@ function SecondOrderDonut() {
               x={ptX(n.angle)}
               y={ptY(n.angle) + 11}
               textAnchor="middle"
-              style={{ fontSize: '8px', fill: '#9da2b0', fontFamily: "'Inter', system-ui, sans-serif" }}
+              style={{ fontSize: '8.5px', fill: '#555a68', fontFamily: "'Inter', system-ui, sans-serif" }}
             >
               {n.gloss}
             </text>
@@ -145,7 +144,7 @@ function SecondOrderDonut() {
           x={cx}
           y={cy - 6}
           textAnchor="middle"
-          style={{ fontSize: '11px', fontWeight: 600, fill: '#0e1117', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.06em' }}
+          style={{ fontSize: '12px', fontWeight: 600, fill: '#0e1117', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.06em' }}
         >
           HUMAN SUBJECT
         </text>
@@ -153,19 +152,20 @@ function SecondOrderDonut() {
           x={cx}
           y={cy + 10}
           textAnchor="middle"
-          style={{ fontSize: '9px', fill: '#6b7080', fontFamily: "'Inter', system-ui, sans-serif" }}
+          style={{ fontSize: '10px', fill: '#555a68', fontFamily: "'Inter', system-ui, sans-serif" }}
         >
           under transformation
         </text>
 
         {/* Upward arrow below ring */}
-        <line x1={cx} y1={cy + r + 22} x2={cx} y2={cy + r + 8} stroke="#9da2b0" strokeWidth="1" opacity="0.5" />
+        <line x1={cx} y1={cy + r + 22} x2={cx} y2={cy + r + 8} stroke="#555a68" strokeWidth="1.5" opacity="0.6" />
         <polyline
           points={`${cx - 3},${cy + r + 12} ${cx},${cy + r + 6} ${cx + 3},${cy + r + 12}`}
           fill="none"
-          stroke="#9da2b0"
-          strokeWidth="1"
-          opacity="0.5"
+          stroke="#555a68"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+          opacity="0.6"
         />
 
         {/* "governance presupposes" label */}
@@ -173,15 +173,15 @@ function SecondOrderDonut() {
           x={cx}
           y={cy + r + 38}
           textAnchor="middle"
-          style={{ fontSize: '9px', fontStyle: 'italic', fill: '#9da2b0', fontFamily: "'Inter', system-ui, sans-serif" }}
+          style={{ fontSize: '9.5px', fontStyle: 'italic', fill: '#555a68', fontFamily: "'Inter', system-ui, sans-serif" }}
         >
           governance presupposes this subject
         </text>
       </svg>
 
       {/* Governance gap label */}
-      <div className="border border-text-primary/10 rounded-sm px-3.5 py-1.5 -mt-1">
-        <p className="font-sans text-[10px] tracking-[0.12em] uppercase text-text-subtitle font-medium">
+      <div className="border-2 border-text-primary/15 rounded px-5 py-2 -mt-1">
+        <p className="font-sans text-[11px] tracking-[0.12em] uppercase text-text-subtitle font-semibold">
           the governance gap
         </p>
       </div>
@@ -213,11 +213,28 @@ export function GovernanceGap() {
             <div className="w-10 h-px bg-rule mb-10" />
           </Reveal>
 
-          {/* Title */}
+          {/* Title with image motif (from main) */}
           <Reveal delay={0.05}>
-            <h2 className="font-display text-[2rem] md:text-[2.6rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-10">
-              The governance gap
-            </h2>
+            <div className="flex items-start gap-5 mb-10">
+              <div
+                className="hidden md:block flex-shrink-0 w-[4px] min-h-[40px] self-stretch rounded-full overflow-hidden"
+                style={{
+                  maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+                }}
+              >
+                <Image
+                  src={IMAGES.governanceGap}
+                  alt=""
+                  fill
+                  className="object-cover opacity-50"
+                  sizes="4px"
+                />
+              </div>
+              <h2 className="font-display text-[2rem] md:text-[2.6rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary">
+                The governance gap
+              </h2>
+            </div>
           </Reveal>
 
           {/* Description text */}
@@ -259,28 +276,28 @@ export function GovernanceGap() {
 
           {/* Diagrams side by side */}
           <Reveal delay={0.22}>
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-8 md:gap-6 items-center justify-items-center">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-10 md:gap-6 items-center justify-items-center">
               {/* Left: Current governance */}
               <CurrentGovernanceDiagram />
 
               {/* ⇔ connector — desktop */}
               <div className="hidden md:flex flex-col items-center gap-1">
-                <p className="font-sans text-[9px] tracking-[0.18em] uppercase text-text-subtitle mb-1">
+                <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-text-subtitle font-medium mb-1">
                   reframed as
                 </p>
-                <span className="text-[1.6rem] text-text-ghost leading-none">⇔</span>
+                <span className="text-[1.6rem] text-text-tertiary leading-none">⇔</span>
               </div>
 
               {/* ⇔ connector — mobile */}
               <div className="flex md:hidden items-center justify-center gap-3 w-full">
-                <div className="flex-1 h-px bg-rule" />
+                <div className="flex-1 h-px bg-text-primary/10" />
                 <div className="flex flex-col items-center">
-                  <p className="font-sans text-[9px] tracking-[0.18em] uppercase text-text-subtitle mb-0.5">
+                  <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-text-subtitle font-medium mb-0.5">
                     reframed as
                   </p>
-                  <span className="text-[1.2rem] text-text-ghost leading-none">⇔</span>
+                  <span className="text-[1.2rem] text-text-tertiary leading-none">⇔</span>
                 </div>
-                <div className="flex-1 h-px bg-rule" />
+                <div className="flex-1 h-px bg-text-primary/10" />
               </div>
 
               {/* Right: Second-order governance donut */}
