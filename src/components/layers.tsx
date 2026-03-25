@@ -79,6 +79,240 @@ function torsoPath(ctx: CanvasRenderingContext2D, s: number) {
   ctx.closePath()
 }
 
+/* ── Glass-wave ribbon helper ── */
+
+function drawGlassRibbon(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  t: number,
+  config: {
+    // Start/end as fractions of w/h
+    x0: number; y0: number; x1: number; y1: number
+    // Control point offsets (animated)
+    cp1x: number; cp1y: number; cp2x: number; cp2y: number
+    // Visual
+    width: number       // ribbon width in px
+    opacity: number     // base opacity multiplier
+    hue: 'blue' | 'silver' | 'mint' | 'violet'
+    // Motion
+    phaseOffset?: number
+    speed?: number
+  },
+) {
+  const p = config.phaseOffset ?? 0
+  const spd = config.speed ?? 1
+
+  // Animated control points — slow, flowing undulation
+  const cx1 = w * config.cp1x + Math.sin(t * 0.18 * spd + p) * w * 0.04 + Math.sin(t * 0.07 * spd + p * 1.3) * w * 0.02
+  const cy1 = h * config.cp1y + Math.cos(t * 0.14 * spd + p) * h * 0.06 + Math.sin(t * 0.05 * spd + p * 0.7) * h * 0.03
+  const cx2 = w * config.cp2x + Math.cos(t * 0.16 * spd + p) * w * 0.04 + Math.cos(t * 0.06 * spd + p * 1.1) * w * 0.02
+  const cy2 = h * config.cp2y + Math.sin(t * 0.12 * spd + p) * h * 0.06 + Math.cos(t * 0.04 * spd + p * 0.9) * h * 0.03
+
+  const sx = w * config.x0 + Math.sin(t * 0.1 * spd + p) * w * 0.01
+  const sy = h * config.y0 + Math.cos(t * 0.08 * spd + p) * h * 0.015
+  const ex = w * config.x1 + Math.cos(t * 0.09 * spd + p) * w * 0.01
+  const ey = h * config.y1 + Math.sin(t * 0.07 * spd + p) * h * 0.015
+
+  const rw = config.width
+  const op = config.opacity
+
+  // Colour palette
+  const colors = {
+    blue:   { r: '91,164,201',  h: '145,195,225', g: '120,180,215' },
+    silver: { r: '180,195,210', h: '200,215,228', g: '190,205,220' },
+    mint:   { r: '130,195,185', h: '160,215,205', g: '145,205,195' },
+    violet: { r: '139,126,184', h: '165,155,200', g: '150,140,192' },
+  }
+  const c = colors[config.hue]
+
+  ctx.save()
+
+  // ── Outer glow — the luminous halo around the ribbon ──
+  ctx.save()
+  ctx.shadowColor = `rgba(${c.r},${0.15 * op})`
+  ctx.shadowBlur = rw * 1.5
+  ctx.beginPath()
+  ctx.moveTo(sx, sy)
+  ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ex, ey)
+  ctx.strokeStyle = `rgba(${c.r},${0.008 * op})`
+  ctx.lineWidth = rw * 0.8
+  ctx.lineCap = 'round'
+  ctx.stroke()
+  ctx.restore()
+
+  // ── Main ribbon body — wide, translucent glass fill ──
+  // Draw as thick stroke with glass-like gradient
+  ctx.beginPath()
+  ctx.moveTo(sx, sy)
+  ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ex, ey)
+
+  // Glass gradient along the path (approximated with linear gradient)
+  const grad = ctx.createLinearGradient(sx, sy, ex, ey)
+  grad.addColorStop(0, `rgba(${c.r},${0.0})`)
+  grad.addColorStop(0.15, `rgba(${c.r},${0.06 * op})`)
+  grad.addColorStop(0.4, `rgba(${c.g},${0.08 * op})`)
+  grad.addColorStop(0.6, `rgba(${c.r},${0.07 * op})`)
+  grad.addColorStop(0.85, `rgba(${c.g},${0.05 * op})`)
+  grad.addColorStop(1, `rgba(${c.r},${0.0})`)
+  ctx.strokeStyle = grad
+  ctx.lineWidth = rw
+  ctx.lineCap = 'round'
+  ctx.stroke()
+
+  // ── Secondary fill layer — warmer, offset, creates depth ──
+  ctx.beginPath()
+  ctx.moveTo(sx, sy)
+  ctx.bezierCurveTo(cx1 + rw * 0.1, cy1 - rw * 0.05, cx2 - rw * 0.1, cy2 + rw * 0.05, ex, ey)
+  const grad2 = ctx.createLinearGradient(sx, sy, ex, ey)
+  grad2.addColorStop(0, `rgba(${c.h},0)`)
+  grad2.addColorStop(0.3, `rgba(${c.h},${0.04 * op})`)
+  grad2.addColorStop(0.7, `rgba(${c.h},${0.035 * op})`)
+  grad2.addColorStop(1, `rgba(${c.h},0)`)
+  ctx.strokeStyle = grad2
+  ctx.lineWidth = rw * 0.6
+  ctx.lineCap = 'round'
+  ctx.stroke()
+
+  // ── Rim edges — surface tension lines on both sides of the ribbon ──
+  for (const offset of [-1, 1]) {
+    // Approximate offset by shifting control points perpendicular to path
+    const nx1 = cx1 + offset * rw * 0.35
+    const ny1 = cy1 + offset * rw * 0.15
+    const nx2 = cx2 + offset * rw * 0.25
+    const ny2 = cy2 - offset * rw * 0.2
+
+    ctx.beginPath()
+    ctx.moveTo(sx + offset * rw * 0.2, sy)
+    ctx.bezierCurveTo(nx1, ny1, nx2, ny2, ex + offset * rw * 0.15, ey)
+    const rimGrad = ctx.createLinearGradient(sx, sy, ex, ey)
+    rimGrad.addColorStop(0, `rgba(${c.h},0)`)
+    rimGrad.addColorStop(0.2, `rgba(${c.h},${0.12 * op})`)
+    rimGrad.addColorStop(0.5, `rgba(${c.h},${0.15 * op})`)
+    rimGrad.addColorStop(0.8, `rgba(${c.h},${0.1 * op})`)
+    rimGrad.addColorStop(1, `rgba(${c.h},0)`)
+    ctx.strokeStyle = rimGrad
+    ctx.lineWidth = 0.8
+    ctx.stroke()
+  }
+
+  // ── Centre structural line — elegant thin line through the middle ──
+  ctx.beginPath()
+  ctx.moveTo(sx, sy)
+  ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ex, ey)
+  const centreGrad = ctx.createLinearGradient(sx, sy, ex, ey)
+  centreGrad.addColorStop(0, `rgba(${c.h},0)`)
+  centreGrad.addColorStop(0.25, `rgba(${c.h},${0.08 * op})`)
+  centreGrad.addColorStop(0.5, `rgba(255,255,255,${0.06 * op})`)
+  centreGrad.addColorStop(0.75, `rgba(${c.h},${0.07 * op})`)
+  centreGrad.addColorStop(1, `rgba(${c.h},0)`)
+  ctx.strokeStyle = centreGrad
+  ctx.lineWidth = 0.5
+  ctx.stroke()
+
+  // ── Caustic highlight — bright spot where light collects ──
+  const midX = (sx + ex) / 2 + (cx1 + cx2) / 2 - (sx + ex) / 2
+  const midY = (sy + ey) / 2 + (cy1 + cy2) / 2 - (sy + ey) / 2
+  const hlR = rw * 0.8
+  const hl = ctx.createRadialGradient(midX, midY, 0, midX, midY, hlR)
+  hl.addColorStop(0, `rgba(255,255,255,${0.08 * op})`)
+  hl.addColorStop(0.4, `rgba(255,255,255,${0.025 * op})`)
+  hl.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = hl
+  ctx.beginPath()
+  ctx.arc(midX, midY, hlR, 0, Math.PI * 2)
+  ctx.fill()
+
+  ctx.restore()
+}
+
+/* ── membrane surface — large flowing translucent area ── */
+
+function drawMembrane(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  t: number,
+  config: {
+    points: Array<[number, number]>  // 4+ points as fractions of w/h
+    opacity: number
+    hue: 'blue' | 'silver' | 'mint'
+    phaseOffset?: number
+  },
+) {
+  const p = config.phaseOffset ?? 0
+  const op = config.opacity
+  const pts = config.points.map(([px, py], i) => ({
+    x: w * px + Math.sin(t * (0.12 + i * 0.03) + p + i) * w * 0.02,
+    y: h * py + Math.cos(t * (0.1 + i * 0.025) + p + i * 0.7) * h * 0.025,
+  }))
+
+  const colors = {
+    blue:   { r: '91,164,201',  h: '145,195,225' },
+    silver: { r: '180,195,210', h: '200,215,228' },
+    mint:   { r: '130,195,185', h: '160,215,205' },
+  }
+  const c = colors[config.hue]
+
+  ctx.save()
+
+  // Glow
+  ctx.save()
+  ctx.shadowColor = `rgba(${c.r},${0.08 * op})`
+  ctx.shadowBlur = 40
+
+  // Build a smooth closed path through the points
+  ctx.beginPath()
+  ctx.moveTo(pts[0].x, pts[0].y)
+  for (let i = 0; i < pts.length; i++) {
+    const curr = pts[i]
+    const next = pts[(i + 1) % pts.length]
+    const mx = (curr.x + next.x) / 2
+    const my = (curr.y + next.y) / 2
+    ctx.quadraticCurveTo(curr.x, curr.y, mx, my)
+  }
+  ctx.closePath()
+
+  // Translucent glass fill
+  const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length
+  const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length
+  const gr = Math.max(w, h) * 0.3
+  const fill = ctx.createRadialGradient(cx - gr * 0.2, cy - gr * 0.15, 0, cx, cy, gr)
+  fill.addColorStop(0, `rgba(${c.r},${0.045 * op})`)
+  fill.addColorStop(0.4, `rgba(${c.h},${0.025 * op})`)
+  fill.addColorStop(0.8, `rgba(${c.r},${0.01 * op})`)
+  fill.addColorStop(1, `rgba(${c.r},0)`)
+  ctx.fillStyle = fill
+  ctx.fill()
+  ctx.restore()
+
+  // Edge rim
+  ctx.beginPath()
+  ctx.moveTo(pts[0].x, pts[0].y)
+  for (let i = 0; i < pts.length; i++) {
+    const curr = pts[i]
+    const next = pts[(i + 1) % pts.length]
+    const mx = (curr.x + next.x) / 2
+    const my = (curr.y + next.y) / 2
+    ctx.quadraticCurveTo(curr.x, curr.y, mx, my)
+  }
+  ctx.closePath()
+  ctx.strokeStyle = `rgba(${c.h},${0.08 * op})`
+  ctx.lineWidth = 0.8
+  ctx.stroke()
+
+  // Caustic
+  const hl = ctx.createRadialGradient(cx - gr * 0.15, cy - gr * 0.2, 0, cx, cy, gr * 0.5)
+  hl.addColorStop(0, `rgba(255,255,255,${0.05 * op})`)
+  hl.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = hl
+  ctx.beginPath()
+  ctx.arc(cx - gr * 0.1, cy - gr * 0.1, gr * 0.4, 0, Math.PI * 2)
+  ctx.fill()
+
+  ctx.restore()
+}
+
 /* ── Per-layer canvas (one per layer, embedded in the section) ── */
 
 function LayerCanvas({ layerIndex }: { layerIndex: number }) {
@@ -103,6 +337,39 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
       const t = Date.now() * 0.00005
       const vmin = Math.min(w, h)
       ctx.clearRect(0, 0, w, h)
+
+      // ── Glass-wave ribbons — flowing through each layer ──
+      // Ribbons become more enclosing/layered with depth
+
+      // Primary ribbon — varies per depth
+      drawGlassRibbon(ctx, w, h, t, {
+        x0: -0.05, y0: 0.3 + depth * 0.1, x1: 1.05, y1: 0.6 - depth * 0.05,
+        cp1x: 0.3, cp1y: 0.15 + depth * 0.1, cp2x: 0.7, cp2y: 0.7 - depth * 0.05,
+        width: vmin * (0.07 + depth * 0.02), opacity: (0.7 - depth * 0.15) * opMul,
+        hue: depth === 0 ? 'blue' : depth === 1 ? 'violet' : 'silver',
+        phaseOffset: depth * 2.5, speed: 0.6,
+      })
+
+      // Secondary counter-ribbon
+      drawGlassRibbon(ctx, w, h, t, {
+        x0: 1.06, y0: 0.2 + depth * 0.15, x1: -0.06, y1: 0.7 + depth * 0.05,
+        cp1x: 0.65, cp1y: 0.5, cp2x: 0.35, cp2y: 0.4 + depth * 0.1,
+        width: vmin * (0.04 + depth * 0.015), opacity: (0.45 - depth * 0.1) * opMul,
+        hue: 'silver', phaseOffset: depth * 3.5 + 1.5, speed: 0.5,
+      })
+
+      // Membrane — gets more enclosing with depth
+      if (depth >= 1) {
+        drawMembrane(ctx, w, h, t, {
+          points: [
+            [0.1 - depth * 0.03, 0.2], [0.6, 0.1 - depth * 0.03],
+            [0.95 + depth * 0.02, 0.4], [0.85, 0.8 + depth * 0.05],
+            [0.3, 0.85], [0.05 - depth * 0.02, 0.55],
+          ],
+          opacity: (0.3 + depth * 0.1) * opMul, hue: depth === 1 ? 'blue' : 'silver',
+          phaseOffset: depth * 4.0,
+        })
+      }
 
       // ── Supporting objects per layer ──
 
