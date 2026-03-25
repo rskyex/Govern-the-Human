@@ -414,70 +414,36 @@ function drawGhost(
   ctx.save()
   ctx.translate(0, 50 * s)
 
-  // Subsurface glow — large, diffuse, physically present
+  // Subsurface glow — soft, diffuse
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.22)'
-  ctx.shadowBlur = 40 * s
+  ctx.shadowColor = 'rgba(91,164,201,0.12)'
+  ctx.shadowBlur = 30 * s
   torsoPath(ctx, s)
-  ctx.strokeStyle = 'rgba(91,164,201,0.012)'
-  ctx.lineWidth = 4
+  ctx.strokeStyle = 'rgba(91,164,201,0.006)'
+  ctx.lineWidth = 2
   ctx.stroke()
   ctx.restore()
 
-  // Layered subsurface fill — heavy, luminous volume
+  // Translucent fill — light, icy
   torsoPath(ctx, s)
   const tg = ctx.createLinearGradient(-20 * s, 0, 20 * s, 192 * s)
-  tg.addColorStop(0, 'rgba(91,164,201,0.09)')
-  tg.addColorStop(0.25, 'rgba(91,164,201,0.06)')
-  tg.addColorStop(0.6, 'rgba(91,164,201,0.025)')
+  tg.addColorStop(0, 'rgba(91,164,201,0.045)')
+  tg.addColorStop(0.3, 'rgba(91,164,201,0.025)')
+  tg.addColorStop(0.65, 'rgba(91,164,201,0.01)')
   tg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg
   ctx.fill()
 
-  // Second subsurface layer — warmer, offset centre
-  torsoPath(ctx, s * 0.94)
-  const tg2 = ctx.createRadialGradient(8 * s, 40 * s, 0, 0, 60 * s, 90 * s)
-  tg2.addColorStop(0, 'rgba(120,170,210,0.035)')
-  tg2.addColorStop(0.5, 'rgba(91,164,201,0.015)')
-  tg2.addColorStop(1, 'rgba(91,164,201,0)')
-  ctx.fillStyle = tg2
-  ctx.fill()
-
-  // Rim edge — taut, present, the boundary of a form
+  // Rim contour — the human boundary
   torsoPath(ctx, s)
   const eg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  eg.addColorStop(0, 'rgba(145,195,225,0.2)')
-  eg.addColorStop(0.3, 'rgba(91,164,201,0.12)')
-  eg.addColorStop(0.6, 'rgba(91,164,201,0.04)')
+  eg.addColorStop(0, 'rgba(145,195,225,0.1)')
+  eg.addColorStop(0.35, 'rgba(91,164,201,0.05)')
+  eg.addColorStop(0.7, 'rgba(91,164,201,0.015)')
   eg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.strokeStyle = eg
-  ctx.lineWidth = 1.8
+  ctx.lineWidth = 1.2
   ctx.stroke()
-
-  // Inner tension line
-  torsoPath(ctx, s * 0.97)
-  const itl = ctx.createLinearGradient(0, 0, 0, 186 * s)
-  itl.addColorStop(0, 'rgba(180,215,235,0.1)')
-  itl.addColorStop(0.4, 'rgba(145,195,225,0.04)')
-  itl.addColorStop(1, 'rgba(91,164,201,0)')
-  ctx.strokeStyle = itl
-  ctx.lineWidth = 0.6
-  ctx.stroke()
-
-  // Frosted inner echo — filled, not just stroked
-  ctx.save()
-  ctx.translate(echoOffsetX * 0.7, echoOffsetY * 0.7)
-  torsoPath(ctx, s * 0.86)
-  const ifg = ctx.createLinearGradient(0, 0, 0, 165 * s)
-  ifg.addColorStop(0, 'rgba(139,126,184,0.03)')
-  ifg.addColorStop(0.5, 'rgba(139,126,184,0.014)')
-  ifg.addColorStop(1, 'rgba(139,126,184,0)')
-  ctx.fillStyle = ifg
-  ctx.fill()
-  ctx.strokeStyle = 'rgba(139,126,184,0.055)'
-  ctx.lineWidth = 0.8
-  ctx.stroke()
-  ctx.restore()
 
   ctx.restore()
 
@@ -486,124 +452,54 @@ function drawGhost(
   ctx.save()
   ctx.rotate(headTilt)
 
-  // Outer glow halo — large, imposing
+  // Soft glow halo
   ctx.save()
-  ctx.shadowColor = 'rgba(91,164,201,0.26)'
-  ctx.shadowBlur = 48 * s
+  ctx.shadowColor = 'rgba(91,164,201,0.14)'
+  ctx.shadowBlur = 30 * s
   headPath(ctx, s)
-  ctx.strokeStyle = 'rgba(91,164,201,0.01)'
-  ctx.lineWidth = 3
+  ctx.strokeStyle = 'rgba(91,164,201,0.005)'
+  ctx.lineWidth = 2
   ctx.stroke()
   ctx.restore()
 
-  // Primary subsurface fill — luminous core
+  // Translucent fill — icy luminous core
   headPath(ctx, s)
   const hg = ctx.createRadialGradient(0, -8 * s, 0, 0, -2 * s, 56 * s)
-  hg.addColorStop(0, 'rgba(91,164,201,0.11)')
-  hg.addColorStop(0.3, 'rgba(91,164,201,0.065)')
-  hg.addColorStop(0.65, 'rgba(91,164,201,0.03)')
-  hg.addColorStop(1, 'rgba(91,164,201,0.008)')
+  hg.addColorStop(0, 'rgba(91,164,201,0.055)')
+  hg.addColorStop(0.35, 'rgba(91,164,201,0.03)')
+  hg.addColorStop(0.7, 'rgba(91,164,201,0.012)')
+  hg.addColorStop(1, 'rgba(91,164,201,0.003)')
   ctx.fillStyle = hg
   ctx.fill()
 
-  // Secondary subsurface — offset, warmer, creates colour shift
-  headPath(ctx, s * 0.92)
-  const hg2 = ctx.createRadialGradient(12 * s, 8 * s, 0, 5 * s, 0, 42 * s)
-  hg2.addColorStop(0, 'rgba(130,160,210,0.04)')
-  hg2.addColorStop(0.5, 'rgba(120,145,200,0.018)')
-  hg2.addColorStop(1, 'rgba(91,164,201,0)')
-  ctx.fillStyle = hg2
-  ctx.fill()
-
-  // Rim edge — taut, defined, the boundary of something real
+  // Rim contour — the cranial boundary
   headPath(ctx, s)
-  ctx.strokeStyle = 'rgba(145,195,225,0.22)'
-  ctx.lineWidth = 2
+  ctx.strokeStyle = 'rgba(145,195,225,0.11)'
+  ctx.lineWidth = 1.2
   ctx.stroke()
 
-  // Inner tension line
-  headPath(ctx, s * 0.97)
-  ctx.strokeStyle = 'rgba(180,215,235,0.08)'
-  ctx.lineWidth = 0.5
-  ctx.stroke()
-
-  // Frosted inner echo 1 — filled membrane
+  // Single inner echo — faint identity shell
   ctx.save()
   ctx.translate(echoOffsetX, echoOffsetY)
-  headPath(ctx, s * 0.76)
-  const ie1 = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 42 * s)
-  ie1.addColorStop(0, 'rgba(139,126,184,0.035)')
-  ie1.addColorStop(1, 'rgba(139,126,184,0.008)')
-  ctx.fillStyle = ie1
-  ctx.fill()
-  ctx.strokeStyle = 'rgba(139,126,184,0.08)'
-  ctx.lineWidth = 0.9
+  headPath(ctx, s * 0.72)
+  ctx.strokeStyle = 'rgba(139,126,184,0.04)'
+  ctx.lineWidth = 0.6
   ctx.stroke()
   ctx.restore()
 
-  // Frosted inner echo 2 — deeper
-  ctx.save()
-  ctx.translate(echoOffsetX * 1.5, echoOffsetY * 1.5)
-  headPath(ctx, s * 0.52)
-  ctx.fillStyle = 'rgba(91,164,201,0.014)'
-  ctx.fill()
-  ctx.strokeStyle = 'rgba(91,164,201,0.035)'
-  ctx.lineWidth = 0.5
-  ctx.stroke()
-  ctx.restore()
-
-  // Primary caustic highlight (clipped) — upper left
+  // Caustic highlight — glass refraction
   ctx.save()
   headPath(ctx, s)
   ctx.clip()
   const hl = ctx.createRadialGradient(-14 * s, -24 * s, 0, -14 * s, -24 * s, 28 * s)
-  hl.addColorStop(0, 'rgba(255,255,255,0.18)')
-  hl.addColorStop(0.3, 'rgba(255,255,255,0.07)')
-  hl.addColorStop(0.7, 'rgba(255,255,255,0.015)')
+  hl.addColorStop(0, 'rgba(255,255,255,0.1)')
+  hl.addColorStop(0.35, 'rgba(255,255,255,0.03)')
   hl.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = hl
   ctx.fillRect(-50 * s, -55 * s, 100 * s, 80 * s)
-  // Secondary caustic — lower right (refraction)
-  const hl2 = ctx.createRadialGradient(18 * s, 20 * s, 0, 18 * s, 20 * s, 16 * s)
-  hl2.addColorStop(0, 'rgba(255,255,255,0.06)')
-  hl2.addColorStop(1, 'rgba(255,255,255,0)')
-  ctx.fillStyle = hl2
-  ctx.fillRect(0, 5 * s, 40 * s, 35 * s)
   ctx.restore()
 
   ctx.restore() // end head tilt
-
-  // ── Thought-stream traces — glacial rotation, varied weight ──
-  for (let i = 0; i < 7; i++) {
-    // Very slow rotation: ~225s per revolution
-    const angle = (i / 7) * Math.PI * 2 + t * 0.14
-    const r1 = 10 * s
-    // Reach oscillates slowly (~100s)
-    const r2 = (30 + i * 3) * s + Math.sin(t * 0.31 + i * 1.6) * 10 * s
-    const a2 = angle + 0.65 + Math.sin(t * 0.25 + i) * 0.4
-    const weight = 0.5 + (i % 3) * 0.2
-    // Opacity pulses slowly (~90s, phase-offset per trace)
-    const op = 0.05 + Math.sin(t * 0.35 + i * 0.9) * 0.02
-
-    ctx.beginPath()
-    ctx.moveTo(Math.cos(angle) * r1, Math.sin(angle) * r1)
-    ctx.quadraticCurveTo(
-      Math.cos(angle + 0.3) * r2 * 0.6,
-      Math.sin(angle + 0.3) * r2 * 0.6,
-      Math.cos(a2) * r2,
-      Math.sin(a2) * r2,
-    )
-    ctx.strokeStyle = `rgba(91,164,201,${op})`
-    ctx.lineWidth = weight
-    ctx.stroke()
-
-    // Endpoint node — slow pulse (~45s)
-    const pulse = 0.5 + Math.sin(t * 0.698 + i * 1.3) * 0.4
-    ctx.beginPath()
-    ctx.arc(Math.cos(a2) * r2, Math.sin(a2) * r2, 1.2 * pulse, 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(91,164,201,${0.07 * pulse})`
-    ctx.fill()
-  }
 
   ctx.restore()
 }
@@ -1001,70 +897,29 @@ export function Hero() {
         opacity: 0.5, hue: 'blue', phaseOffset: 1.2,
       })
 
-      // ── Scan arcs — glacial rotation, larger ──
-      ctx.save()
-      ctx.translate(w * 0.36, h * 0.36)
-      for (let i = 0; i < 4; i++) {
-        const r = vmin * 0.3 + i * vmin * 0.14
-        const rot = t * (0.14 + i * 0.03) * (i % 2 === 0 ? 1 : -1)
-        ctx.save()
-        ctx.rotate(rot)
-        const segs = 3 + i
-        const gap = Math.PI * 0.14
-        const seg = (Math.PI * 2 - segs * gap) / segs
-        ctx.strokeStyle = `rgba(91,164,201,${0.04 - i * 0.006})`
-        ctx.lineWidth = 0.7
-        ctx.lineCap = 'round'
-        for (let j = 0; j < segs; j++) {
-          const a = j * (seg + gap)
-          ctx.beginPath()
-          ctx.arc(0, 0, r, a, a + seg)
-          ctx.stroke()
-        }
-        ctx.restore()
-      }
-      ctx.restore()
+      // ── Ghost — faint contour hint, left-of-centre ──
+      drawGhost(ctx, gx, gy, gs, t)
 
-      // ── Ghost echo — distant, behind everything ──
-      drawGhost(ctx, w * 0.62, h * 0.55, vmin / 560, t - 0.5)
+      // ── Ring — timing structure, right side ──
+      drawRing(ctx, rx, ry, vmin * 0.3, t)
 
-      // ── Ghost — dominant, imposing, left-of-centre ──
-      drawGhost(ctx, w * 0.34, h * 0.26, vmin / 340, t)
+      // ── Second ring — partially off-screen, orbital arc ──
+      drawRing(ctx, w * 0.16, h * 0.04, vmin * 0.18, t + 3.0)
 
-      // ── Ring — right side, large ──
-      drawRing(ctx, w * 0.76, h * 0.48, vmin * 0.3, t)
+      // ── Orbs — three deliberate presences ──
+      drawOrb(ctx, w * 0.1, h * 0.2, vmin * 0.1, t, 0)
+      drawOrb(ctx, w * 0.56, h * 0.14, vmin * 0.07, t, 2.1)
+      drawOrb(ctx, w * 0.85, h * 0.76, vmin * 0.06, t, 4.3)
 
-      // ── Second ring — upper area, partially off-screen ──
-      drawRing(ctx, w * 0.16, h * 0.04, vmin * 0.2, t + 3.0)
-
-      // ── Orbs — larger, fewer feel more deliberate ──
-      drawOrb(ctx, w * 0.1, h * 0.2, vmin * 0.12, t, 0)
-      drawOrb(ctx, w * 0.56, h * 0.14, vmin * 0.085, t, 2.1)
-      drawOrb(ctx, w * 0.85, h * 0.76, vmin * 0.065, t, 4.3)
-      drawOrb(ctx, w * 0.04, h * 0.74, vmin * 0.055, t, 5.8)
-      drawOrb(ctx, w * 0.93, h * 0.3, vmin * 0.048, t, 7.2)
-
-      // ── Infrastructure lines — soft control network ──
+      // ── Infrastructure — single soft control line ──
       drawInfrastructureLines(ctx, t, [
         { x: gx, y: gy },
-        { x: gx, y: gy + 50 * gs },
-        { x: (gx + rx) / 2, y: (gy + ry) / 2, r: 2.5 },
+        { x: (gx + rx) / 2, y: (gy + ry) / 2, r: 2 },
         { x: rx, y: ry },
-      ], { opacity: 0.5, hue: 'silver', phaseOffset: 0 })
+      ], { opacity: 0.35, hue: 'silver', phaseOffset: 0 })
 
-      drawInfrastructureLines(ctx, t, [
-        { x: gx, y: gy - 30 * gs },
-        { x: w * 0.1, y: h * 0.2 },
-      ], { opacity: 0.3, hue: 'blue', phaseOffset: 2.0 })
-
-      drawInfrastructureLines(ctx, t, [
-        { x: rx, y: ry },
-        { x: w * 0.85, y: h * 0.76 },
-      ], { opacity: 0.25, hue: 'violet', phaseOffset: 4.0 })
-
-      // ── Dissolution zones — where ribbons meet the ghost ──
-      drawDissolutionZone(ctx, gx, gy, gs, w * 0.34, h * 0.22, t, 0.5)
-      drawDissolutionZone(ctx, gx, gy, gs, w * 0.44, h * 0.45, t, 0.4)
+      // ── Dissolution — where the ribbon meets the body ──
+      drawDissolutionZone(ctx, gx, gy, gs, w * 0.38, h * 0.30, t, 0.3)
     }
 
     resize()

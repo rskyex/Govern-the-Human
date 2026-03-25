@@ -398,7 +398,7 @@ function ObservatoryCanvas() {
       drawGlassRibbon(ctx, w, h, t, {
         x0: -0.05, y0: 0.4, x1: 1.05, y1: 0.55,
         cp1x: 0.3, cp1y: 0.2, cp2x: 0.7, cp2y: 0.75,
-        width: Math.min(w, h) * 0.06, opacity: 0.5, hue: 'silver', phaseOffset: 1.0, speed: 0.6,
+        width: Math.min(w, h) * 0.06, opacity: 0.3, hue: 'silver', phaseOffset: 1.0, speed: 0.6,
       })
 
       ctx.save()
@@ -410,10 +410,10 @@ function ObservatoryCanvas() {
 
       // Ring bands
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.1)'; ctx.lineWidth = r * 0.08; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.055)'; ctx.lineWidth = r * 0.08; ctx.stroke()
       ctx.restore()
       ctx.beginPath(); ctx.arc(0, 0, r * 0.76, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.05)'; ctx.lineWidth = r * 0.025; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.028)'; ctx.lineWidth = r * 0.025; ctx.stroke()
 
       // Markers
       const rot = t * 0.05
@@ -425,7 +425,7 @@ function ObservatoryCanvas() {
         ctx.beginPath()
         ctx.moveTo(Math.cos(a) * (r - r * 0.04 - len), Math.sin(a) * (r - r * 0.04 - len))
         ctx.lineTo(Math.cos(a) * (r - r * 0.04), Math.sin(a) * (r - r * 0.04))
-        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.22 : 0.08})`
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.12 : 0.04})`
         ctx.lineWidth = major ? 1.69 : 0.78; ctx.lineCap = 'round'; ctx.stroke()
       }
       ctx.restore()
@@ -434,7 +434,7 @@ function ObservatoryCanvas() {
       const ha = t * 0.07
       ctx.beginPath(); ctx.moveTo(0, 0)
       ctx.lineTo(Math.cos(ha) * r * 0.68, Math.sin(ha) * r * 0.68)
-      ctx.strokeStyle = 'rgba(91,164,201,0.1)'; ctx.lineWidth = 0.8; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.05)'; ctx.lineWidth = 0.8; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(91,164,201,0.2)'; ctx.fill()
 
@@ -470,7 +470,7 @@ function DriftCanvas() {
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.1, y0: -0.05, x1: 0.9, y1: 1.05,
         cp1x: 0.40, cp1y: 0.32, cp2x: 0.60, cp2y: 0.55,
-        width: Math.min(w, h) * 0.05, opacity: 0.4, hue: 'mint', phaseOffset: 4.0, speed: 0.5,
+        width: Math.min(w, h) * 0.05, opacity: 0.24, hue: 'mint', phaseOffset: 4.0, speed: 0.5,
       })
 
       ctx.save()
@@ -481,7 +481,7 @@ function DriftCanvas() {
         const spread = Math.sin(t * 0.21 + i * 0.3) * (5 + i * 4)
         const vertDrift = Math.sin(t * 0.314 + i * 0.7) * (1.6 + i * 2)
         const scale = 1 - i * 0.08
-        const op = 0.12 - i * 0.02
+        const op = 0.065 - i * 0.012
         const color = i % 2 === 0 ? '91,164,201' : '139,126,184'
 
         ctx.save()
@@ -492,7 +492,7 @@ function DriftCanvas() {
         ctx.stroke()
         if (i === 0) {
           const fg = ctx.createRadialGradient(10 * s, -20 * s, 0, 0, 0, 80 * s)
-          fg.addColorStop(0, 'rgba(91,164,201,0.04)')
+          fg.addColorStop(0, 'rgba(91,164,201,0.02)')
           fg.addColorStop(1, 'rgba(91,164,201,0)')
           ctx.fillStyle = fg
           ctx.fill()
@@ -532,7 +532,7 @@ function PlatformedCanvas() {
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.15, y0: 0.5, x1: 0.85, y1: 0.5,
         cp1x: 0.35, cp1y: 0.38, cp2x: 0.65, cp2y: 0.38,
-        width: Math.min(w, h) * 0.045, opacity: 0.4, hue: 'violet', phaseOffset: 7.0, speed: 0.5,
+        width: Math.min(w, h) * 0.045, opacity: 0.24, hue: 'violet', phaseOffset: 7.0, speed: 0.5,
       })
 
       const gap = 35 * s + Math.sin(t * 0.28) * 3 * s // gap oscillates
@@ -543,12 +543,12 @@ function PlatformedCanvas() {
       ctx.translate(w * 0.5 - gap, h * 0.48 + floatY)
       headPath(ctx, s * 0.85)
       const lg = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 48 * s)
-      lg.addColorStop(0, 'rgba(91,164,201,0.068)')
-      lg.addColorStop(1, 'rgba(91,164,201,0.014)')
+      lg.addColorStop(0, 'rgba(91,164,201,0.041)')
+      lg.addColorStop(1, 'rgba(91,164,201,0.008)')
       ctx.fillStyle = lg; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.136)'; ctx.lineWidth = 1; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.082)'; ctx.lineWidth = 1; ctx.stroke()
       headPath(ctx, s * 0.62)
-      ctx.strokeStyle = 'rgba(139,126,184,0.068)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(139,126,184,0.041)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.restore()
 
       // Right-facing head (mirrored)
@@ -557,12 +557,12 @@ function PlatformedCanvas() {
       ctx.scale(-1, 1)
       headPath(ctx, s * 0.85)
       const rg = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 48 * s)
-      rg.addColorStop(0, 'rgba(91,164,201,0.06)')
-      rg.addColorStop(1, 'rgba(91,164,201,0.01)')
+      rg.addColorStop(0, 'rgba(91,164,201,0.036)')
+      rg.addColorStop(1, 'rgba(91,164,201,0.006)')
       ctx.fillStyle = rg; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.11)'; ctx.lineWidth = 1; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.066)'; ctx.lineWidth = 1; ctx.stroke()
       headPath(ctx, s * 0.62)
-      ctx.strokeStyle = 'rgba(139,126,184,0.051)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(139,126,184,0.031)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.restore()
 
       // Connecting arc between them — the feedback loop
@@ -570,10 +570,10 @@ function PlatformedCanvas() {
       ctx.translate(w * 0.5, h * 0.48 + floatY)
       ctx.beginPath()
       ctx.arc(0, -10 * s, gap + 20 * s, Math.PI * 0.15, Math.PI * 0.85)
-      ctx.strokeStyle = 'rgba(91,164,201,0.04)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.024)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.beginPath()
       ctx.arc(0, 10 * s, gap + 20 * s, -Math.PI * 0.85, -Math.PI * 0.15)
-      ctx.strokeStyle = 'rgba(139,126,184,0.032)'; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = 'rgba(139,126,184,0.019)'; ctx.lineWidth = 0.5; ctx.stroke()
       ctx.restore()
     }
 
@@ -608,34 +608,34 @@ function SuiteAmbientCanvas() {
       drawGlassRibbon(ctx, w, h, t, {
         x0: -0.06, y0: 0.1, x1: 1.08, y1: 0.85,
         cp1x: 0.82, cp1y: 0.15, cp2x: 0.7, cp2y: 0.95,
-        width: vmin * 0.1, opacity: 0.7, hue: 'blue', phaseOffset: 0, speed: 0.7,
+        width: vmin * 0.1, opacity: 0.42, hue: 'blue', phaseOffset: 0, speed: 0.7,
       })
       drawGlassRibbon(ctx, w, h, t, {
         x0: 1.05, y0: 0.05, x1: -0.03, y1: 0.7,
         cp1x: 0.75, cp1y: 0.35, cp2x: 0.25, cp2y: 0.3,
-        width: vmin * 0.065, opacity: 0.45, hue: 'silver', phaseOffset: 3.0, speed: 0.55,
+        width: vmin * 0.065, opacity: 0.27, hue: 'silver', phaseOffset: 3.0, speed: 0.55,
       })
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.1, y0: 1.05, x1: 0.9, y1: 0.15,
         cp1x: 0.3, cp1y: 0.6, cp2x: 0.65, cp2y: 0.5,
-        width: vmin * 0.04, opacity: 0.35, hue: 'mint', phaseOffset: 6.5, speed: 0.5,
+        width: vmin * 0.04, opacity: 0.21, hue: 'mint', phaseOffset: 6.5, speed: 0.5,
       })
       drawMembrane(ctx, w, h, t, {
         points: [[0.15, 0.15], [0.6, 0.05], [0.92, 0.3], [0.8, 0.7], [0.4, 0.8], [0.08, 0.45]],
-        opacity: 0.35, hue: 'blue', phaseOffset: 2.0,
+        opacity: 0.21, hue: 'blue', phaseOffset: 2.0,
       })
 
       // ── Body-wrapping ribbon ──
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.78, y0: 0.05, x1: 0.98, y1: 0.55,
         cp1x: 0.96, cp1y: 0.15, cp2x: 0.98, cp2y: 0.38,
-        width: vmin * 0.03, opacity: 0.35, hue: 'violet', phaseOffset: 8.5, speed: 0.45,
+        width: vmin * 0.03, opacity: 0.21, hue: 'violet', phaseOffset: 8.5, speed: 0.45,
       })
 
       // ── Identity-shell membrane ──
       drawMembrane(ctx, w, h, t, {
         points: ghostShellPoints(0.88, 0.35, 1.3),
-        opacity: 0.15, hue: 'silver', phaseOffset: 6.0,
+        opacity: 0.09, hue: 'silver', phaseOffset: 6.0,
       })
 
       // ── Large ghost silhouette — right edge, tall, faint ──
@@ -661,17 +661,17 @@ function SuiteAmbientCanvas() {
       ctx.bezierCurveTo(55 * gs, 28 * gs, 20 * gs, 22 * gs, 14 * gs, 18 * gs)
       ctx.lineTo(14 * gs, 0); ctx.closePath()
       const tg = ctx.createLinearGradient(0, 0, 0, 192 * gs)
-      tg.addColorStop(0, 'rgba(91,164,201,0.0425)'); tg.addColorStop(0.5, 'rgba(91,164,201,0.02)')
+      tg.addColorStop(0, 'rgba(91,164,201,0.0255)'); tg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
       tg.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = tg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.068)'; ctx.lineWidth = 1.04; ctx.stroke()
+      ctx.strokeStyle = 'rgba(145,195,225,0.041)'; ctx.lineWidth = 1.04; ctx.stroke()
       ctx.restore()
       // Head
       headPath(ctx, gs)
       const hfg = ctx.createRadialGradient(0, -6 * gs, 0, 0, 0, 52 * gs)
-      hfg.addColorStop(0, 'rgba(91,164,201,0.051)'); hfg.addColorStop(0.5, 'rgba(91,164,201,0.02)')
-      hfg.addColorStop(1, 'rgba(91,164,201,0.005)'); ctx.fillStyle = hfg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.094)'; ctx.lineWidth = 1.3; ctx.stroke()
-      headPath(ctx, gs * 0.72); ctx.strokeStyle = 'rgba(139,126,184,0.0425)'; ctx.lineWidth = 0.65; ctx.stroke()
+      hfg.addColorStop(0, 'rgba(91,164,201,0.031)'); hfg.addColorStop(0.5, 'rgba(91,164,201,0.012)')
+      hfg.addColorStop(1, 'rgba(91,164,201,0.003)'); ctx.fillStyle = hfg; ctx.fill()
+      ctx.strokeStyle = 'rgba(145,195,225,0.056)'; ctx.lineWidth = 1.3; ctx.stroke()
+      headPath(ctx, gs * 0.72); ctx.strokeStyle = 'rgba(139,126,184,0.0255)'; ctx.lineWidth = 0.65; ctx.stroke()
       ctx.restore()
 
       // ── Governance ring — upper left area ──
@@ -691,7 +691,7 @@ function SuiteAmbientCanvas() {
         ctx.beginPath()
         ctx.moveTo(Math.cos(a) * (rr - rr * 0.035 - len), Math.sin(a) * (rr - rr * 0.035 - len))
         ctx.lineTo(Math.cos(a) * (rr - rr * 0.035), Math.sin(a) * (rr - rr * 0.035))
-        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.136 : 0.0425})`; ctx.lineWidth = major ? 1.17 : 0.52
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.07 : 0.02})`; ctx.lineWidth = major ? 1.17 : 0.52
         ctx.lineCap = 'round'; ctx.stroke()
       }
       ctx.restore(); ctx.restore()
@@ -699,9 +699,7 @@ function SuiteAmbientCanvas() {
       // ── 4 orbs scattered ──
       for (const orb of [
         { x: 0.05, y: 0.48, r: 0.08, ph: 0 },
-        { x: 0.72, y: 0.08, r: 0.064, ph: 1.8 },
         { x: 0.94, y: 0.7, r: 0.056, ph: 3.5 },
-        { x: 0.32, y: 0.92, r: 0.048, ph: 5.1 },
       ]) {
         const or = vmin * orb.r
         const oa = t * (0.16 + orb.ph * 0.006) + orb.ph
@@ -722,7 +720,7 @@ function SuiteAmbientCanvas() {
         { x: w * 0.88, y: h * 0.22 },
         { x: w * 0.08, y: h * 0.12 },
         { x: w * 0.05, y: h * 0.48 },
-      ], { opacity: 0.3, hue: 'silver', phaseOffset: 0 })
+      ], { opacity: 0.18, hue: 'silver', phaseOffset: 0 })
     }
 
     resize(); window.addEventListener('resize', resize)

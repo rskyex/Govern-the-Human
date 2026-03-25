@@ -414,7 +414,7 @@ function drawSinkingGhost(
 
   // Subsurface glow
   ctx.save()
-  ctx.shadowColor = `rgba(91,164,201,${0.16 * f})`
+  ctx.shadowColor = `rgba(91,164,201,${0.08 * f})`
   ctx.shadowBlur = 28 * s
   drawTorso(ctx, s)
   ctx.strokeStyle = 'rgba(91,164,201,0.005)'
@@ -425,9 +425,9 @@ function drawSinkingGhost(
   // Primary fill
   drawTorso(ctx, s)
   const tg = ctx.createLinearGradient(-15 * s, 0, 15 * s, 192 * s)
-  tg.addColorStop(0, `rgba(91,164,201,${0.07 * f})`)
-  tg.addColorStop(0.3, `rgba(91,164,201,${0.04 * f})`)
-  tg.addColorStop(0.65, `rgba(91,164,201,${0.018 * f})`)
+  tg.addColorStop(0, `rgba(91,164,201,${0.038 * f})`)
+  tg.addColorStop(0.3, `rgba(91,164,201,${0.022 * f})`)
+  tg.addColorStop(0.65, `rgba(91,164,201,${0.01 * f})`)
   tg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.fillStyle = tg
   ctx.fill()
@@ -435,11 +435,11 @@ function drawSinkingGhost(
   // Rim — surface tension
   drawTorso(ctx, s)
   const teg = ctx.createLinearGradient(0, 0, 0, 192 * s)
-  teg.addColorStop(0, `rgba(145,195,225,${0.14 * f})`)
+  teg.addColorStop(0, `rgba(145,195,225,${0.07 * f})`)
   teg.addColorStop(0.4, `rgba(91,164,201,${0.06 * f})`)
   teg.addColorStop(1, 'rgba(91,164,201,0)')
   ctx.strokeStyle = teg
-  ctx.lineWidth = 1.6
+  ctx.lineWidth = 1.0
   ctx.stroke()
 
   // Frosted inner echo
@@ -455,8 +455,8 @@ function drawSinkingGhost(
   // ── Head — blown glass, depth-faded ──
   // Glow
   ctx.save()
-  ctx.shadowColor = `rgba(91,164,201,${0.2 * f})`
-  ctx.shadowBlur = 36 * s
+  ctx.shadowColor = `rgba(91,164,201,${0.1 * f})`
+  ctx.shadowBlur = 22 * s
   drawHead(ctx, s)
   ctx.strokeStyle = 'rgba(91,164,201,0.005)'
   ctx.lineWidth = 1.5
@@ -466,17 +466,17 @@ function drawSinkingGhost(
   // Primary subsurface
   drawHead(ctx, s)
   const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, 0, 52 * s)
-  hg.addColorStop(0, `rgba(91,164,201,${0.08 * f})`)
-  hg.addColorStop(0.4, `rgba(91,164,201,${0.045 * f})`)
-  hg.addColorStop(0.8, `rgba(91,164,201,${0.02 * f})`)
+  hg.addColorStop(0, `rgba(91,164,201,${0.04 * f})`)
+  hg.addColorStop(0.4, `rgba(91,164,201,${0.024 * f})`)
+  hg.addColorStop(0.8, `rgba(91,164,201,${0.01 * f})`)
   hg.addColorStop(1, `rgba(91,164,201,${0.008 * f})`)
   ctx.fillStyle = hg
   ctx.fill()
 
   // Rim
   drawHead(ctx, s)
-  ctx.strokeStyle = `rgba(145,195,225,${0.16 * f})`
-  ctx.lineWidth = 1.7
+  ctx.strokeStyle = `rgba(145,195,225,${0.08 * f})`
+  ctx.lineWidth = 1.0
   ctx.stroke()
 
   // Frosted inner echo
@@ -501,7 +501,7 @@ function drawSinkingGhost(
       Math.cos(a2) * r2,
       Math.sin(a2) * r2,
     )
-    ctx.strokeStyle = `rgba(91,164,201,${(0.05 + Math.sin(t * 0.35 + i) * 0.018) * fadeMultiplier})`
+    ctx.strokeStyle = `rgba(91,164,201,${(0.03 + Math.sin(t * 0.35 + i) * 0.011) * fadeMultiplier})`
     ctx.lineWidth = 0.5
     ctx.stroke()
   }
@@ -530,7 +530,7 @@ function drawRing(
 
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
-  ctx.strokeStyle = 'rgba(91,164,201,0.09)'
+  ctx.strokeStyle = 'rgba(91,164,201,0.05)'
   ctx.lineWidth = r * 0.1
   ctx.stroke()
 
@@ -558,7 +558,7 @@ function drawRing(
     ctx.beginPath()
     ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner)
     ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer)
-    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.18 : 0.07})`
+    ctx.strokeStyle = `rgba(91,164,201,${major ? 0.09 : 0.035})`
     ctx.lineWidth = major ? 1.7 : 0.9
     ctx.stroke()
   }
@@ -584,7 +584,7 @@ function drawRing(
   ctx.moveTo(0, 0)
   ctx.lineTo(Math.cos(handA) * r * 0.7, Math.sin(handA) * r * 0.7)
   const hg = ctx.createLinearGradient(0, 0, Math.cos(handA) * r * 0.7, Math.sin(handA) * r * 0.7)
-  hg.addColorStop(0, 'rgba(91,164,201,0.09)')
+  hg.addColorStop(0, 'rgba(91,164,201,0.045)')
   hg.addColorStop(1, 'rgba(91,164,201,0.015)')
   ctx.strokeStyle = hg
   ctx.lineWidth = 1
@@ -624,12 +624,12 @@ function drawOrb(
   ctx.beginPath()
   ctx.arc(0, 0, r, 0, Math.PI * 2)
   const sg = ctx.createRadialGradient(-r * 0.2, -r * 0.25, 0, 0, 0, r)
-  sg.addColorStop(0, 'rgba(91,164,201,0.055)')
-  sg.addColorStop(0.5, 'rgba(91,164,201,0.025)')
+  sg.addColorStop(0, 'rgba(91,164,201,0.03)')
+  sg.addColorStop(0.5, 'rgba(91,164,201,0.013)')
   sg.addColorStop(1, 'rgba(91,164,201,0.008)')
   ctx.fillStyle = sg
   ctx.fill()
-  ctx.strokeStyle = 'rgba(91,164,201,0.1)'
+  ctx.strokeStyle = 'rgba(91,164,201,0.05)'
   ctx.lineWidth = 1
   ctx.stroke()
 
@@ -740,30 +740,30 @@ function GapCanvas() {
       drawGlassRibbon(ctx, w, h, t, {
         x0: -0.05, y0: 0.05, x1: 1.06, y1: 0.9,
         cp1x: 0.68, cp1y: 0.22, cp2x: 0.78, cp2y: 0.55,
-        width: vmin * 0.09, opacity: 0.65, hue: 'blue', phaseOffset: 0, speed: 0.6,
+        width: vmin * 0.09, opacity: 0.39, hue: 'blue', phaseOffset: 0, speed: 0.6,
       })
       drawGlassRibbon(ctx, w, h, t, {
         x0: 1.04, y0: 0.15, x1: -0.04, y1: 0.75,
         cp1x: 0.7, cp1y: 0.4, cp2x: 0.3, cp2y: 0.35,
-        width: vmin * 0.055, opacity: 0.4, hue: 'silver', phaseOffset: 3.5, speed: 0.5,
+        width: vmin * 0.055, opacity: 0.24, hue: 'silver', phaseOffset: 3.5, speed: 0.5,
       })
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.2, y0: 1.05, x1: 0.85, y1: 0.2,
         cp1x: 0.35, cp1y: 0.65, cp2x: 0.6, cp2y: 0.55,
-        width: vmin * 0.035, opacity: 0.35, hue: 'violet', phaseOffset: 6.0, speed: 0.45,
+        width: vmin * 0.035, opacity: 0.21, hue: 'violet', phaseOffset: 6.0, speed: 0.45,
       })
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.64, y0: 0.12, x1: 0.84, y1: 0.55,
         cp1x: 0.86, cp1y: 0.22, cp2x: 0.88, cp2y: 0.42,
-        width: vmin * 0.04, opacity: 0.4, hue: 'violet', phaseOffset: 8.5, speed: 0.45,
+        width: vmin * 0.04, opacity: 0.24, hue: 'violet', phaseOffset: 8.5, speed: 0.45,
       })
       drawMembrane(ctx, w, h, t, {
         points: [[0.1, 0.15], [0.55, 0.05], [0.9, 0.25], [0.85, 0.65], [0.5, 0.8], [0.08, 0.5]],
-        opacity: 0.35, hue: 'blue', phaseOffset: 1.5,
+        opacity: 0.21, hue: 'blue', phaseOffset: 1.5,
       })
       drawMembrane(ctx, w, h, t, {
         points: ghostShellPoints(0.74, 0.35, 1.6),
-        opacity: 0.2, hue: 'silver', phaseOffset: 5.0,
+        opacity: 0.12, hue: 'silver', phaseOffset: 5.0,
       })
 
       // ── Primary ring — upper-left, the analytical lens ──
@@ -776,39 +776,23 @@ function GapCanvas() {
         t,
       )
 
-      // ── Secondary ring — lower-left, smaller, deeper ──
-      drawRing(
-        ctx,
-        w * 0.06 + Math.sin(t * 0.33) * 3,
-        h * 0.72 + Math.cos(t * 0.25) * 3,
-        vmin * 0.15,
-        t + 2.5,
-      )
-
       // ── Sinking ghost — right side, descending, larger ──
       const ghostScale = vmin / 360
       drawSinkingGhost(ctx, w * 0.74, h * 0.3, ghostScale, t, h)
 
-      // ── Ghost echo — fainter reflection, offset ──
-      drawSinkingGhost(ctx, w * 0.62, h * 0.45, vmin / 520, t - 0.4, h)
-
-      // ── Orbs at depth-zone boundaries — 5 total, larger ──
+      // ── Orbs at depth-zone boundaries — 3 total ──
       drawOrb(ctx, w * 0.9, h * 0.22, vmin * 0.068, t, 0)
-      drawOrb(ctx, w * 0.88, h * 0.42, vmin * 0.06, t, 1.2)
       drawOrb(ctx, w * 0.72, h * 0.58, vmin * 0.052, t, 2.5)
-      drawOrb(ctx, w * 0.85, h * 0.75, vmin * 0.045, t, 3.8)
       drawOrb(ctx, w * 0.06, h * 0.48, vmin * 0.057, t, 5.2)
 
       drawInfrastructureLines(ctx, t, [
         { x: w * 0.14, y: h * 0.1 },
         { x: w * 0.74, y: h * 0.3 },
         { x: w * 0.9, y: h * 0.22 },
-        { x: w * 0.88, y: h * 0.42 },
         { x: w * 0.72, y: h * 0.58 },
-        { x: w * 0.06, y: h * 0.72 },
-      ], { opacity: 0.4, hue: 'silver', phaseOffset: 0 })
+      ], { opacity: 0.22, hue: 'silver', phaseOffset: 0 })
 
-      drawDissolutionZone(ctx, w * 0.74, h * 0.3, vmin / 360, w * 0.78, h * 0.35, t, 0.45)
+      drawDissolutionZone(ctx, w * 0.74, h * 0.3, vmin / 360, w * 0.78, h * 0.35, t, 0.22)
     }
 
     resize()

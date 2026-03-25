@@ -395,25 +395,25 @@ function ClosingCanvas() {
       drawGlassRibbon(ctx, w, h, t, {
         x0: -0.08, y0: 0.3, x1: 1.08, y1: 0.6,
         cp1x: 0.45, cp1y: 0.30, cp2x: 0.55, cp2y: 0.50,
-        width: vmin * 0.08, opacity: 0.5, hue: 'silver', phaseOffset: 0, speed: 0.4,
+        width: vmin * 0.08, opacity: 0.325, hue: 'silver', phaseOffset: 0, speed: 0.4,
       })
       drawGlassRibbon(ctx, w, h, t, {
         x0: 1.05, y0: 0.15, x1: -0.05, y1: 0.7,
         cp1x: 0.65, cp1y: 0.45, cp2x: 0.35, cp2y: 0.35,
-        width: vmin * 0.05, opacity: 0.35, hue: 'blue', phaseOffset: 4.0, speed: 0.35,
+        width: vmin * 0.05, opacity: 0.228, hue: 'blue', phaseOffset: 4.0, speed: 0.35,
       })
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.38, y0: 0.2, x1: 0.62, y1: 0.65,
         cp1x: 0.62, cp1y: 0.28, cp2x: 0.64, cp2y: 0.52,
-        width: vmin * 0.035, opacity: 0.3, hue: 'violet', phaseOffset: 9.5, speed: 0.35,
+        width: vmin * 0.035, opacity: 0.195, hue: 'violet', phaseOffset: 9.5, speed: 0.35,
       })
       drawMembrane(ctx, w, h, t, {
         points: [[0.2, 0.2], [0.6, 0.12], [0.85, 0.35], [0.78, 0.65], [0.4, 0.72], [0.15, 0.48]],
-        opacity: 0.25, hue: 'silver', phaseOffset: 2.5,
+        opacity: 0.163, hue: 'silver', phaseOffset: 2.5,
       })
       drawMembrane(ctx, w, h, t, {
         points: ghostShellPoints(0.5, 0.42, 1.4),
-        opacity: 0.15, hue: 'silver', phaseOffset: 6.0,
+        opacity: 0.098, hue: 'silver', phaseOffset: 6.0,
       })
 
       // ── Large governance ring — centre, the structure that persists ──
@@ -422,9 +422,9 @@ function ClosingCanvas() {
       const ringCy = h * 0.46 + Math.cos(t * 0.62) * 4
       ctx.save()
       ctx.translate(ringCx, ringCy)
-      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.1)'; ctx.shadowBlur = 24
+      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.1)'; ctx.shadowBlur = 14
       ctx.beginPath(); ctx.arc(0, 0, ringR, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.06)'; ctx.lineWidth = ringR * 0.07; ctx.stroke(); ctx.restore()
+      ctx.strokeStyle = 'rgba(91,164,201,0.035)'; ctx.lineWidth = ringR * 0.07; ctx.stroke(); ctx.restore()
       ctx.beginPath(); ctx.arc(0, 0, ringR * 0.76, 0, Math.PI * 2)
       ctx.strokeStyle = 'rgba(91,164,201,0.03)'; ctx.lineWidth = ringR * 0.02; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, ringR * 0.54, 0, Math.PI * 2)
@@ -437,7 +437,7 @@ function ClosingCanvas() {
         ctx.beginPath()
         ctx.moveTo(Math.cos(a) * (ringR - ringR * 0.035 - len), Math.sin(a) * (ringR - ringR * 0.035 - len))
         ctx.lineTo(Math.cos(a) * (ringR - ringR * 0.035), Math.sin(a) * (ringR - ringR * 0.035))
-        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.13 : 0.04})`; ctx.lineWidth = major ? 1.3 : 0.52
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.07 : 0.02})`; ctx.lineWidth = major ? 1.3 : 0.52
         ctx.lineCap = 'round'; ctx.stroke()
       }
       ctx.restore()
@@ -455,48 +455,33 @@ function ClosingCanvas() {
       ctx.translate(gcx, gcy)
       ctx.scale(breathe, breathe)
       // Glow
-      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.14)'; ctx.shadowBlur = 30 * s
-      headPath(ctx, s); ctx.strokeStyle = 'rgba(91,164,201,0.004)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore()
+      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.084)'; ctx.shadowBlur = 30 * s
+      headPath(ctx, s); ctx.strokeStyle = 'rgba(91,164,201,0.0024)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore()
       // Torso
       ctx.save(); ctx.translate(0, 40 * s)
       torsoPath(ctx, s)
       const tg = ctx.createLinearGradient(-10 * s, 0, 10 * s, 192 * s)
-      tg.addColorStop(0, 'rgba(91,164,201,0.048)'); tg.addColorStop(0.4, 'rgba(91,164,201,0.024)')
+      tg.addColorStop(0, 'rgba(91,164,201,0.029)'); tg.addColorStop(0.4, 'rgba(91,164,201,0.014)')
       tg.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = tg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.056)'; ctx.lineWidth = 0.91; ctx.stroke()
+      ctx.strokeStyle = 'rgba(145,195,225,0.034)'; ctx.lineWidth = 0.91; ctx.stroke()
       torsoPath(ctx, s * 0.86)
-      ctx.fillStyle = 'rgba(139,126,184,0.01)'; ctx.fill()
-      ctx.strokeStyle = 'rgba(139,126,184,0.029)'; ctx.lineWidth = 0.52; ctx.stroke()
+      ctx.fillStyle = 'rgba(139,126,184,0.006)'; ctx.fill()
+      ctx.strokeStyle = 'rgba(139,126,184,0.017)'; ctx.lineWidth = 0.52; ctx.stroke()
       ctx.restore()
       // Head
       headPath(ctx, s)
       const hg = ctx.createRadialGradient(0, -4 * s, 0, 0, 0, 52 * s)
-      hg.addColorStop(0, 'rgba(91,164,201,0.06)'); hg.addColorStop(0.5, 'rgba(91,164,201,0.026)')
-      hg.addColorStop(1, 'rgba(91,164,201,0.005)'); ctx.fillStyle = hg; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.08)'; ctx.lineWidth = 1.17; ctx.stroke()
-      headPath(ctx, s * 0.68); ctx.fillStyle = 'rgba(139,126,184,0.008)'; ctx.fill()
-      ctx.strokeStyle = 'rgba(139,126,184,0.035)'; ctx.lineWidth = 0.52; ctx.stroke()
-      ctx.restore()
-
-      // ── Ghost echo — offset, even fainter (the unresolved double) ──
-      ctx.save()
-      ctx.translate(gcx + 24, gcy + 16 + Math.sin(t * 0.9) * 4)
-      ctx.scale(breathe * 0.88, breathe * 0.88)
-      ctx.save(); ctx.translate(0, 40 * s * 0.8)
-      torsoPath(ctx, s * 0.8)
-      ctx.fillStyle = 'rgba(91,164,201,0.012)'; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.023)'; ctx.lineWidth = 0.5; ctx.stroke()
-      ctx.restore()
-      headPath(ctx, s * 0.8)
-      ctx.fillStyle = 'rgba(91,164,201,0.015)'; ctx.fill()
-      ctx.strokeStyle = 'rgba(91,164,201,0.03)'; ctx.lineWidth = 0.5; ctx.stroke()
+      hg.addColorStop(0, 'rgba(91,164,201,0.036)'); hg.addColorStop(0.5, 'rgba(91,164,201,0.016)')
+      hg.addColorStop(1, 'rgba(91,164,201,0.003)'); ctx.fillStyle = hg; ctx.fill()
+      ctx.strokeStyle = 'rgba(145,195,225,0.048)'; ctx.lineWidth = 1.17; ctx.stroke()
+      headPath(ctx, s * 0.68); ctx.fillStyle = 'rgba(139,126,184,0.005)'; ctx.fill()
+      ctx.strokeStyle = 'rgba(139,126,184,0.021)'; ctx.lineWidth = 0.52; ctx.stroke()
       ctx.restore()
 
       // ── Orbs — 3, faint, at edges ──
       for (const orb of [
         { x: 0.12, y: 0.3, r: 0.08, ph: 0 },
         { x: 0.88, y: 0.65, r: 0.065, ph: 2.3 },
-        { x: 0.35, y: 0.8, r: 0.048, ph: 4.7 },
       ]) {
         const or = vmin * orb.r
         const oa = t * (0.16 + orb.ph * 0.006) + orb.ph
@@ -516,9 +501,9 @@ function ClosingCanvas() {
         { x: w * 0.5, y: h * 0.4 },
         { x: ringCx, y: ringCy },
         { x: w * 0.12, y: h * 0.3 },
-      ], { opacity: 0.2, hue: 'silver', phaseOffset: 0 })
+      ], { opacity: 0.12, hue: 'silver', phaseOffset: 0 })
 
-      drawDissolutionZone(ctx, w * 0.5, h * 0.4, vmin / 420, w * 0.52, h * 0.38, t, 0.3)
+      drawDissolutionZone(ctx, w * 0.5, h * 0.4, vmin / 420, w * 0.52, h * 0.38, t, 0.15)
     }
 
     resize()

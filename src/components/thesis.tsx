@@ -379,9 +379,9 @@ function ThesisCanvas() {
       ctx.strokeStyle = 'rgba(91,164,201,0.005)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore()
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
       const og = ctx.createRadialGradient(-r * 0.18, -r * 0.22, 0, 0, 0, r)
-      og.addColorStop(0, 'rgba(91,164,201,0.07)'); og.addColorStop(0.4, 'rgba(91,164,201,0.03)')
+      og.addColorStop(0, 'rgba(91,164,201,0.035)'); og.addColorStop(0.4, 'rgba(91,164,201,0.015)')
       og.addColorStop(1, 'rgba(91,164,201,0.003)'); ctx.fillStyle = og; ctx.fill()
-      ctx.strokeStyle = 'rgba(145,195,225,0.11)'; ctx.lineWidth = 0.8; ctx.stroke()
+      ctx.strokeStyle = 'rgba(145,195,225,0.055)'; ctx.lineWidth = 0.8; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, r * 0.62, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(139,126,184,0.01)'; ctx.fill()
       ctx.strokeStyle = 'rgba(139,126,184,0.035)'; ctx.lineWidth = 0.4; ctx.stroke()
@@ -391,9 +391,9 @@ function ThesisCanvas() {
     function drawRingCompact(cx: number, cy: number, r: number, t: number) {
       if (!ctx) return
       ctx.save(); ctx.translate(cx, cy)
-      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.14)'; ctx.shadowBlur = 12
+      ctx.save(); ctx.shadowColor = 'rgba(91,164,201,0.07)'; ctx.shadowBlur = 12
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
-      ctx.strokeStyle = 'rgba(91,164,201,0.085)'; ctx.lineWidth = r * 0.08; ctx.stroke(); ctx.restore()
+      ctx.strokeStyle = 'rgba(91,164,201,0.045)'; ctx.lineWidth = r * 0.08; ctx.stroke(); ctx.restore()
       ctx.beginPath(); ctx.arc(0, 0, r * 0.76, 0, Math.PI * 2)
       ctx.strokeStyle = 'rgba(91,164,201,0.025)'; ctx.lineWidth = r * 0.025; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, r * 0.56, 0, Math.PI * 2)
@@ -405,13 +405,13 @@ function ThesisCanvas() {
         ctx.beginPath()
         ctx.moveTo(Math.cos(a) * (r - r * 0.04 - len), Math.sin(a) * (r - r * 0.04 - len))
         ctx.lineTo(Math.cos(a) * (r - r * 0.04), Math.sin(a) * (r - r * 0.04))
-        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.2 : 0.065})`; ctx.lineWidth = major ? 1.2 : 0.5
+        ctx.strokeStyle = `rgba(91,164,201,${major ? 0.1 : 0.03})`; ctx.lineWidth = major ? 1.2 : 0.5
         ctx.lineCap = 'round'; ctx.stroke()
       }
       ctx.restore()
       const ha = t * 0.065; ctx.beginPath(); ctx.moveTo(0, 0)
       ctx.lineTo(Math.cos(ha) * r * 0.65, Math.sin(ha) * r * 0.65)
-      ctx.strokeStyle = 'rgba(91,164,201,0.08)'; ctx.lineWidth = 0.8; ctx.lineCap = 'round'; ctx.stroke()
+      ctx.strokeStyle = 'rgba(91,164,201,0.04)'; ctx.lineWidth = 0.8; ctx.lineCap = 'round'; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, 1.8, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(91,164,201,0.1)'; ctx.fill()
       ctx.restore()
@@ -423,13 +423,13 @@ function ThesisCanvas() {
       ctx.save(); ctx.translate(cx + Math.sin(t * 0.33) * 5, cy + Math.sin(t * 0.42) * 9)
       ctx.rotate(tilt)
       // Glow
-      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.2 * opacity})`; ctx.shadowBlur = 38 * s
+      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.1 * opacity})`; ctx.shadowBlur = 24 * s
       drawCranialProfile(ctx, s); ctx.strokeStyle = 'rgba(91,164,201,0.005)'; ctx.lineWidth = 2; ctx.stroke(); ctx.restore()
       // Fill
       drawCranialProfile(ctx, s)
       const fg = ctx.createRadialGradient(10 * s, -20 * s, 0, 0, 0, 95 * s)
-      fg.addColorStop(0, `rgba(91,164,201,${0.075 * opacity})`); fg.addColorStop(0.35, `rgba(91,164,201,${0.042 * opacity})`)
-      fg.addColorStop(0.7, `rgba(91,164,201,${0.017 * opacity})`); fg.addColorStop(1, 'rgba(91,164,201,0)')
+      fg.addColorStop(0, `rgba(91,164,201,${0.04 * opacity})`); fg.addColorStop(0.35, `rgba(91,164,201,${0.022 * opacity})`)
+      fg.addColorStop(0.7, `rgba(91,164,201,${0.008 * opacity})`); fg.addColorStop(1, 'rgba(91,164,201,0)')
       ctx.fillStyle = fg; ctx.fill()
       // Secondary subsurface
       drawCranialProfile(ctx, s * 0.9)
@@ -438,23 +438,23 @@ function ThesisCanvas() {
       ctx.fillStyle = fg2; ctx.fill()
       // Rim
       drawCranialProfile(ctx, s)
-      ctx.strokeStyle = `rgba(145,195,225,${0.17 * opacity})`; ctx.lineWidth = 1.8; ctx.stroke()
+      ctx.strokeStyle = `rgba(145,195,225,${0.09 * opacity})`; ctx.lineWidth = 1.1; ctx.stroke()
       drawCranialProfile(ctx, s * 0.97)
-      ctx.strokeStyle = `rgba(180,215,235,${0.06 * opacity})`; ctx.lineWidth = 0.5; ctx.stroke()
+      ctx.strokeStyle = `rgba(180,215,235,${0.03 * opacity})`; ctx.lineWidth = 0.5; ctx.stroke()
       // Frosted inner shells
       const shells = [0.8, 0.6, 0.42]
       shells.forEach((sc, i) => {
         const lag = Math.sin(t * 0.33 - 0.1 * (i + 1)) * 1.5
         ctx.save(); ctx.translate(lag, Math.cos(t * 0.42 - 0.08 * (i + 1)) * 1)
         drawCranialProfile(ctx, s * sc)
-        ctx.fillStyle = `rgba(139,126,184,${[0.019, 0.01, 0.005][i] * opacity})`; ctx.fill()
-        ctx.strokeStyle = `rgba(139,126,184,${[0.072, 0.04, 0.024][i] * opacity})`
+        ctx.fillStyle = `rgba(139,126,184,${[0.01, 0.005, 0.002][i] * opacity})`; ctx.fill()
+        ctx.strokeStyle = `rgba(139,126,184,${[0.035, 0.02, 0.012][i] * opacity})`
         ctx.lineWidth = 0.55 - i * 0.1; ctx.stroke(); ctx.restore()
       })
       // Caustics
       ctx.save(); drawCranialProfile(ctx, s); ctx.clip()
       const hl = ctx.createRadialGradient(-10 * s, -40 * s, 0, -10 * s, -40 * s, 30 * s)
-      hl.addColorStop(0, `rgba(255,255,255,${0.14 * opacity})`); hl.addColorStop(0.3, `rgba(255,255,255,${0.05 * opacity})`)
+      hl.addColorStop(0, `rgba(255,255,255,${0.07 * opacity})`); hl.addColorStop(0.3, `rgba(255,255,255,${0.05 * opacity})`)
       hl.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = hl
       ctx.fillRect(-55 * s, -100 * s, 110 * s, 90 * s); ctx.restore()
       ctx.restore()
@@ -473,47 +473,44 @@ function ThesisCanvas() {
       drawGlassRibbon(ctx, w, h, t, {
         x0: -0.06, y0: 0.35, x1: 1.08, y1: 0.55,
         cp1x: 0.72, cp1y: 0.30, cp2x: 0.82, cp2y: 0.58,
-        width: vmin * 0.09, opacity: 0.8, hue: 'blue', phaseOffset: 0, speed: 0.7,
+        width: vmin * 0.09, opacity: 0.5, hue: 'blue', phaseOffset: 0, speed: 0.7,
       })
 
       // Silver ribbon: counter-flow from right side
       drawGlassRibbon(ctx, w, h, t, {
         x0: 1.05, y0: 0.2, x1: 0.1, y1: 0.8,
         cp1x: 0.70, cp1y: 0.50, cp2x: 0.35, cp2y: 0.45,
-        width: vmin * 0.06, opacity: 0.5, hue: 'silver', phaseOffset: 3.0, speed: 0.6,
+        width: vmin * 0.06, opacity: 0.3, hue: 'silver', phaseOffset: 3.0, speed: 0.6,
       })
 
       // Mint thread: thin, across lower area
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.2, y0: 0.9, x1: 0.85, y1: 0.6,
         cp1x: 0.4, cp1y: 0.7, cp2x: 0.65, cp2y: 0.8,
-        width: vmin * 0.035, opacity: 0.4, hue: 'mint', phaseOffset: 6.0, speed: 0.5,
+        width: vmin * 0.035, opacity: 0.25, hue: 'mint', phaseOffset: 6.0, speed: 0.5,
       })
 
       // Body-wrapping ribbon around the cranial head
       drawGlassRibbon(ctx, w, h, t, {
         x0: 0.68, y0: 0.28, x1: 0.88, y1: 0.68,
         cp1x: 0.90, cp1y: 0.38, cp2x: 0.92, cp2y: 0.56,
-        width: vmin * 0.035, opacity: 0.4, hue: 'violet', phaseOffset: 9.0, speed: 0.45,
+        width: vmin * 0.035, opacity: 0.25, hue: 'violet', phaseOffset: 9.0, speed: 0.45,
       })
 
       // ── Membrane — translucent area behind the text region ──
       drawMembrane(ctx, w, h, t, {
         points: [[0.1, 0.3], [0.5, 0.15], [0.85, 0.35], [0.75, 0.7], [0.35, 0.75], [0.05, 0.55]],
-        opacity: 0.4, hue: 'blue', phaseOffset: 2.0,
+        opacity: 0.25, hue: 'blue', phaseOffset: 2.0,
       })
 
       // ── Identity-shell membrane ──
       drawMembrane(ctx, w, h, t, {
         points: ghostShellPoints(0.78, 0.48, 1.5),
-        opacity: 0.2, hue: 'silver', phaseOffset: 5.5,
+        opacity: 0.12, hue: 'silver', phaseOffset: 5.5,
       })
 
       // ── Primary cranial profile — right side, large ──
       drawCranialHead(w * 0.78, h * 0.48, vmin / 170, t, 1)
-
-      // ── Mirror echo — left side, fainter, slightly delayed ──
-      drawCranialHead(w * 0.15, h * 0.38, vmin / 240, t - 0.4, 0.45)
 
       // ── Governance ring — left-centre, large, partially behind text ──
       drawRingCompact(
@@ -522,26 +519,24 @@ function ThesisCanvas() {
         vmin * 0.28, t,
       )
 
-      // ── Orbs — 4, scattered at different scales ──
+      // ── Orbs — 2, scattered at different scales ──
       drawOrb(w * 0.06, h * 0.28, vmin * 0.1, t, 0)
       drawOrb(w * 0.42, h * 0.15, vmin * 0.07, t, 1.8)
-      drawOrb(w * 0.92, h * 0.72, vmin * 0.085, t, 3.5)
-      drawOrb(w * 0.55, h * 0.82, vmin * 0.055, t, 5.2)
 
       // ── Infrastructure lines — soft control network ──
       drawInfrastructureLines(ctx, t, [
         { x: w * 0.15, y: h * 0.38 },
         { x: w * 0.28 + Math.sin(t * 0.74) * 3, y: h * 0.68 + Math.cos(t * 0.62) * 2 },
         { x: w * 0.78, y: h * 0.48 },
-      ], { opacity: 0.35, hue: 'silver', phaseOffset: 0 })
+      ], { opacity: 0.2, hue: 'silver', phaseOffset: 0 })
 
       drawInfrastructureLines(ctx, t, [
         { x: w * 0.78, y: h * 0.48 },
         { x: w * 0.92, y: h * 0.72 },
-      ], { opacity: 0.25, hue: 'blue', phaseOffset: 2.5 })
+      ], { opacity: 0.15, hue: 'blue', phaseOffset: 2.5 })
 
       // ── Dissolution zone ──
-      drawDissolutionZone(ctx, w * 0.78, h * 0.48, vmin / 170, w * 0.82, h * 0.40, t, 0.4)
+      drawDissolutionZone(ctx, w * 0.78, h * 0.48, vmin / 170, w * 0.82, h * 0.40, t, 0.2)
     }
 
     resize()

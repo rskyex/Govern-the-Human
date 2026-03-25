@@ -444,7 +444,7 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
       drawGlassRibbon(ctx, w, h, t, {
         x0: -0.05, y0: 0.3 + depth * 0.1, x1: 1.05, y1: 0.6 - depth * 0.05,
         cp1x: 0.3, cp1y: 0.15 + depth * 0.1, cp2x: 0.74, cp2y: 0.42 + depth * 0.1,
-        width: vmin * (0.07 + depth * 0.02), opacity: (0.7 - depth * 0.15) * opMul,
+        width: vmin * (0.07 + depth * 0.02), opacity: (0.7 - depth * 0.15) * 0.65 * opMul,
         hue: depth === 0 ? 'blue' : depth === 1 ? 'violet' : 'silver',
         phaseOffset: depth * 2.5, speed: 0.6,
       })
@@ -453,7 +453,7 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
       drawGlassRibbon(ctx, w, h, t, {
         x0: 1.06, y0: 0.2 + depth * 0.15, x1: -0.06, y1: 0.7 + depth * 0.05,
         cp1x: 0.65, cp1y: 0.5, cp2x: 0.35, cp2y: 0.4 + depth * 0.1,
-        width: vmin * (0.04 + depth * 0.015), opacity: (0.45 - depth * 0.1) * opMul,
+        width: vmin * (0.04 + depth * 0.015), opacity: (0.45 - depth * 0.1) * 0.65 * opMul,
         hue: 'silver', phaseOffset: depth * 3.5 + 1.5, speed: 0.5,
       })
 
@@ -477,7 +477,7 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
         cp1x: 0.88 - depth * 0.03, cp1y: 0.38 + depth * 0.04,
         cp2x: 0.90 - depth * 0.03, cp2y: 0.56 + depth * 0.04,
         width: vmin * (0.03 + depth * 0.008),
-        opacity: (0.4 - depth * 0.08) * opMul,
+        opacity: (0.4 - depth * 0.08) * 0.65 * opMul,
         hue: 'violet', phaseOffset: 9.0 + depth, speed: 0.45,
       })
 
@@ -497,11 +497,11 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
       ctx.save(); ctx.translate(orbX, orbY)
       ctx.beginPath(); ctx.arc(0, 0, orbR, 0, Math.PI * 2)
       const og = ctx.createRadialGradient(-orbR * 0.18, -orbR * 0.2, 0, 0, 0, orbR)
-      og.addColorStop(0, `rgba(91,164,201,${0.054 * opMul})`); og.addColorStop(0.5, `rgba(91,164,201,${0.024 * opMul})`)
+      og.addColorStop(0, `rgba(91,164,201,${0.032 * opMul})`); og.addColorStop(0.5, `rgba(91,164,201,${0.014 * opMul})`)
       og.addColorStop(1, 'rgba(91,164,201,0)'); ctx.fillStyle = og; ctx.fill()
-      ctx.strokeStyle = `rgba(145,195,225,${0.094 * opMul})`; ctx.lineWidth = 0.78; ctx.stroke()
+      ctx.strokeStyle = `rgba(145,195,225,${0.056 * opMul})`; ctx.lineWidth = 0.78; ctx.stroke()
       ctx.beginPath(); ctx.arc(0, 0, orbR * 0.6, 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(139,126,184,${0.034 * opMul})`; ctx.lineWidth = 0.39; ctx.stroke()
+      ctx.strokeStyle = `rgba(139,126,184,${0.02 * opMul})`; ctx.lineWidth = 0.39; ctx.stroke()
       ctx.restore()
 
       // Ring fragment — arc, not full circle. Gets more enclosing with depth.
@@ -511,13 +511,13 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
       const arcSpan = Math.PI * (0.8 + depth * 0.4) // deeper = more enclosing
       const arcStart = -Math.PI * 0.5 + t * (0.032 + depth * 0.008) + depth * 1.2
       ctx.save(); ctx.translate(ringX, ringY)
-      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.085 * opMul})`; ctx.shadowBlur = 12
+      ctx.save(); ctx.shadowColor = `rgba(91,164,201,${0.051 * opMul})`; ctx.shadowBlur = 12
       ctx.beginPath(); ctx.arc(0, 0, ringR, arcStart, arcStart + arcSpan)
-      ctx.strokeStyle = `rgba(91,164,201,${0.068 * opMul})`; ctx.lineWidth = ringR * 0.078
+      ctx.strokeStyle = `rgba(91,164,201,${0.041 * opMul})`; ctx.lineWidth = ringR * 0.078
       ctx.lineCap = 'round'; ctx.stroke(); ctx.restore()
       // Inner arc
       ctx.beginPath(); ctx.arc(0, 0, ringR * 0.78, arcStart + 0.15, arcStart + arcSpan - 0.15)
-      ctx.strokeStyle = `rgba(139,126,184,${0.034 * opMul})`; ctx.lineWidth = ringR * 0.026
+      ctx.strokeStyle = `rgba(139,126,184,${0.02 * opMul})`; ctx.lineWidth = ringR * 0.026
       ctx.lineCap = 'round'; ctx.stroke()
       ctx.restore()
 
@@ -533,7 +533,7 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
       if (depth === 0) {
         // Layer I: Clear head profile — the knowable subject
         ctx.save()
-        ctx.shadowColor = `rgba(91,164,201,${0.136 * opMul})`
+        ctx.shadowColor = `rgba(91,164,201,${0.07 * opMul})`
         ctx.shadowBlur = 24 * s
         headPath(ctx, s)
         ctx.strokeStyle = 'rgba(91,164,201,0.017)'
@@ -543,13 +543,13 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
 
         headPath(ctx, s)
         const hg = ctx.createRadialGradient(0, -6 * s, 0, 0, 0, 55 * s)
-        hg.addColorStop(0, `rgba(91,164,201,${0.085 * opMul})`)
-        hg.addColorStop(0.6, `rgba(91,164,201,${0.034 * opMul})`)
+        hg.addColorStop(0, `rgba(91,164,201,${0.045 * opMul})`)
+        hg.addColorStop(0.6, `rgba(91,164,201,${0.018 * opMul})`)
         hg.addColorStop(1, 'rgba(91,164,201,0)')
         ctx.fillStyle = hg
         ctx.fill()
-        ctx.strokeStyle = `rgba(91,164,201,${0.17 * opMul})`
-        ctx.lineWidth = 1.56
+        ctx.strokeStyle = `rgba(91,164,201,${0.09 * opMul})`
+        ctx.lineWidth = 1.1
         ctx.stroke()
 
         headPath(ctx, s * 0.75)
@@ -566,12 +566,12 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
         ctx.translate(0, 45 * s)
         torsoPath(ctx, s * 0.7)
         const tg = ctx.createLinearGradient(0, 0, 0, 135 * s)
-        tg.addColorStop(0, `rgba(139,126,184,${0.06 * opMul})`)
-        tg.addColorStop(0.6, `rgba(139,126,184,${0.026 * opMul})`)
+        tg.addColorStop(0, `rgba(139,126,184,${0.032 * opMul})`)
+        tg.addColorStop(0.6, `rgba(139,126,184,${0.014 * opMul})`)
         tg.addColorStop(1, 'rgba(139,126,184,0)')
         ctx.fillStyle = tg
         ctx.fill()
-        ctx.strokeStyle = `rgba(139,126,184,${0.102 * opMul})`
+        ctx.strokeStyle = `rgba(139,126,184,${0.055 * opMul})`
         ctx.lineWidth = 1.3
         ctx.stroke()
 
@@ -579,7 +579,7 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
         ctx.save()
         ctx.translate(Math.sin(t * 0.314) * 3.5, Math.cos(t * 0.251) * 2.5)
         torsoPath(ctx, s * 0.58)
-        ctx.strokeStyle = `rgba(91,164,201,${0.043 * opMul})`
+        ctx.strokeStyle = `rgba(91,164,201,${0.022 * opMul})`
         ctx.lineWidth = 0.65
         ctx.stroke()
         ctx.restore()
@@ -589,7 +589,7 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
         ctx.save()
         ctx.translate(Math.sin(t * 0.251) * 2.5, 0)
         headPath(ctx, s * 0.55)
-        ctx.fillStyle = `rgba(139,126,184,${0.034 * opMul})`
+        ctx.fillStyle = `rgba(139,126,184,${0.018 * opMul})`
         ctx.fill()
         ctx.strokeStyle = `rgba(139,126,184,${0.085 * opMul})`
         ctx.lineWidth = 1.04
@@ -605,11 +605,11 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
         ctx.translate(0, 40 * s)
         torsoPath(ctx, s * 0.6)
         const tg = ctx.createLinearGradient(0, 0, 0, 115 * s)
-        tg.addColorStop(0, `rgba(91,164,201,${0.034 * opMul})`)
+        tg.addColorStop(0, `rgba(91,164,201,${0.018 * opMul})`)
         tg.addColorStop(1, 'rgba(91,164,201,0)')
         ctx.fillStyle = tg
         ctx.fill()
-        ctx.strokeStyle = `rgba(91,164,201,${0.051 * opMul})`
+        ctx.strokeStyle = `rgba(91,164,201,${0.028 * opMul})`
         ctx.lineWidth = 1.04
         ctx.stroke()
         ctx.restore()
@@ -636,10 +636,10 @@ function LayerCanvas({ layerIndex }: { layerIndex: number }) {
         { x: w * 0.78, y: h * 0.5 },
         { x: ringX, y: ringY },
         { x: orbX, y: orbY },
-      ], { opacity: (0.4 - depth * 0.1) * opMul, hue: depth === 0 ? 'blue' : 'silver', phaseOffset: depth * 2 })
+      ], { opacity: (0.4 - depth * 0.1) * 0.6 * opMul, hue: depth === 0 ? 'blue' : 'silver', phaseOffset: depth * 2 })
 
       // ── Dissolution zone ──
-      drawDissolutionZone(ctx, w * 0.78, h * 0.5, vmin / 210, w * 0.82, h * 0.42 + depth * 0.08, t, 0.35 * opMul)
+      drawDissolutionZone(ctx, w * 0.78, h * 0.5, vmin / 210, w * 0.82, h * 0.42 + depth * 0.08, t, 0.2 * opMul)
     }
 
     resize()
