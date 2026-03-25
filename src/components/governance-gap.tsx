@@ -203,7 +203,7 @@ export function GovernanceGap() {
         />
       </div>
 
-      <div className="relative bg-surface/90 py-20 md:py-28">
+      <div className="relative bg-surface/90 py-14 md:py-20">
         <div className="max-w-[1120px] mx-auto px-8 md:px-16">
           {/* Section number */}
           <Reveal>
