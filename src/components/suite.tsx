@@ -43,7 +43,7 @@ export function Suite() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-16 max-w-[640px]">
+          <p className="font-sans text-[0.95rem] leading-[1.9] text-text-subtitle font-light mb-16 max-w-[640px]">
             Three research instruments — each examining a different dimension of how AI
             systems reshape the human subject they are meant to serve.
           </p>
