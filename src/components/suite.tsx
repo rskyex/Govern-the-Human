@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Reveal } from '@/components/ui/reveal'
+import { IMAGES } from '@/lib/images'
 
 const INSTRUMENTS = [
   {
