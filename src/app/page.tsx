@@ -13,15 +13,15 @@ export default function Home() {
     <div className="min-h-screen bg-base">
       <Header />
       <Hero />
-      <SectionDivider image="/img-panoramic-calm.png" objectPosition="object-bottom" />
+      <SectionDivider />
       <Thesis />
-      <SectionDivider image="/img-arches-reflective.png" objectPosition="object-center" />
+      <SectionDivider />
       <ThreeLayerModel />
-      <SectionDivider image="/img-hall-solitary.png" objectPosition="object-[center_40%]" />
+      <SectionDivider />
       <Suite />
-      <SectionDivider image="/img-fluid-abstract.png" objectPosition="object-center" />
+      <SectionDivider />
       <GovernanceGap />
-      <SectionDivider image="/img-portal-circular.png" objectPosition="object-[center_60%]" />
+      <SectionDivider />
       <Closing />
       <Footer />
     </div>
