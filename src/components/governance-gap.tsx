@@ -6,16 +6,16 @@ import { IMAGES } from '@/lib/images'
 
 // ── Vertical arrow ──
 function VerticalArrow({ label, emphasized = false, className = '' }: { label?: string; emphasized?: boolean; className?: string }) {
-  const color = emphasized ? 'text-text-secondary' : 'text-text-ghost/60'
-  const weight = emphasized ? 1.5 : 1
+  const color = emphasized ? 'text-text-primary' : 'text-text-tertiary'
+  const weight = emphasized ? 2 : 1.5
   return (
-    <div className={`flex flex-col items-center gap-1 ${className}`}>
-      <svg width="12" height="28" viewBox="0 0 12 28" className={color} aria-hidden="true">
-        <line x1="6" y1="0" x2="6" y2="22" stroke="currentColor" strokeWidth={weight} />
-        <polyline points="2,20 6,26 10,20" fill="none" stroke="currentColor" strokeWidth={weight} />
+    <div className={`flex flex-col items-center gap-1.5 py-1 ${className}`}>
+      <svg width="14" height="32" viewBox="0 0 14 32" className={color} aria-hidden="true">
+        <line x1="7" y1="0" x2="7" y2="25" stroke="currentColor" strokeWidth={weight} />
+        <polyline points="2,23 7,30 12,23" fill="none" stroke="currentColor" strokeWidth={weight} strokeLinejoin="round" />
       </svg>
       {label && (
-        <p className={`font-sans text-[10px] italic leading-tight ${emphasized ? 'text-text-secondary font-medium' : 'text-text-ghost'}`}>
+        <p className={`font-sans text-[11px] italic leading-tight ${emphasized ? 'text-text-primary font-medium' : 'text-text-secondary'}`}>
           {label}
         </p>
       )}
@@ -26,13 +26,13 @@ function VerticalArrow({ label, emphasized = false, className = '' }: { label?: 
 // ── Upward arrow ──
 function UpwardArrow({ label, className = '' }: { label?: string; className?: string }) {
   return (
-    <div className={`flex flex-col items-center gap-1 ${className}`}>
+    <div className={`flex flex-col items-center gap-1.5 py-1 ${className}`}>
       {label && (
-        <p className="font-sans text-[10px] text-text-ghost italic leading-tight">{label}</p>
+        <p className="font-sans text-[11px] text-text-secondary italic leading-tight">{label}</p>
       )}
-      <svg width="12" height="24" viewBox="0 0 12 24" className="text-text-ghost/60" aria-hidden="true">
-        <line x1="6" y1="24" x2="6" y2="6" stroke="currentColor" strokeWidth="1" />
-        <polyline points="2,8 6,2 10,8" fill="none" stroke="currentColor" strokeWidth="1" />
+      <svg width="14" height="28" viewBox="0 0 14 28" className="text-text-tertiary" aria-hidden="true">
+        <line x1="7" y1="28" x2="7" y2="7" stroke="currentColor" strokeWidth="1.5" />
+        <polyline points="2,9 7,2 12,9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
       </svg>
     </div>
   )
@@ -41,17 +41,17 @@ function UpwardArrow({ label, className = '' }: { label?: string; className?: st
 // ── Three-dimension chips ──
 function DimensionChips() {
   const dimensions = [
-    { name: 'epistemic', gloss: 'knowing' },
-    { name: 'ontological', gloss: 'being' },
-    { name: 'political', gloss: 'acting' },
+    { name: 'Epistemic', gloss: 'how we know' },
+    { name: 'Ontological', gloss: 'how we are' },
+    { name: 'Political', gloss: 'how we act' },
   ]
 
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div className="flex flex-col gap-2 w-full">
       {dimensions.map((d) => (
-        <div key={d.name} className="border border-panel-border bg-panel rounded-sm px-4 py-2 flex items-center justify-between">
-          <p className="font-display text-[12px] italic text-text-secondary">{d.name}</p>
-          <p className="font-sans text-[10px] text-text-ghost">how we {d.gloss === 'knowing' ? 'know' : d.gloss === 'being' ? 'are' : 'act'}</p>
+        <div key={d.name} className="border border-text-primary/10 bg-base rounded px-5 py-2.5 flex items-center justify-between">
+          <p className="font-display text-[13px] italic text-text-primary font-medium">{d.name}</p>
+          <p className="font-sans text-[11px] text-text-secondary">{d.gloss}</p>
         </div>
       ))}
     </div>
@@ -61,11 +61,11 @@ function DimensionChips() {
 // ── Human Subject node ──
 function HumanSubjectNode({ className = '' }: { className?: string }) {
   return (
-    <div className={`border-2 border-text-primary/12 bg-base rounded px-6 py-5 text-center shadow-[0_1px_8px_rgba(0,0,0,0.04)] ${className}`}>
-      <p className="font-sans text-[14px] tracking-[0.08em] uppercase text-text-primary leading-tight font-semibold">
+    <div className={`border-2 border-text-primary/20 bg-base rounded px-7 py-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.06)] ${className}`}>
+      <p className="font-sans text-[15px] tracking-[0.08em] uppercase text-text-primary leading-tight font-semibold">
         Human Subject
       </p>
-      <p className="font-sans text-[11px] text-text-tertiary mt-1.5 leading-snug">
+      <p className="font-sans text-[12px] text-text-secondary mt-2 leading-snug">
         under transformation
       </p>
     </div>
@@ -75,49 +75,49 @@ function HumanSubjectNode({ className = '' }: { className?: string }) {
 function Diagram() {
   return (
     <div className="mt-8 lg:mt-0 mb-4">
-      <div className="flex flex-col items-center gap-0 max-w-[300px] mx-auto">
+      <div className="flex flex-col items-center gap-0 max-w-[340px] mx-auto">
 
         {/* ── First-order framing ── */}
-        <div className="w-full mb-8">
-          <p className="font-sans text-[10px] font-medium tracking-[0.22em] uppercase text-text-ghost text-center mb-4">
+        <div className="w-full mb-10">
+          <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-text-secondary text-center mb-5">
             First-order governance
           </p>
-          <div className="flex flex-col items-center gap-2">
-            <div className="border border-panel-border bg-panel rounded-sm px-5 py-3 text-center w-full">
-              <p className="font-sans text-[12px] tracking-[0.06em] uppercase text-text-tertiary leading-tight font-medium">
+          <div className="flex flex-col items-center gap-3">
+            <div className="border border-text-primary/10 bg-base rounded px-6 py-3.5 text-center w-full shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+              <p className="font-sans text-[13px] tracking-[0.06em] uppercase text-text-primary leading-tight font-medium">
                 Governance
               </p>
-              <p className="font-sans text-[10px] text-text-ghost mt-1">safety, fairness, accountability</p>
+              <p className="font-sans text-[11px] text-text-secondary mt-1.5">safety, fairness, accountability</p>
             </div>
             <VerticalArrow label="regulates" />
-            <div className="border border-panel-border bg-panel rounded-sm px-5 py-3 text-center w-full">
-              <p className="font-sans text-[12px] tracking-[0.06em] uppercase text-text-tertiary leading-tight font-medium">
+            <div className="border border-text-primary/10 bg-base rounded px-6 py-3.5 text-center w-full shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+              <p className="font-sans text-[13px] tracking-[0.06em] uppercase text-text-primary leading-tight font-medium">
                 AI System
               </p>
-              <p className="font-sans text-[10px] text-text-ghost mt-1">behaviour &amp; outputs</p>
+              <p className="font-sans text-[11px] text-text-secondary mt-1.5">behaviour &amp; outputs</p>
             </div>
-            <p className="font-sans text-[10px] text-text-ghost italic mt-1">assumes a stable subject</p>
+            <p className="font-sans text-[11px] text-text-tertiary italic mt-2">assumes a stable subject</p>
           </div>
         </div>
 
         {/* ── Divider ── */}
-        <div className="flex items-center justify-center gap-4 w-full mb-8">
-          <div className="flex-1 h-px bg-rule" />
-          <p className="font-sans text-[9px] tracking-[0.18em] uppercase text-text-ghost">
+        <div className="flex items-center justify-center gap-5 w-full mb-10">
+          <div className="flex-1 h-px bg-text-primary/10" />
+          <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-text-secondary font-medium">
             reframed as
           </p>
-          <div className="flex-1 h-px bg-rule" />
+          <div className="flex-1 h-px bg-text-primary/10" />
         </div>
 
         {/* ── Second-order framing ── */}
         <div className="w-full">
-          <p className="font-sans text-[10px] font-medium tracking-[0.22em] uppercase text-text-ghost text-center mb-4">
+          <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-text-secondary text-center mb-5">
             Second-order governance
           </p>
 
-          <div className="flex flex-col items-center gap-2">
-            <div className="border border-panel-border bg-panel rounded-sm px-5 py-2.5 text-center w-full">
-              <p className="font-sans text-[11px] tracking-[0.06em] uppercase text-text-tertiary leading-tight font-medium">
+          <div className="flex flex-col items-center gap-3">
+            <div className="border border-text-primary/10 bg-base rounded px-6 py-3 text-center w-full shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+              <p className="font-sans text-[13px] tracking-[0.06em] uppercase text-text-primary leading-tight font-medium">
                 AI System
               </p>
             </div>
@@ -128,21 +128,21 @@ function Diagram() {
             <HumanSubjectNode className="w-full" />
 
             {/* Three dimensions */}
-            <div className="mt-3 w-full">
-              <p className="font-sans text-[9px] font-medium tracking-[0.2em] uppercase text-text-ghost text-center mb-2">
+            <div className="mt-4 w-full">
+              <p className="font-sans text-[10px] font-semibold tracking-[0.2em] uppercase text-text-secondary text-center mb-3">
                 Dimensions of transformation
               </p>
               <DimensionChips />
             </div>
 
             {/* Governance presupposes */}
-            <div className="mt-3">
+            <div className="mt-4">
               <UpwardArrow label="governance presupposes this subject" />
             </div>
 
             {/* Gap label */}
-            <div className="mt-3 inline-block border border-text-primary/10 rounded-sm px-3.5 py-1.5">
-              <p className="font-sans text-[10px] tracking-[0.12em] uppercase text-text-secondary font-medium">
+            <div className="mt-4 inline-block border-2 border-text-primary/15 rounded px-5 py-2">
+              <p className="font-sans text-[11px] tracking-[0.12em] uppercase text-text-primary font-semibold">
                 the governance gap
               </p>
             </div>
@@ -180,9 +180,26 @@ export function GovernanceGap() {
             {/* Left column: text */}
             <div>
               <Reveal delay={0.05}>
-                <h2 className="font-display text-[2rem] md:text-[2.6rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-10">
-                  The governance gap
-                </h2>
+                <div className="flex items-start gap-5 mb-10">
+                  <div
+                    className="hidden md:block flex-shrink-0 w-[4px] min-h-[40px] self-stretch rounded-full overflow-hidden"
+                    style={{
+                      maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+                      WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+                    }}
+                  >
+                    <Image
+                      src={IMAGES.governanceGap}
+                      alt=""
+                      fill
+                      className="object-cover opacity-50"
+                      sizes="4px"
+                    />
+                  </div>
+                  <h2 className="font-display text-[2rem] md:text-[2.6rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary">
+                    The governance gap
+                  </h2>
+                </div>
               </Reveal>
 
               <Reveal delay={0.1}>

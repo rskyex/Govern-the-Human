@@ -18,6 +18,23 @@ export function Closing() {
         />
       </div>
 
+      {/* Architectural side strip — right margin */}
+      <div
+        className="hidden lg:block absolute top-20 right-0 w-[50px] xl:w-[65px] bottom-20 pointer-events-none"
+        style={{
+          maskImage: 'linear-gradient(to left, rgba(0,0,0,0.14) 0%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,0.14) 0%, transparent 100%)',
+        }}
+      >
+        <Image
+          src={IMAGES.fluidAbstract}
+          alt=""
+          fill
+          className="object-cover object-center opacity-35"
+          sizes="65px"
+        />
+      </div>
+
       <div className="relative bg-base/95 py-44 md:py-60">
         <div className="max-w-[800px] mx-auto px-8 md:px-16 text-center">
           <Reveal>
