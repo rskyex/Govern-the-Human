@@ -5,7 +5,7 @@ import { Reveal } from '@/components/ui/reveal'
 export function Thesis() {
   return (
     <section id="thesis" className="bg-base py-36 md:py-48">
-      <div className="max-w-[960px] mx-auto px-8 md:px-16">
+      <div className="max-w-[1120px] mx-auto px-8 md:px-16">
         <Reveal>
           <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
             01
