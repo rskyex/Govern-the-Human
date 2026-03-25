@@ -3,9 +3,9 @@
 import Image from 'next/image'
 
 const NAV = [
-  { label: 'Thesis', href: '#thesis' },
-  { label: 'Framework', href: '#three-layer-model' },
-  { label: 'Suite', href: '#the-suite' },
+  { label: 'Thesis', href: '/#thesis' },
+  { label: 'Framework', href: '/#three-layer-model' },
+  { label: 'Suite', href: '/#the-suite' },
 ]
 
 export function Header() {
@@ -13,7 +13,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-base/80 backdrop-blur-xl">
       <div className="h-px w-full bg-rule absolute bottom-0 left-0" />
       <div className="max-w-[1400px] mx-auto px-8 md:px-16 h-[64px] flex items-center justify-between">
-        <a href="#" className="flex items-center gap-4">
+        <a href="/" className="flex items-center gap-4">
           <Image
             src="/logo.png"
             alt="Govern the Human"

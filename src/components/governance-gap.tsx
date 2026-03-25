@@ -1,6 +1,8 @@
 'use client'
 
+import Image from 'next/image'
 import { Reveal } from '@/components/ui/reveal'
+import { IMAGES } from '@/lib/images'
 
 // ── Vertical arrow ──
 function VerticalArrow({ label, emphasized = false, className = '' }: { label?: string; emphasized?: boolean; className?: string }) {
@@ -153,64 +155,77 @@ function Diagram() {
 
 export function GovernanceGap() {
   return (
-    <section id="governance-gap" className="bg-surface py-36 md:py-48">
-      <div className="max-w-[960px] mx-auto px-8 md:px-16">
-        <Reveal>
-          <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
-            04
-          </p>
-          <div className="w-10 h-px bg-rule mb-10" />
-        </Reveal>
+    <section id="governance-gap" className="relative overflow-hidden">
+      {/* Background image — faded atmospheric layer */}
+      <div className="absolute inset-0">
+        <Image
+          src={IMAGES.governanceGap}
+          alt=""
+          fill
+          className="object-cover object-center opacity-[0.07]"
+          sizes="100vw"
+        />
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Left column: text */}
-          <div>
-            <Reveal delay={0.05}>
-              <h2 className="font-display text-[2rem] md:text-[2.6rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-10">
-                The governance gap
-              </h2>
-            </Reveal>
+      <div className="relative bg-surface/90 py-36 md:py-48">
+        <div className="max-w-[960px] mx-auto px-8 md:px-16">
+          <Reveal>
+            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
+              04
+            </p>
+            <div className="w-10 h-px bg-rule mb-10" />
+          </Reveal>
 
-            <Reveal delay={0.1}>
-              <div className="mb-10">
-                <div className="mb-8">
-                  <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-text-ghost mb-3">
-                    First-order
-                  </p>
-                  <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-                    Regulates system behaviour — outputs, fairness, safety, accountability.
-                    Asks: what should AI systems be permitted to do?
-                  </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            {/* Left column: text */}
+            <div>
+              <Reveal delay={0.05}>
+                <h2 className="font-display text-[2rem] md:text-[2.6rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-10">
+                  The governance gap
+                </h2>
+              </Reveal>
+
+              <Reveal delay={0.1}>
+                <div className="mb-10">
+                  <div className="mb-8">
+                    <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-text-ghost mb-3">
+                      First-order
+                    </p>
+                    <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
+                      Regulates system behaviour — outputs, fairness, safety, accountability.
+                      Asks: what should AI systems be permitted to do?
+                    </p>
+                  </div>
+
+                  <div className="w-8 h-px bg-rule mb-8" />
+
+                  <div>
+                    <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-text-ghost mb-3">
+                      Second-order
+                    </p>
+                    <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
+                      Examines the transformation of the subject who governs, consents, and
+                      deliberates. Asks: what is happening to the human who is supposed to
+                      answer that question?
+                    </p>
+                  </div>
                 </div>
+              </Reveal>
 
-                <div className="w-8 h-px bg-rule mb-8" />
+              <Reveal delay={0.16}>
+                <p className="font-sans text-[0.93rem] leading-[1.85] text-text-tertiary font-light">
+                  Without the second order, governance protects a version of the human
+                  that is already being transformed by the systems it seeks to regulate.
+                </p>
+              </Reveal>
+            </div>
 
-                <div>
-                  <p className="font-sans text-[10px] font-medium tracking-[0.2em] uppercase text-text-ghost mb-3">
-                    Second-order
-                  </p>
-                  <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-                    Examines the transformation of the subject who governs, consents, and
-                    deliberates. Asks: what is happening to the human who is supposed to
-                    answer that question?
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.16}>
-              <p className="font-sans text-[0.93rem] leading-[1.85] text-text-tertiary font-light">
-                Without the second order, governance protects a version of the human
-                that is already being transformed by the systems it seeks to regulate.
-              </p>
-            </Reveal>
-          </div>
-
-          {/* Right column: diagram */}
-          <div className="flex items-center">
-            <Reveal delay={0.22}>
-              <Diagram />
-            </Reveal>
+            {/* Right column: diagram */}
+            <div className="flex items-center">
+              <Reveal delay={0.22}>
+                <Diagram />
+              </Reveal>
+            </div>
           </div>
         </div>
       </div>
