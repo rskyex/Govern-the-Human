@@ -3,7 +3,7 @@ import Image from 'next/image'
 export function Footer() {
   return (
     <footer className="py-20 md:py-24 bg-base border-t border-rule">
-      <div className="max-w-[960px] mx-auto px-8 md:px-16 flex flex-col items-center text-center">
+      <div className="max-w-[1120px] mx-auto px-8 md:px-16 flex flex-col items-center text-center">
         <Image
           src="/logo.png"
           alt="Govern the Human"
