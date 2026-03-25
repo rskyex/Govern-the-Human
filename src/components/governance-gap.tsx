@@ -15,7 +15,7 @@ function Diagram() {
             <p className="font-sans text-[11px] tracking-[0.08em] uppercase text-text-tertiary leading-tight">
               Human Subject
             </p>
-            <p className="font-sans text-[9px] text-text-ghost font-light italic mt-0.5">
+            <p className="font-sans text-[9px] text-text-ghost font-light mt-0.5">
               assumed stable
             </p>
           </div>
@@ -65,7 +65,7 @@ function Diagram() {
             <p className="font-sans text-[11px] tracking-[0.08em] uppercase text-text-tertiary leading-tight">
               AI System
             </p>
-            <p className="font-sans text-[9px] text-text-ghost font-light italic mt-1">
+            <p className="font-sans text-[9px] text-text-ghost font-light mt-1">
               reshapes
             </p>
           </div>
@@ -81,17 +81,17 @@ function Diagram() {
               <p className="font-sans text-[11px] tracking-[0.08em] uppercase text-text-primary leading-tight">
                 Human Subject
               </p>
-              <p className="font-sans text-[9px] text-text-ghost font-light italic mt-1">
+              <p className="font-sans text-[9px] text-text-ghost font-light mt-1">
                 under transformation
               </p>
             </div>
             {/* Three conditions */}
             <div className="flex justify-center gap-3 mt-4">
-              <p className="font-display text-[11px] italic text-text-ghost">epistemic</p>
+              <p className="font-display text-[11px] text-text-ghost">epistemic</p>
               <span className="text-text-ghost/30 text-[11px]">/</span>
-              <p className="font-display text-[11px] italic text-text-ghost">ontological</p>
+              <p className="font-display text-[11px] text-text-ghost">ontological</p>
               <span className="text-text-ghost/30 text-[11px]">/</span>
-              <p className="font-display text-[11px] italic text-text-ghost">political</p>
+              <p className="font-display text-[11px] text-text-ghost">political</p>
             </div>
           </div>
 
@@ -105,7 +105,7 @@ function Diagram() {
             <p className="font-sans text-[11px] tracking-[0.08em] uppercase text-text-tertiary leading-tight">
               Governance
             </p>
-            <p className="font-sans text-[9px] text-text-ghost font-light italic mt-1">
+            <p className="font-sans text-[9px] text-text-ghost font-light mt-1">
               presupposes
             </p>
           </div>
@@ -163,7 +163,7 @@ export function GovernanceGap() {
             </Reveal>
 
             <Reveal delay={0.16}>
-              <p className="font-sans text-[0.93rem] leading-[1.85] text-text-tertiary font-light italic">
+              <p className="font-sans text-[0.93rem] leading-[1.85] text-text-tertiary font-light">
                 Without the second order, governance protects a version of the human
                 that is already being transformed by the systems it seeks to regulate.
               </p>

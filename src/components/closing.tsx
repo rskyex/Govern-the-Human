@@ -13,7 +13,7 @@ export function Closing() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="font-display text-[1.5rem] md:text-[2.1rem] lg:text-[2.5rem] font-normal leading-[1.3] tracking-[-0.01em] text-text-ghost italic">
+          <p className="font-display text-[1.5rem] md:text-[2.1rem] lg:text-[2.5rem] font-normal leading-[1.3] tracking-[-0.01em] text-text-tertiary">
             But what governs the human it reshapes?
           </p>
         </Reveal>

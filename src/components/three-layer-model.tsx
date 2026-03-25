@@ -49,7 +49,7 @@ export function ThreeLayerModel() {
           {LAYERS.map((layer, i) => (
             <Reveal key={layer.title} delay={0.1 + i * 0.06}>
               <div>
-                <h3 className="font-display text-[1.3rem] md:text-[1.45rem] italic font-normal text-text-primary mb-4">
+                <h3 className="font-display text-[1.3rem] md:text-[1.45rem] font-medium text-text-primary mb-4">
                   {layer.title}
                 </h3>
                 <p className="font-sans text-[0.9rem] leading-[1.85] text-text-tertiary font-light">
