@@ -32,6 +32,11 @@ export function Closing() {
                   href="/creator"
                   className="block group"
                 >
+                  {/* CTA */}
+                  <p className="font-sans text-[0.95rem] font-medium tracking-[0.08em] uppercase text-[#1e3a5f] group-hover:text-[#1e3a5f]/70 transition-colors duration-300 mb-5">
+                    Creator &rarr;
+                  </p>
+
                   {/* Thumbnail */}
                   <div className="relative w-full h-[158px] rounded-sm overflow-hidden mb-5 border border-panel-border group-hover:border-text-ghost/30 transition-all duration-300">
                     <Image
@@ -47,14 +52,9 @@ export function Closing() {
                   <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary mb-2 group-hover:text-[#1e3a5f] transition-colors duration-300">
                     Risa Koyanagi
                   </p>
-                  <p className="font-sans text-[0.8rem] leading-[1.7] text-text-tertiary font-light mb-4">
+                  <p className="font-sans text-[0.8rem] leading-[1.7] text-text-tertiary font-light">
                     Cambridge Future Scholar. Researcher in space governance, nuclear governance, strategic risk, and emerging technology governance.
                   </p>
-
-                  {/* CTA */}
-                  <span className="font-sans text-[12px] tracking-[0.06em] text-text-ghost group-hover:text-text-secondary transition-colors duration-300">
-                    Creator &rarr;
-                  </span>
                 </Link>
               </div>
             </Reveal>
