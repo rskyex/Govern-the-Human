@@ -23,7 +23,6 @@ export default function SelfTracePage() {
       {/* ── Why this project exists ── */}
       <SuiteSection>
         <SectionHeading
-          label="01"
           title="Why this project exists"
         />
         <div className="max-w-[740px]">
@@ -55,7 +54,6 @@ export default function SelfTracePage() {
       {/* ── What it makes visible ── */}
       <SuiteSection bg="surface">
         <SectionHeading
-          label="02"
           title="What it makes visible"
           description="Four dimensions of mediated selfhood that operate beneath conscious awareness."
         />
@@ -87,7 +85,6 @@ export default function SelfTracePage() {
       <SuiteSection>
         <SideImagePanel image={SUITE_IMAGES.selftraceSection} imagePosition="left">
           <SectionHeading
-            label="03"
             title="How the instrument works"
           />
           <Reveal delay={0.05}>
@@ -117,7 +114,6 @@ export default function SelfTracePage() {
       {/* ── Why it matters ── */}
       <SuiteSection bg="surface">
         <SectionHeading
-          label="04"
           title="Why it matters for identity and governance"
         />
         <div className="max-w-[740px]">
