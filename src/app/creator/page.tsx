@@ -39,7 +39,6 @@ export default function CreatorPage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-black/50" />
         </div>
 
         <div className="relative py-28 md:py-44">
