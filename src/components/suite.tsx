@@ -11,6 +11,7 @@ const INSTRUMENTS = [
     slug: '/observatory',
     description:
       'A diagnostic framework for tracking how AI systems alter the categories of agency, identity, and selfhood that governance presupposes.',
+    image: '/ogo-og.png',
   },
   {
     name: 'SelfTrace',

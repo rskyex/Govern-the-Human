@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import {
   SuitePageWrapper,
-  SuiteHero,
   SuiteSection,
   SectionHeading,
   ConceptCard,
@@ -32,12 +32,41 @@ export const metadata: Metadata = {
 export default function ObservatoryPage() {
   return (
     <SuitePageWrapper>
-      {/* ── Hero ── */}
-      <SuiteHero
-        title="Ontological Governance Observatory"
-        subtitle="A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes but never examines."
-        image={SUITE_IMAGES.observatory}
-      />
+      {/* ── Hero with ogo hero background ── */}
+      <section className="relative min-h-[70svh] flex items-end overflow-hidden">
+        <Image
+          src="/ogo%20hero.png"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.85) 65%, #ffffff 90%)',
+          }}
+        />
+        <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
+          <Reveal>
+            <h1
+              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-6"
+              style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
+            >
+              Ontological Governance Observatory
+            </h1>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px]">
+              A diagnostic framework for tracking how AI systems alter the foundational
+              categories — agency, identity, selfhood — that governance presupposes but
+              never examines.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── Why this project exists ── */}
       <SuiteSection>
