@@ -16,7 +16,11 @@ export const IMAGES = {
   /** Reflective arches, quieter mood — SelfTrace page */
   selfTrace: '/img-arches-reflective.png',
   /** Spatial uncertainty, transformation — Narrative Drift page */
-  narrativeDrift: '/img-portal-circular.png',
+  narrativeDrift: '/narrative drift hero.png',
+  /** Transition image — Narrative Drift */
+  narrativeDriftTransition: '/transition-1.png',
+  /** Interlude image — Narrative Drift */
+  narrativeDriftInterlude: '/interlude.png',
   /** Fluid abstract structural — atmospheric accent */
   fluidAbstract: '/img-fluid-abstract.png',
 } as const
