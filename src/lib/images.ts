@@ -27,4 +27,6 @@ export const IMAGES = {
   narrativeDriftHp: '/narrative drift-hp.png',
   /** Fluid abstract structural — atmospheric accent */
   fluidAbstract: '/img-fluid-abstract.png',
+  /** Builder profile photo */
+  builderProfile: '/profile.jpg',
 } as const
