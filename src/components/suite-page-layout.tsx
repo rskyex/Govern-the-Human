@@ -10,14 +10,14 @@ import type { ReactNode } from 'react'
 /* ── Image asset map — centralized for easy replacement ── */
 export const SUITE_IMAGES = {
   observatory: '/git-image (1).png',
-  selftrace: '/selftrace (2).png',
+  selftrace: '/selftrace-2.png',
   narrativeDrift: '/narrative drift hero.png',
   /* secondary / sectional images */
   observatorySection: '/git-image (2).png',
-  selftraceSection: '/selftrace (5).png',
-  selftraceWhy: '/selftrace (1).png',
-  selftraceIdentity: '/selftrace (3).png',
-  selftraceAbstract: '/selftrace (7).png',
+  selftraceSection: '/selftrace-5.png',
+  selftraceWhy: '/selftrace-1.png',
+  selftraceIdentity: '/selftrace-3.png',
+  selftraceAbstract: '/selftrace-7.png',
   narrativeDriftSection: '/interlude.png',
 }
 
@@ -37,13 +37,11 @@ export function SuiteHero({
     <section className="relative min-h-[70svh] flex items-end overflow-hidden">
       {image && (
         <>
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={image}
             alt={imageAlt}
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div
             className="absolute inset-0 pointer-events-none"
@@ -168,12 +166,11 @@ export function SideImagePanel({
         {children}
       </div>
       <div className={`relative aspect-[4/3] rounded-sm overflow-hidden ${imagePosition === 'left' ? 'lg:order-1' : ''}`}>
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={image}
           alt={alt}
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-white/10 pointer-events-none" />
       </div>
