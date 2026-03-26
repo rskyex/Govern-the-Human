@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { Reveal } from '@/components/ui/reveal'
 
@@ -7,9 +8,10 @@ export function Closing() {
   return (
     <section id="closing" className="relative overflow-hidden bg-white">
       <div className="relative py-28 md:py-40">
-        <div className="max-w-[960px] mx-auto px-8 md:px-16">
-          <div className="flex flex-col md:flex-row items-center md:items-end md:justify-between gap-10">
-            <div className="text-center md:text-left">
+        <div className="max-w-[1120px] mx-auto px-8 md:px-16">
+          <div className="flex flex-col lg:flex-row items-start lg:justify-between gap-16 lg:gap-20">
+            {/* Left — Quote */}
+            <div className="text-left">
               <Reveal>
                 <p className="font-display text-[1.8rem] md:text-[2.6rem] lg:text-[3.2rem] font-normal leading-[1.25] tracking-[-0.015em] text-[#1e3a5f] mb-8">
                   The system can be governed.
@@ -23,13 +25,38 @@ export function Closing() {
               </Reveal>
             </div>
 
+            {/* Right — Creator card */}
             <Reveal delay={0.2}>
-              <Link
-                href="/creator"
-                className="flex-shrink-0 font-sans text-[13px] tracking-[0.04em] text-[#1e3a5f]/50 hover:text-[#1e3a5f] transition-colors duration-300 whitespace-nowrap pb-1"
-              >
-                Creator &rarr;
-              </Link>
+              <div className="flex-shrink-0 w-full lg:w-[300px]">
+                <Link
+                  href="/creator"
+                  className="block group"
+                >
+                  {/* Thumbnail */}
+                  <div className="relative w-full h-[158px] rounded-sm overflow-hidden mb-5 border border-panel-border group-hover:border-text-ghost/30 transition-all duration-300">
+                    <Image
+                      src="/risa-koyanagi-og.png"
+                      alt="Risa Koyanagi"
+                      fill
+                      className="object-cover object-center"
+                      sizes="300px"
+                    />
+                  </div>
+
+                  {/* Name + brief intro */}
+                  <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary mb-2 group-hover:text-[#1e3a5f] transition-colors duration-300">
+                    Risa Koyanagi
+                  </p>
+                  <p className="font-sans text-[0.8rem] leading-[1.7] text-text-tertiary font-light mb-4">
+                    Cambridge Future Scholar. Researcher in space governance, nuclear governance, strategic risk, and emerging technology governance.
+                  </p>
+
+                  {/* CTA */}
+                  <span className="font-sans text-[12px] tracking-[0.06em] text-text-ghost group-hover:text-text-secondary transition-colors duration-300">
+                    Creator &rarr;
+                  </span>
+                </Link>
+              </div>
             </Reveal>
           </div>
         </div>
