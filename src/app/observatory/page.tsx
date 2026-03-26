@@ -23,7 +23,6 @@ export default function ObservatoryPage() {
       {/* ── Why this project exists ── */}
       <SuiteSection>
         <SectionHeading
-          label="01"
           title="Why this project exists"
         />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
@@ -66,7 +65,6 @@ export default function ObservatoryPage() {
       {/* ── What it makes visible ── */}
       <SuiteSection bg="surface">
         <SectionHeading
-          label="02"
           title="What it makes visible"
           description="Five categories of ontological transformation that current governance frameworks do not track."
         />
@@ -103,7 +101,6 @@ export default function ObservatoryPage() {
       <SuiteSection>
         <SideImagePanel image={SUITE_IMAGES.observatorySection}>
           <SectionHeading
-            label="03"
             title="How the Observatory works"
           />
           <Reveal delay={0.05}>
@@ -133,7 +130,6 @@ export default function ObservatoryPage() {
       {/* ── Why it matters ── */}
       <SuiteSection bg="surface">
         <SectionHeading
-          label="04"
           title="Why it matters for governance"
         />
         <div className="max-w-[740px]">
