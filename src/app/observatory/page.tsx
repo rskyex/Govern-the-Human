@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     description:
       'A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes.',
     url: `${siteUrl}/observatory`,
-    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, type: 'image/png', alt: 'Govern the Human' }],
+    images: [{ url: `${siteUrl}/govern-the-human-og.jpg`, width: 1200, height: 630, type: 'image/jpeg', alt: 'Govern the Human' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Ontological Governance Observatory — Govern the Human',
-    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, alt: 'Govern the Human' }],
+    images: [{ url: `${siteUrl}/govern-the-human-og.jpg`, width: 1200, height: 630, alt: 'Govern the Human' }],
   },
 }
 

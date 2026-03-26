@@ -26,10 +26,10 @@ export const metadata: Metadata = {
     siteName: 'Govern the Human',
     images: [
       {
-        url: `${siteUrl}/govern-the-human-og.png`,
+        url: `${siteUrl}/govern-the-human-og.jpg`,
         width: 1200,
         height: 630,
-        type: 'image/png',
+        type: 'image/jpeg',
         alt: 'Govern the Human',
       },
     ],
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
       'AI governance asks what systems do. This project asks what they do to the human subject.',
     images: [
       {
-        url: `${siteUrl}/govern-the-human-og.png`,
+        url: `${siteUrl}/govern-the-human-og.jpg`,
         width: 1200,
         height: 630,
         alt: 'Govern the Human',
