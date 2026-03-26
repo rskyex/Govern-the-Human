@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
+import { IMAGES } from '@/lib/images'
 import {
   SuitePageWrapper,
-  SuiteHero,
   SuiteSection,
   SectionHeading,
   ConceptCard,
-  SideImagePanel,
   SuiteNav,
-  SUITE_IMAGES,
 } from '@/components/suite-page-layout'
 import { Reveal } from '@/components/ui/reveal'
 
@@ -32,42 +31,81 @@ export const metadata: Metadata = {
 export default function SelfTracePage() {
   return (
     <SuitePageWrapper>
-      {/* ── Hero — quieter, more intimate ── */}
-      <SuiteHero
-        title="SelfTrace"
-        subtitle="A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity."
-        image={SUITE_IMAGES.selftrace}
-      />
+      {/* ── Hero with selftrace-2 background ── */}
+      <section className="relative min-h-[70svh] flex items-end overflow-hidden">
+        <Image
+          src={IMAGES.selfTraceHero}
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.85) 65%, #ffffff 90%)',
+          }}
+        />
+        <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
+          <Reveal>
+            <h1
+              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-6"
+              style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
+            >
+              SelfTrace
+            </h1>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px]">
+              A reflective instrument for examining how AI-mediated environments reshape
+              self-perception, memory, and the continuity of personal identity.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── Why this project exists ── */}
       <SuiteSection>
-        <SideImagePanel image={SUITE_IMAGES.selftraceWhy} imagePosition="right">
-          <SectionHeading
-            title="Why this project exists"
-          />
-          <Reveal delay={0.05}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              Every interface that reflects you back to yourself is also shaping what you
-              see. Recommendation systems, personalised feeds, AI-generated summaries of
-              your behaviour — these are not mirrors. They are constructions.
-            </p>
-          </Reveal>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div>
+            <SectionHeading title="Why this project exists" />
+            <Reveal delay={0.05}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                Every interface that reflects you back to yourself is also shaping what you
+                see. Recommendation systems, personalised feeds, AI-generated summaries of
+                your behaviour — these are not mirrors. They are constructions.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                SelfTrace examines what happens to the sense of self when it is continuously
+                mediated by systems that model, predict, and reflect identity back in
+                optimised form. It asks how self-knowledge changes when the tools of
+                self-understanding are not neutral.
+              </p>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
+                This is not a question of privacy or data ownership. It is a question about
+                the integrity of self-perception under conditions of persistent algorithmic
+                mediation.
+              </p>
+            </Reveal>
+          </div>
           <Reveal delay={0.1}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              SelfTrace examines what happens to the sense of self when it is continuously
-              mediated by systems that model, predict, and reflect identity back in
-              optimised form. It asks how self-knowledge changes when the tools of
-              self-understanding are not neutral.
-            </p>
+            <div className="relative aspect-[4/3] rounded-sm overflow-hidden">
+              <Image
+                src={IMAGES.selfTraceWhy}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
           </Reveal>
-          <Reveal delay={0.14}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-              This is not a question of privacy or data ownership. It is a question about
-              the integrity of self-perception under conditions of persistent algorithmic
-              mediation.
-            </p>
-          </Reveal>
-        </SideImagePanel>
+        </div>
       </SuiteSection>
 
       {/* ── What it makes visible ── */}
@@ -100,63 +138,85 @@ export default function SelfTracePage() {
         </div>
       </SuiteSection>
 
-      {/* ── How it works — with side image ── */}
+      {/* ── How it works ── */}
       <SuiteSection>
-        <SideImagePanel image={SUITE_IMAGES.selftraceSection} imagePosition="left">
-          <SectionHeading
-            title="How the instrument works"
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <Reveal delay={0.05}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              SelfTrace is a reflective research instrument, not a diagnostic tool. It
-              does not measure selfhood — it creates conditions for examining how selfhood
-              is being shaped.
-            </p>
+            <div className="relative aspect-[4/3] rounded-sm overflow-hidden lg:order-1">
+              <Image
+                src={IMAGES.selfTraceHow}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
           </Reveal>
-          <Reveal delay={0.1}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              Through structured reflection exercises, comparative self-assessments, and
-              mediation-aware journaling, SelfTrace helps subjects and researchers trace
-              the points where AI-mediated experience diverges from unmediated
-              self-understanding.
-            </p>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-              The goal is legibility — making the invisible influence of algorithmic
-              mediation available for conscious examination.
-            </p>
-          </Reveal>
-        </SideImagePanel>
+          <div className="lg:order-2">
+            <SectionHeading title="How the instrument works" />
+            <Reveal delay={0.05}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                SelfTrace is a reflective research instrument, not a diagnostic tool. It
+                does not measure selfhood — it creates conditions for examining how selfhood
+                is being shaped.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                Through structured reflection exercises, comparative self-assessments, and
+                mediation-aware journaling, SelfTrace helps subjects and researchers trace
+                the points where AI-mediated experience diverges from unmediated
+                self-understanding.
+              </p>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
+                The goal is legibility — making the invisible influence of algorithmic
+                mediation available for conscious examination.
+              </p>
+            </Reveal>
+          </div>
+        </div>
       </SuiteSection>
 
       {/* ── Why it matters ── */}
       <SuiteSection bg="surface">
-        <SideImagePanel image={SUITE_IMAGES.selftraceIdentity} imagePosition="right">
-          <SectionHeading
-            title="Why it matters for identity and governance"
-          />
-          <Reveal delay={0.05}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              Democratic governance assumes subjects who can know themselves well enough
-              to form genuine preferences, give meaningful consent, and hold coherent
-              positions over time.
-            </p>
-          </Reveal>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div>
+            <SectionHeading title="Why it matters for identity and governance" />
+            <Reveal delay={0.05}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                Democratic governance assumes subjects who can know themselves well enough
+                to form genuine preferences, give meaningful consent, and hold coherent
+                positions over time.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                If the tools through which self-knowledge is formed are themselves shaping
+                that knowledge, then the foundation of autonomous participation is not
+                secure. SelfTrace does not claim this foundation is broken — but it insists
+                that it must be examined.
+              </p>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="font-display text-[1.3rem] md:text-[1.5rem] font-normal leading-[1.4] tracking-[-0.01em] text-text-primary">
+                The self that governs must first be able to trace itself.
+              </p>
+            </Reveal>
+          </div>
           <Reveal delay={0.1}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              If the tools through which self-knowledge is formed are themselves shaping
-              that knowledge, then the foundation of autonomous participation is not
-              secure. SelfTrace does not claim this foundation is broken — but it insists
-              that it must be examined.
-            </p>
+            <div className="relative aspect-[4/3] rounded-sm overflow-hidden">
+              <Image
+                src={IMAGES.selfTraceIdentity}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
           </Reveal>
-          <Reveal delay={0.14}>
-            <p className="font-display text-[1.3rem] md:text-[1.5rem] font-normal leading-[1.4] tracking-[-0.01em] text-text-primary">
-              The self that governs must first be able to trace itself.
-            </p>
-          </Reveal>
-        </SideImagePanel>
+        </div>
       </SuiteSection>
 
       {/* ── Suite navigation ── */}
