@@ -44,14 +44,14 @@ export default function SelfTracePage() {
         <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
           <Reveal>
             <h1
-              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-white mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]"
+              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-6"
               style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
             >
               SelfTrace
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-white/85 font-light max-w-[640px] drop-shadow-[0_1px_6px_rgba(0,0,0,0.2)]">
+            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px] drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
               A reflective instrument for examining how AI-mediated environments reshape
               self-perception, memory, and the continuity of personal identity.
             </p>
@@ -132,11 +132,11 @@ export default function SelfTracePage() {
               { title: 'Affective calibration', description: 'How personalised environments tune emotional responses over time, shifting the baseline of what feels normal, urgent, or important.' },
             ].map((item, i) => (
               <Reveal key={item.title} delay={0.08 + i * 0.05}>
-                <div className="p-7 md:p-9 border border-white/20 bg-white/10 backdrop-blur-sm rounded-sm h-full">
-                  <h3 className="font-display text-[1.15rem] md:text-[1.25rem] font-medium text-white mb-3">
+                <div className="p-7 md:p-9 border border-white/30 bg-white rounded-sm h-full">
+                  <h3 className="font-display text-[1.15rem] md:text-[1.25rem] font-medium text-text-primary mb-3">
                     {item.title}
                   </h3>
-                  <p className="font-sans text-[0.9rem] leading-[1.85] text-white/70 font-light">
+                  <p className="font-sans text-[0.9rem] leading-[1.85] text-text-tertiary font-light">
                     {item.description}
                   </p>
                 </div>
