@@ -44,14 +44,14 @@ export default function SelfTracePage() {
         <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
           <Reveal>
             <h1
-              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-6"
+              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-white md:text-text-primary mb-6"
               style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
             >
               SelfTrace
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px] drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
+            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-white/90 md:text-text-secondary font-light max-w-[640px] drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
               A reflective instrument for examining how AI-mediated environments reshape
               self-perception, memory, and the continuity of personal identity.
             </p>
