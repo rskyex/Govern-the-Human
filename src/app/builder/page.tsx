@@ -13,7 +13,12 @@ export const metadata: Metadata = {
     title: 'Risa Koyanagi — Builder',
     description:
       'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
-    images: [{ url: '/govern the human og.png', width: 1200, height: 630 }],
+    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Risa Koyanagi — Builder',
+    images: ['/govern-the-human-og.png'],
   },
 }
 
@@ -54,7 +59,7 @@ export default function BuilderPage() {
             >
               <div className="relative w-[120px] h-[63px] rounded-sm overflow-hidden flex-shrink-0 border border-panel-border">
                 <Image
-                  src="/og-builder.png"
+                  src="/risa-koyanagi-og.png"
                   alt="risakoyanagi.com"
                   fill
                   className="object-cover object-center"
