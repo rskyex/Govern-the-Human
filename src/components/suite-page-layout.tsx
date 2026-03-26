@@ -11,7 +11,7 @@ import type { ReactNode } from 'react'
 export const SUITE_IMAGES = {
   observatory: '/git-image (1).png',
   selftrace: '/git-image (4).png',
-  narrativeDrift: '/git-image (6).png',
+  narrativeDrift: '/narrative drift hero.png',
   /* secondary / sectional images */
   observatorySection: '/git-image (2).png',
   selftraceSection: '/git-image (5).png',
