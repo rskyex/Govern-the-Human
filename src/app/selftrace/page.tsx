@@ -41,10 +41,10 @@ export default function SelfTracePage() {
 
       {/* ── Why this project exists ── */}
       <SuiteSection>
-        <SectionHeading
-          title="Why this project exists"
-        />
-        <div className="max-w-[740px]">
+        <SideImagePanel image={SUITE_IMAGES.selftraceWhy} imagePosition="right">
+          <SectionHeading
+            title="Why this project exists"
+          />
           <Reveal delay={0.05}>
             <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
               Every interface that reflects you back to yourself is also shaping what you
@@ -67,7 +67,7 @@ export default function SelfTracePage() {
               mediation.
             </p>
           </Reveal>
-        </div>
+        </SideImagePanel>
       </SuiteSection>
 
       {/* ── What it makes visible ── */}
@@ -132,10 +132,10 @@ export default function SelfTracePage() {
 
       {/* ── Why it matters ── */}
       <SuiteSection bg="surface">
-        <SectionHeading
-          title="Why it matters for identity and governance"
-        />
-        <div className="max-w-[740px]">
+        <SideImagePanel image={SUITE_IMAGES.selftraceIdentity} imagePosition="right">
+          <SectionHeading
+            title="Why it matters for identity and governance"
+          />
           <Reveal delay={0.05}>
             <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
               Democratic governance assumes subjects who can know themselves well enough
@@ -156,7 +156,7 @@ export default function SelfTracePage() {
               The self that governs must first be able to trace itself.
             </p>
           </Reveal>
-        </div>
+        </SideImagePanel>
       </SuiteSection>
 
       {/* ── Suite navigation ── */}

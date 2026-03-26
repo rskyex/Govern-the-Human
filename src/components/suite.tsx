@@ -17,6 +17,7 @@ const INSTRUMENTS = [
     slug: '/selftrace',
     description:
       'A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity.',
+    image: '/og-selftrace.png',
   },
   {
     name: 'Narrative Drift',

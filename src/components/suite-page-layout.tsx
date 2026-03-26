@@ -10,11 +10,14 @@ import type { ReactNode } from 'react'
 /* ── Image asset map — centralized for easy replacement ── */
 export const SUITE_IMAGES = {
   observatory: '/git-image (1).png',
-  selftrace: '/git-image (4).png',
+  selftrace: '/selftrace (2).png',
   narrativeDrift: '/narrative drift hero.png',
   /* secondary / sectional images */
   observatorySection: '/git-image (2).png',
-  selftraceSection: '/git-image (5).png',
+  selftraceSection: '/selftrace (5).png',
+  selftraceWhy: '/selftrace (1).png',
+  selftraceIdentity: '/selftrace (3).png',
+  selftraceAbstract: '/selftrace (7).png',
   narrativeDriftSection: '/interlude.png',
 }
 
