@@ -13,7 +13,8 @@ export const metadata: Metadata = {
     title: 'Risa Koyanagi — Builder',
     description:
       'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
-    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630 }],
+    url: '/builder',
+    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630, type: 'image/png' }],
   },
   twitter: {
     card: 'summary_large_image',
