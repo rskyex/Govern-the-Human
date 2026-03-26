@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import {
   SuitePageWrapper,
   SuiteHero,
@@ -9,6 +10,18 @@ import {
   SUITE_IMAGES,
 } from '@/components/suite-page-layout'
 import { Reveal } from '@/components/ui/reveal'
+
+export const metadata: Metadata = {
+  title: 'Ontological Governance Observatory | Govern the Human',
+  description:
+    'A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes.',
+  openGraph: {
+    title: 'Ontological Governance Observatory — Govern the Human',
+    description:
+      'A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes.',
+    images: [{ url: '/og-observatory.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function ObservatoryPage() {
   return (

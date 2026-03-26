@@ -21,6 +21,12 @@ export const IMAGES = {
   narrativeDriftTransition: '/transition-1.png',
   /** Interlude image — Narrative Drift */
   narrativeDriftInterlude: '/interlude.png',
+  /** Narrative Drift background variant */
+  narrativeDrift1: '/narrative drift-1.png',
+  /** Narrative Drift home page card image */
+  narrativeDriftHp: '/narrative drift-hp.png',
   /** Fluid abstract structural — atmospheric accent */
   fluidAbstract: '/img-fluid-abstract.png',
+  /** Builder profile photo */
+  builderProfile: '/profile.jpg',
 } as const
