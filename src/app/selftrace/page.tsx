@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import {
   SuitePageWrapper,
   SuiteHero,
@@ -9,6 +10,18 @@ import {
   SUITE_IMAGES,
 } from '@/components/suite-page-layout'
 import { Reveal } from '@/components/ui/reveal'
+
+export const metadata: Metadata = {
+  title: 'SelfTrace | Govern the Human',
+  description:
+    'A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity.',
+  openGraph: {
+    title: 'SelfTrace — Govern the Human',
+    description:
+      'A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity.',
+    images: [{ url: '/og-selftrace.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function SelfTracePage() {
   return (

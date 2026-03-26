@@ -1,8 +1,21 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Reveal } from '@/components/ui/reveal'
+
+export const metadata: Metadata = {
+  title: 'Builder — Risa Koyanagi | Govern the Human',
+  description:
+    'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
+  openGraph: {
+    title: 'Risa Koyanagi — Builder',
+    description:
+      'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
+    images: [{ url: '/og-builder.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function BuilderPage() {
   return (

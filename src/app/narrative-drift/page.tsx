@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -8,6 +9,18 @@ import {
   SuiteNav,
 } from '@/components/suite-page-layout'
 import { Reveal } from '@/components/ui/reveal'
+
+export const metadata: Metadata = {
+  title: 'Narrative Drift | Govern the Human',
+  description:
+    'An investigation into how algorithmic curation restructures personal memory, narrative coherence, and the temporal continuity required for self-governance.',
+  openGraph: {
+    title: 'Narrative Drift — Govern the Human',
+    description:
+      'An investigation into how algorithmic curation restructures personal memory, narrative coherence, and the temporal continuity required for self-governance.',
+    images: [{ url: '/og-narrative-drift.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function NarrativeDriftPage() {
   return (
