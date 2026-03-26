@@ -15,7 +15,7 @@ export const SUITE_IMAGES = {
   /* secondary / sectional images */
   observatorySection: '/git-image (2).png',
   selftraceSection: '/git-image (5).png',
-  narrativeDriftSection: '/git-image (7).png',
+  narrativeDriftSection: '/interlude.png',
 }
 
 /* ── Hero variant for suite pages ── */
