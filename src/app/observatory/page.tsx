@@ -19,7 +19,8 @@ export const metadata: Metadata = {
     title: 'Ontological Governance Observatory — Govern the Human',
     description:
       'A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes.',
-    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630 }],
+    url: '/observatory',
+    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630, type: 'image/png' }],
   },
   twitter: {
     card: 'summary_large_image',
