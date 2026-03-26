@@ -19,7 +19,12 @@ export const metadata: Metadata = {
     title: 'SelfTrace — Govern the Human',
     description:
       'A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity.',
-    images: [{ url: '/govern the human og.png', width: 1200, height: 630 }],
+    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SelfTrace — Govern the Human',
+    images: ['/govern-the-human-og.png'],
   },
 }
 

@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://govern-the-human.vercel.app',
+  ),
   title: 'Govern the Human',
   description:
     'A research project on second-order AI governance, subject formation, and the human under AI conditions.',
@@ -16,10 +19,15 @@ export const metadata: Metadata = {
     title: 'Govern the Human',
     description:
       'AI governance asks what systems do. This project asks what they do to the human subject.',
-    images: [{ url: '/govern the human og.png', width: 1200, height: 630 }],
+    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630 }],
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'Govern the Human',
+    description:
+      'AI governance asks what systems do. This project asks what they do to the human subject.',
+    images: ['/govern-the-human-og.png'],
   },
 }
 

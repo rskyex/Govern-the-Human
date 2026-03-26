@@ -53,7 +53,7 @@ export function Footer() {
             >
               <div className="relative w-[240px] h-[126px] rounded-sm overflow-hidden mb-4 border border-white/20 group-hover:border-white/40 transition-all duration-300">
                 <Image
-                  src="/og-builder.png"
+                  src="/risa-koyanagi-og.png"
                   alt="Risa Koyanagi"
                   fill
                   className="object-cover object-center"
