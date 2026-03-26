@@ -29,4 +29,14 @@ export const IMAGES = {
   fluidAbstract: '/img-fluid-abstract.png',
   /** Builder profile photo */
   builderProfile: '/profile.jpg',
+  /** SelfTrace — hero background */
+  selfTraceHero: '/selftrace-2.png',
+  /** SelfTrace — why section */
+  selfTraceWhy: '/selftrace-1.png',
+  /** SelfTrace — how it works section */
+  selfTraceHow: '/selftrace-5.png',
+  /** SelfTrace — identity & governance section */
+  selfTraceIdentity: '/selftrace-3.png',
+  /** SelfTrace — abstract accent */
+  selfTraceAbstract: '/selftrace-7.png',
 } as const
