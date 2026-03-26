@@ -20,7 +20,7 @@ const CARDS = [
     external: true,
     thumbnail: '/faultline%20og.png',
     name: 'Faultline',
-    description: '',
+    description: 'The Strategic Risk Suite: mapping how orbital, nuclear, and cyber risks connect, overlap, and escalate.',
   },
   {
     label: 'Sister Project: MYTHERA',
@@ -28,7 +28,7 @@ const CARDS = [
     external: false,
     thumbnail: '/mythera%20og.png',
     name: 'MYTHERA',
-    description: 'Coming soon',
+    description: 'The interactive mythic world of cultural and philosophical interfaces where memory, meaning, and selfhood can be explored. Coming soon.',
   },
 ]
 

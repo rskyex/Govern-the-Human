@@ -120,35 +120,106 @@ export default function CreatorPage() {
         </div>
       </section>
 
-      {/* ── Her Portfolio ── */}
+      {/* ── Her Portfolio & Projects ── */}
       <section className="bg-surface py-20 md:py-28">
-        <div className="max-w-[640px] mx-auto px-8 md:px-16 text-center">
+        <div className="max-w-[1120px] mx-auto px-8 md:px-16">
           <Reveal>
             <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-10">
-              Her Portfolio
+              Her Portfolio &amp; Projects
             </p>
           </Reveal>
-          <Reveal delay={0.1}>
-            <Link
-              href="https://risakoyanagi.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block group"
-            >
-              <div className="relative w-full aspect-[1200/630] rounded-sm overflow-hidden mb-6 border border-panel-border group-hover:border-text-ghost/30 group-hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-300">
-                <Image
-                  src="/risa-koyanagi-og.png"
-                  alt="risakoyanagi.com"
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 640px) 100vw, 640px"
-                />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {/* Portfolio */}
+            <Reveal delay={0.1}>
+              <Link
+                href="https://risakoyanagi.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group h-full"
+              >
+                <div className="border border-panel-border bg-base rounded-sm h-full overflow-hidden transition-all duration-300 group-hover:border-text-ghost/20 group-hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
+                  <div className="relative w-full aspect-[1200/630]">
+                    <Image
+                      src="/risa-koyanagi-og.png"
+                      alt="risakoyanagi.com"
+                      fill
+                      className="object-cover object-center"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <p className="font-sans text-[11px] font-medium tracking-[0.2em] uppercase text-text-ghost mb-3">
+                      Her Portfolio
+                    </p>
+                    <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary group-hover:text-[#1e3a5f] transition-colors duration-300">
+                      risakoyanagi.com <span className="text-text-ghost">&rarr;</span>
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </Reveal>
+
+            {/* Faultline */}
+            <Reveal delay={0.16}>
+              <a
+                href="https://faultline-nqmm.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block group h-full"
+              >
+                <div className="border border-panel-border bg-base rounded-sm h-full overflow-hidden transition-all duration-300 group-hover:border-text-ghost/20 group-hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
+                  <div className="relative w-full aspect-[1200/630]">
+                    <Image
+                      src="/faultline%20og.png"
+                      alt="Faultline"
+                      fill
+                      className="object-cover object-center"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <p className="font-sans text-[11px] font-medium tracking-[0.2em] uppercase text-text-ghost mb-3">
+                      Sister Project
+                    </p>
+                    <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary group-hover:text-[#1e3a5f] transition-colors duration-300">
+                      Faultline <span className="text-text-ghost">&rarr;</span>
+                    </p>
+                    <p className="font-sans text-[0.8rem] leading-[1.7] text-text-tertiary font-light mt-1">
+                      The Strategic Risk Suite: mapping how orbital, nuclear, and cyber risks connect, overlap, and escalate.
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Reveal>
+
+            {/* MYTHERA */}
+            <Reveal delay={0.22}>
+              <div className="block h-full">
+                <div className="border border-panel-border bg-base rounded-sm h-full overflow-hidden">
+                  <div className="relative w-full aspect-[1200/630]">
+                    <Image
+                      src="/mythera%20og.png"
+                      alt="MYTHERA"
+                      fill
+                      className="object-cover object-center"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <p className="font-sans text-[11px] font-medium tracking-[0.2em] uppercase text-text-ghost mb-3">
+                      Sister Project
+                    </p>
+                    <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary">
+                      MYTHERA
+                    </p>
+                    <p className="font-sans text-[0.8rem] leading-[1.7] text-text-tertiary font-light mt-1">
+                      The interactive mythic world of cultural and philosophical interfaces where memory, meaning, and selfhood can be explored. Coming soon.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary group-hover:text-[#1e3a5f] transition-colors duration-300">
-                risakoyanagi.com &rarr;
-              </p>
-            </Link>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </section>
 
