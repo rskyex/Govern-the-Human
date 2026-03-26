@@ -5,6 +5,9 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Reveal } from '@/components/ui/reveal'
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://govern-the-human.vercel.app'
+
 export const metadata: Metadata = {
   title: 'Creator — Risa Koyanagi | Govern the Human',
   description:
@@ -13,13 +16,13 @@ export const metadata: Metadata = {
     title: 'Risa Koyanagi — Creator',
     description:
       'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
-    url: '/creator',
-    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630, type: 'image/png' }],
+    url: `${siteUrl}/creator`,
+    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, type: 'image/png', alt: 'Govern the Human' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Risa Koyanagi — Creator',
-    images: ['/govern-the-human-og.png'],
+    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, alt: 'Govern the Human' }],
   },
 }
 
