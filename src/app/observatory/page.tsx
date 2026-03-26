@@ -11,6 +11,9 @@ import {
 } from '@/components/suite-page-layout'
 import { Reveal } from '@/components/ui/reveal'
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://govern-the-human.vercel.app'
+
 export const metadata: Metadata = {
   title: 'Ontological Governance Observatory | Govern the Human',
   description:
@@ -19,13 +22,13 @@ export const metadata: Metadata = {
     title: 'Ontological Governance Observatory — Govern the Human',
     description:
       'A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes.',
-    url: '/observatory',
-    images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630, type: 'image/png' }],
+    url: `${siteUrl}/observatory`,
+    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, type: 'image/png', alt: 'Govern the Human' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Ontological Governance Observatory — Govern the Human',
-    images: ['/govern-the-human-og.png'],
+    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, alt: 'Govern the Human' }],
   },
 }
 
