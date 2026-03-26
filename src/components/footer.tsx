@@ -33,7 +33,23 @@ export function Footer() {
           </p>
         </div>
 
-        <p className="font-sans text-[11px] text-white/50 font-light mt-10 text-center">
+        <div className="w-full h-px bg-white/20 mt-10 mb-8" />
+
+        <div className="flex flex-col items-center text-center">
+          <p className="font-sans text-[0.8rem] leading-[1.7] text-white/60 font-light max-w-[520px] mb-4">
+            Born in 2003, Risa Koyanagi is a Cambridge Future Scholar and researcher at the intersection of space governance, nuclear governance, cyber governance, strategic risk, and emerging technology governance.
+          </p>
+          <a
+            href="https://risakoyanagi.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-sans text-[12px] tracking-[0.06em] text-white/50 hover:text-white/90 transition-colors duration-300"
+          >
+            risakoyanagi.com &rarr;
+          </a>
+        </div>
+
+        <p className="font-sans text-[11px] text-white/50 font-light mt-8 text-center">
           &copy; Risa Koyanagi
         </p>
       </div>
