@@ -23,6 +23,7 @@ const INSTRUMENTS = [
     slug: '/narrative-drift',
     description:
       'An investigation into how algorithmic curation restructures personal memory, narrative coherence, and the temporal continuity required for self-governance.',
+    image: IMAGES.narrativeDriftHp,
   },
 ]
 
@@ -68,16 +69,29 @@ export function Suite() {
           {INSTRUMENTS.map((item, i) => (
             <Reveal key={item.name} delay={0.08 + i * 0.06}>
               <Link href={item.slug} className="block group h-full">
-                <div className="p-7 md:p-9 border border-panel-border bg-panel backdrop-blur-sm rounded-sm h-full transition-all duration-300 group-hover:border-text-ghost/20 group-hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
-                  <h3 className="font-display text-[1.2rem] md:text-[1.3rem] font-medium text-text-primary mb-4">
-                    {item.name}
-                  </h3>
-                  <p className="font-sans text-[0.9rem] leading-[1.85] text-text-tertiary font-light mb-6">
-                    {item.description}
-                  </p>
-                  <span className="font-sans text-[12px] tracking-[0.06em] text-text-ghost group-hover:text-text-secondary transition-colors duration-300">
-                    Explore &rarr;
-                  </span>
+                <div className="border border-panel-border bg-panel backdrop-blur-sm rounded-sm h-full transition-all duration-300 group-hover:border-text-ghost/20 group-hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)] overflow-hidden">
+                  {item.image && (
+                    <div className="relative w-full h-[160px] md:h-[180px]">
+                      <Image
+                        src={item.image}
+                        alt=""
+                        fill
+                        className="object-cover object-center"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
+                  )}
+                  <div className="p-7 md:p-9">
+                    <h3 className="font-display text-[1.2rem] md:text-[1.3rem] font-medium text-text-primary mb-4">
+                      {item.name}
+                    </h3>
+                    <p className="font-sans text-[0.9rem] leading-[1.85] text-text-tertiary font-light mb-6">
+                      {item.description}
+                    </p>
+                    <span className="font-sans text-[12px] tracking-[0.06em] text-text-ghost group-hover:text-text-secondary transition-colors duration-300">
+                      Explore &rarr;
+                    </span>
+                  </div>
                 </div>
               </Link>
             </Reveal>

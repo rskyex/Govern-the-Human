@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   SuitePageWrapper,
   SuiteSection,
@@ -50,6 +51,18 @@ export default function NarrativeDriftPage() {
               self-governance.
             </p>
           </Reveal>
+          <Reveal delay={0.2}>
+            <Link
+              href="https://narrative-drift.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-8 px-8 py-4 bg-white/15 backdrop-blur-sm border border-white/30 rounded-sm font-sans text-[0.95rem] tracking-[0.04em] text-white hover:bg-white/25 transition-all duration-300"
+              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.15)' }}
+            >
+              Experience Narrative Drift
+              <span className="text-[1.1rem]">&rarr;</span>
+            </Link>
+          </Reveal>
         </div>
       </section>
 
@@ -92,6 +105,18 @@ export default function NarrativeDriftPage() {
         </div>
       </SuiteSection>
 
+      {/* ── Transition divider ── */}
+      <section className="relative w-full h-[40vh] md:h-[50vh] overflow-hidden">
+        <Image
+          src="/transition-1.png"
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/20 pointer-events-none" />
+      </section>
+
       {/* ── How the research works — with interlude image ── */}
       <SuiteSection>
         <SideImagePanel image="/interlude.png">
@@ -124,7 +149,7 @@ export default function NarrativeDriftPage() {
       {/* ── What it makes visible — with background image ── */}
       <section className="relative py-24 md:py-36 overflow-hidden">
         <Image
-          src="/transition-1.png"
+          src="/narrative drift-1.png"
           alt=""
           fill
           className="object-cover object-center"
