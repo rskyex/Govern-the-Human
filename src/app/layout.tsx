@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Govern the Human',
     description:
       'AI governance asks what systems do. This project asks what they do to the human subject.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: '/govern the human og.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',

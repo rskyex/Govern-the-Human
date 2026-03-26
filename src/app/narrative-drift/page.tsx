@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: 'Narrative Drift — Govern the Human',
     description:
       'An investigation into how algorithmic curation restructures personal memory, narrative coherence, and the temporal continuity required for self-governance.',
-    images: [{ url: '/og-narrative-drift.png', width: 1200, height: 630 }],
+    images: [{ url: '/govern the human og.png', width: 1200, height: 630 }],
   },
 }
 
