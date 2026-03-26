@@ -6,24 +6,24 @@ import { Footer } from '@/components/footer'
 import { Reveal } from '@/components/ui/reveal'
 
 export const metadata: Metadata = {
-  title: 'Builder — Risa Koyanagi | Govern the Human',
+  title: 'Creator — Risa Koyanagi | Govern the Human',
   description:
     'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
   openGraph: {
-    title: 'Risa Koyanagi — Builder',
+    title: 'Risa Koyanagi — Creator',
     description:
       'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
-    url: '/builder',
+    url: '/creator',
     images: [{ url: '/govern-the-human-og.png', width: 1200, height: 630, type: 'image/png' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Risa Koyanagi — Builder',
+    title: 'Risa Koyanagi — Creator',
     images: ['/govern-the-human-og.png'],
   },
 }
 
-export default function BuilderPage() {
+export default function CreatorPage() {
   return (
     <div className="min-h-screen bg-base">
       <Header />
@@ -33,7 +33,7 @@ export default function BuilderPage() {
         <div className="max-w-[1120px] mx-auto px-8 md:px-16">
           <Reveal>
             <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-6">
-              Builder
+              Creator
             </p>
           </Reveal>
           <Reveal>
@@ -99,11 +99,11 @@ export default function BuilderPage() {
               <Reveal delay={0.1}>
                 <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
                   Born in 2003, Risa Koyanagi is a Cambridge Future Scholar and
-                  researcher working at the intersection of international security,
-                  space governance, nuclear governance, cyber governance, and emerging
-                  technology governance. Her research is especially concerned with
-                  legitimation theory, dual-use governance, authority architecture, and
-                  responsible behaviour norms.
+                  researcher working at the intersection of space governance, nuclear
+                  governance, cyber governance, strategic risk, and emerging technology
+                  governance. Her research is especially concerned with legitimation
+                  theory, dual-use governance, authority architecture, responsible
+                  behaviour norms, and international security.
                 </p>
               </Reveal>
 
