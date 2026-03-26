@@ -28,56 +28,48 @@ export default function CreatorPage() {
     <div className="min-h-screen bg-base">
       <Header />
 
-      {/* ── Hero ── */}
-      <section className="bg-base pt-40 pb-24 md:pb-36">
-        <div className="max-w-[1120px] mx-auto px-8 md:px-16">
-          <Reveal>
-            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-6">
-              Creator
-            </p>
-          </Reveal>
-          <Reveal>
-            <h1
-              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-6"
-              style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
-            >
-              Risa Koyanagi
-            </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px]">
-              Cambridge Future Scholar. Researcher at the intersection of
-              international security, space governance, nuclear governance, cyber
-              governance, and emerging technology governance.
-            </p>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <Link
-              href="https://risakoyanagi.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-5 mt-8 px-8 py-4 border border-panel-border bg-panel rounded-sm hover:border-text-ghost/30 hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)] transition-all duration-300 group"
-            >
-              <div className="relative w-[120px] h-[63px] rounded-sm overflow-hidden flex-shrink-0 border border-panel-border">
-                <Image
-                  src="/risa-koyanagi-og.png"
-                  alt="risakoyanagi.com"
-                  fill
-                  className="object-cover object-center"
-                  sizes="120px"
-                />
-              </div>
-              <span className="font-sans text-[0.95rem] tracking-[0.04em] text-text-primary">
-                risakoyanagi.com
-                <span className="text-[1.1rem] ml-2">&rarr;</span>
-              </span>
-            </Link>
-          </Reveal>
+      {/* ── Hero with background image ── */}
+      <section className="relative overflow-hidden pt-[64px]">
+        <div className="absolute inset-0">
+          <Image
+            src="/creator-bg.png"
+            alt=""
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-black/50" />
+        </div>
+
+        <div className="relative py-28 md:py-44">
+          <div className="max-w-[1120px] mx-auto px-8 md:px-16">
+            <Reveal>
+              <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-[#c9a96e] mb-6">
+                Creator
+              </p>
+            </Reveal>
+            <Reveal>
+              <h1
+                className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-white mb-6"
+                style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
+              >
+                Risa Koyanagi
+              </h1>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-white/80 font-light max-w-[640px]">
+                Cambridge Future Scholar. Researcher at the intersection of
+                international security, space governance, nuclear governance, cyber
+                governance, and emerging technology governance.
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
 
       {/* ── Profile ── */}
-      <section className="bg-base pb-24 md:pb-36">
+      <section className="bg-base py-24 md:py-36">
         <div className="max-w-[1120px] mx-auto px-8 md:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Photo */}
@@ -87,7 +79,6 @@ export default function CreatorPage() {
                   src="/profile.jpg"
                   alt="Risa Koyanagi"
                   fill
-                  priority
                   className="object-cover object-center"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
@@ -130,8 +121,48 @@ export default function CreatorPage() {
         </div>
       </section>
 
-      {/* ── Back navigation ── */}
+      {/* ── Her Portfolio ── */}
       <section className="bg-surface py-20 md:py-28">
+        <div className="max-w-[1120px] mx-auto px-8 md:px-16">
+          <Reveal>
+            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-8">
+              Her Portfolio
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <Link
+              href="https://risakoyanagi.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-6 px-8 py-5 border border-panel-border bg-base rounded-sm hover:border-text-ghost/30 hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)] transition-all duration-300 group"
+            >
+              <div className="relative w-[160px] h-[84px] rounded-sm overflow-hidden flex-shrink-0 border border-panel-border">
+                <Image
+                  src="/risa-koyanagi-og.png"
+                  alt="risakoyanagi.com"
+                  fill
+                  className="object-cover object-center"
+                  sizes="160px"
+                />
+              </div>
+              <div>
+                <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary group-hover:text-[#1e3a5f] transition-colors duration-300 mb-1">
+                  risakoyanagi.com
+                </p>
+                <p className="font-sans text-[0.8rem] text-text-tertiary font-light">
+                  Personal website &amp; portfolio
+                </p>
+              </div>
+              <span className="font-sans text-[1.2rem] text-text-ghost group-hover:text-text-secondary transition-colors duration-300 ml-auto">
+                &rarr;
+              </span>
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Back navigation ── */}
+      <section className="bg-base py-16 md:py-20">
         <div className="max-w-[1120px] mx-auto px-8 md:px-16">
           <Reveal>
             <div className="flex items-center justify-center">
