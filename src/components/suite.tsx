@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { Reveal } from '@/components/ui/reveal'
 import { IMAGES } from '@/lib/images'
@@ -27,19 +28,33 @@ const INSTRUMENTS = [
 
 export function Suite() {
   return (
-    <section id="the-suite" className="bg-base py-20 md:py-28">
+    <section id="the-suite" className="bg-base py-10 md:py-14">
       <div className="max-w-[1120px] mx-auto px-8 md:px-16">
         <Reveal>
-          <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
-            03
-          </p>
           <div className="w-10 h-px bg-rule mb-10" />
         </Reveal>
 
         <Reveal delay={0.05}>
-          <h2 className="font-display text-[1.8rem] md:text-[2.4rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-6">
-            The Suite
-          </h2>
+          <div className="flex items-start gap-5 mb-6">
+            <div
+              className="hidden md:block flex-shrink-0 w-[4px] min-h-[40px] self-stretch rounded-full overflow-hidden"
+              style={{
+                maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%)',
+              }}
+            >
+              <Image
+                src={IMAGES.suitePanoramic}
+                alt=""
+                fill
+                className="object-cover opacity-50"
+                sizes="4px"
+              />
+            </div>
+            <h2 className="font-display text-[1.8rem] md:text-[2.4rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary">
+              The Suite
+            </h2>
+          </div>
         </Reveal>
 
         <Reveal delay={0.08}>

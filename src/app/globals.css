@@ -12,11 +12,11 @@
 
   --color-text-primary: #0e1117;
   --color-text-secondary: #363a45;
-  --color-text-tertiary: #6b7080;
-  --color-text-ghost: #9da2b0;
+  --color-text-tertiary: #555a68;
+  --color-text-ghost: #7d8291;
   --color-text-subtitle: #1e3a5f;
 
-  --color-rule: rgba(0, 0, 0, 0.06);
+  --color-rule: rgba(0, 0, 0, 0.09);
   --color-accent: rgba(100, 120, 160, 0.08);
 }
 

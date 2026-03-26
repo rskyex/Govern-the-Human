@@ -118,6 +118,18 @@ export function NarrativeDriftPage() {
         </div>
       </section>
 
+      {/* Transition image */}
+      <section className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+        <Image
+          src={IMAGES.narrativeDriftTransition}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/20 pointer-events-none" />
+      </section>
+
       {/* How the experience works */}
       <SuitePageSection>
         <Reveal>
@@ -170,6 +182,18 @@ export function NarrativeDriftPage() {
           </div>
         </div>
       </SuitePageSection>
+
+      {/* Interlude image */}
+      <section className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+        <Image
+          src={IMAGES.narrativeDriftInterlude}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/20 pointer-events-none" />
+      </section>
 
       {/* Why it matters */}
       <SuitePageSection background="surface">

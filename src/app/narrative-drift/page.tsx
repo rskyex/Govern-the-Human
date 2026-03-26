@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import {
   SuitePageWrapper,
   SuiteHero,
@@ -61,6 +62,18 @@ export default function NarrativeDriftPage() {
           </div>
         </div>
       </SuiteSection>
+
+      {/* ── Transition image ── */}
+      <section className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+        <Image
+          src="/transition-1.png"
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/20 pointer-events-none" />
+      </section>
 
       {/* ── What it makes visible ── */}
       <SuiteSection bg="surface">
@@ -129,6 +142,18 @@ export default function NarrativeDriftPage() {
           </Reveal>
         </SideImagePanel>
       </SuiteSection>
+
+      {/* ── Interlude image ── */}
+      <section className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
+        <Image
+          src="/interlude.png"
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/20 pointer-events-none" />
+      </section>
 
       {/* ── Why it matters ── */}
       <SuiteSection bg="surface">
