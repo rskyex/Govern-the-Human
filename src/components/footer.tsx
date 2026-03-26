@@ -33,40 +33,6 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="w-full h-px bg-white/20 mb-10" />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
-          {/* Bio — left */}
-          <div>
-            <p className="font-sans text-[0.85rem] leading-[1.8] text-white/75 font-light">
-              Born in 2003, Risa Koyanagi is a Cambridge Future Scholar and researcher working at the intersection of space governance, nuclear governance, cyber governance, strategic risk, and emerging technology governance. Her research is especially concerned with legitimation theory, dual-use governance, authority architecture, responsible behaviour norms, and international security.
-            </p>
-          </div>
-
-          {/* Thumbnail + link — right */}
-          <div className="flex flex-col items-center md:items-end">
-            <a
-              href="https://risakoyanagi.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block group"
-            >
-              <div className="relative w-[240px] h-[126px] rounded-sm overflow-hidden mb-4 border border-white/20 group-hover:border-white/40 transition-all duration-300">
-                <Image
-                  src="/risa-koyanagi-og.png"
-                  alt="Risa Koyanagi"
-                  fill
-                  className="object-cover object-center"
-                  sizes="240px"
-                />
-              </div>
-              <p className="font-sans text-[12px] tracking-[0.06em] text-white/60 group-hover:text-white/90 transition-colors duration-300 text-center md:text-right">
-                risakoyanagi.com &rarr;
-              </p>
-            </a>
-          </div>
-        </div>
-
         <p className="font-sans text-[11px] text-white/50 font-light mt-10 text-center">
           &copy; Risa Koyanagi
         </p>

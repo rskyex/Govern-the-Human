@@ -8,12 +8,14 @@ const NAV_HOME = [
   { label: 'Thesis', href: '#thesis' },
   { label: 'Framework', href: '#three-layer-model' },
   { label: 'Suite', href: '#the-suite' },
+  { label: 'Creator', href: '/creator' },
 ]
 
 const NAV_SUITE = [
   { label: 'Observatory', href: '/observatory' },
   { label: 'SelfTrace', href: '/selftrace' },
   { label: 'Narrative Drift', href: '/narrative-drift' },
+  { label: 'Creator', href: '/creator' },
 ]
 
 export function Header() {
