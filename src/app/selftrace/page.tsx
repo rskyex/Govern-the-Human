@@ -22,12 +22,12 @@ export const metadata: Metadata = {
     description:
       'A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity.',
     url: `${siteUrl}/selftrace`,
-    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, type: 'image/png', alt: 'Govern the Human' }],
+    images: [{ url: `${siteUrl}/govern-the-human-og.jpg`, width: 1200, height: 630, type: 'image/jpeg', alt: 'Govern the Human' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'SelfTrace — Govern the Human',
-    images: [{ url: `${siteUrl}/govern-the-human-og.png`, width: 1200, height: 630, alt: 'Govern the Human' }],
+    images: [{ url: `${siteUrl}/govern-the-human-og.jpg`, width: 1200, height: 630, alt: 'Govern the Human' }],
   },
 }
 
