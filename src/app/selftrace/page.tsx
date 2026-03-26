@@ -44,11 +44,20 @@ export default function SelfTracePage() {
         <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
           <Reveal>
             <h1
-              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-white md:text-text-primary mb-6"
+              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-white md:text-text-primary mb-4"
               style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
             >
               SelfTrace
             </h1>
+            <a
+              href="https://selftrace.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-text-primary text-white text-sm font-sans font-medium tracking-wide hover:opacity-90 transition-opacity mb-2"
+            >
+              Visit SelfTrace
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-white/90 md:text-text-secondary font-light max-w-[640px] drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
