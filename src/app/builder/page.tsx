@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: 'Risa Koyanagi — Builder',
     description:
       'Cambridge Future Scholar. Researcher at the intersection of international security, space governance, and emerging technology governance.',
-    images: [{ url: '/og-builder.png', width: 1200, height: 630 }],
+    images: [{ url: '/govern the human og.png', width: 1200, height: 630 }],
   },
 }
 
@@ -50,10 +50,21 @@ export default function BuilderPage() {
               href="https://risakoyanagi.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-8 px-8 py-4 border border-panel-border bg-panel rounded-sm font-sans text-[0.95rem] tracking-[0.04em] text-text-primary hover:border-text-ghost/30 hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)] transition-all duration-300"
+              className="inline-flex items-center gap-5 mt-8 px-8 py-4 border border-panel-border bg-panel rounded-sm hover:border-text-ghost/30 hover:shadow-[0_2px_16px_rgba(0,0,0,0.04)] transition-all duration-300 group"
             >
-              risakoyanagi.com
-              <span className="text-[1.1rem]">&rarr;</span>
+              <div className="relative w-[120px] h-[63px] rounded-sm overflow-hidden flex-shrink-0 border border-panel-border">
+                <Image
+                  src="/og-builder.png"
+                  alt="risakoyanagi.com"
+                  fill
+                  className="object-cover object-center"
+                  sizes="120px"
+                />
+              </div>
+              <span className="font-sans text-[0.95rem] tracking-[0.04em] text-text-primary">
+                risakoyanagi.com
+                <span className="text-[1.1rem] ml-2">&rarr;</span>
+              </span>
             </Link>
           </Reveal>
         </div>
