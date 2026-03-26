@@ -28,12 +28,9 @@ const INSTRUMENTS = [
 
 export function Suite() {
   return (
-    <section id="the-suite" className="bg-base py-14 md:py-20">
+    <section id="the-suite" className="bg-base py-10 md:py-14">
       <div className="max-w-[1120px] mx-auto px-8 md:px-16">
         <Reveal>
-          <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">
-            03
-          </p>
           <div className="w-10 h-px bg-rule mb-10" />
         </Reveal>
 

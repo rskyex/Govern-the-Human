@@ -24,7 +24,7 @@ const LAYERS = [
 
 export function ThreeLayerModel() {
   return (
-    <section id="three-layer-model" className="relative py-14 md:py-20 overflow-hidden">
+    <section id="three-layer-model" className="relative py-10 md:py-14 overflow-hidden">
       {/* Full background image */}
       <div className="absolute inset-0">
         <Image
@@ -39,9 +39,6 @@ export function ThreeLayerModel() {
 
       <div className="relative max-w-[1120px] mx-auto px-8 md:px-16">
         <Reveal>
-          <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-white/50 mb-4">
-            02
-          </p>
           <div className="w-10 h-px bg-white/20 mb-10" />
         </Reveal>
 
@@ -62,11 +59,11 @@ export function ThreeLayerModel() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {LAYERS.map((layer, i) => (
             <Reveal key={layer.title} delay={0.1 + i * 0.06}>
-              <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-sm p-7 md:p-9">
-                <h3 className="font-display text-[1.3rem] md:text-[1.45rem] font-semibold text-white mb-4" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>
+              <div className="bg-white border border-white/30 rounded-sm p-7 md:p-9 shadow-sm">
+                <h3 className="font-display text-[1.3rem] md:text-[1.45rem] font-semibold text-[#1e3a5f] mb-4">
                   {layer.title}
                 </h3>
-                <p className="font-sans text-[0.9rem] leading-[1.85] text-white/80 font-light">
+                <p className="font-sans text-[0.9rem] leading-[1.85] text-[#1e3a5f]/75 font-light">
                   {layer.description}
                 </p>
               </div>

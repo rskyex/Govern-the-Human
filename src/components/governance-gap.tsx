@@ -27,7 +27,7 @@ function VerticalArrow({ label, emphasized = false, className = '' }: { label?: 
 function CurrentGovernanceDiagram() {
   return (
     <div className="flex flex-col items-center w-full">
-      <p className="font-sans text-[15px] font-semibold tracking-[0.2em] uppercase text-[#1e3a5f] text-center mb-5">
+      <p className="font-sans text-[15px] font-semibold tracking-[0.2em] uppercase text-white text-center mb-5">
         Current governance
       </p>
       <div className="flex flex-col items-center gap-3 w-full max-w-[300px]">
@@ -37,14 +37,28 @@ function CurrentGovernanceDiagram() {
           </p>
           <p className="font-sans text-[14px] text-[#1e3a5f]/70 mt-2">safety, fairness, accountability</p>
         </div>
-        <VerticalArrow label="regulates" />
+        {/* Arrow with "regulates" label beside it */}
+        <div className="flex items-center gap-3">
+          <VerticalArrow />
+          <p className="font-sans text-[13px] italic text-white/80">regulates</p>
+        </div>
         <div className="border border-[#1e3a5f]/20 bg-white rounded-md px-7 py-5 text-center w-full shadow-sm">
           <p className="font-sans text-[17px] tracking-[0.06em] uppercase text-[#1e3a5f] leading-tight font-semibold">
             AI System
           </p>
           <p className="font-sans text-[14px] text-[#1e3a5f]/70 mt-2">behaviour &amp; outputs</p>
         </div>
-        <p className="font-sans text-[14px] text-white/70 italic mt-2">assumes a stable subject</p>
+        {/* Arrow with "protect" label beside it */}
+        <div className="flex items-center gap-3">
+          <VerticalArrow />
+          <p className="font-sans text-[13px] italic text-white/80">protect</p>
+        </div>
+        <div className="border border-[#1e3a5f]/20 bg-white rounded-md px-7 py-5 text-center w-full shadow-sm">
+          <p className="font-sans text-[15px] tracking-[0.06em] uppercase text-[#1e3a5f] leading-tight font-semibold">
+            Human Subject
+          </p>
+          <p className="font-sans text-[13px] text-[#1e3a5f]/70 mt-2">Assumes a stable subject</p>
+        </div>
       </div>
     </div>
   )
@@ -73,7 +87,7 @@ function SecondOrderDonut() {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <p className="font-sans text-[15px] font-semibold tracking-[0.2em] uppercase text-[#1e3a5f] text-center mb-5">
+      <p className="font-sans text-[15px] font-semibold tracking-[0.2em] uppercase text-white text-center mb-5">
         Govern the Human
       </p>
 
@@ -144,7 +158,7 @@ function SecondOrderDonut() {
           x={cx}
           y={cy - 6}
           textAnchor="middle"
-          style={{ fontSize: '16px', fontWeight: 700, fill: '#1e3a5f', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.06em' }}
+          style={{ fontSize: '16px', fontWeight: 700, fill: '#ffffff', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.06em' }}
         >
           HUMAN SUBJECT
         </text>
@@ -152,7 +166,7 @@ function SecondOrderDonut() {
           x={cx}
           y={cy + 12}
           textAnchor="middle"
-          style={{ fontSize: '13px', fill: 'rgba(30,58,95,0.6)', fontFamily: "'Inter', system-ui, sans-serif" }}
+          style={{ fontSize: '13px', fill: 'rgba(255,255,255,0.7)', fontFamily: "'Inter', system-ui, sans-serif" }}
         >
           under transformation
         </text>
@@ -203,13 +217,9 @@ export function GovernanceGap() {
         <div className="absolute inset-0 bg-black/55" />
       </div>
 
-      <div className="relative py-14 md:py-20">
+      <div className="relative py-10 md:py-14">
         <div className="max-w-[1120px] mx-auto px-8 md:px-16">
-          {/* Section number */}
           <Reveal>
-            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-white/50 mb-4">
-              04
-            </p>
             <div className="w-10 h-px bg-white/20 mb-10" />
           </Reveal>
 
@@ -263,15 +273,23 @@ export function GovernanceGap() {
               {/* Left: Current governance */}
               <CurrentGovernanceDiagram />
 
-              {/* ⇔ connector — desktop */}
+              {/* Double arrow connector — desktop */}
               <div className="hidden md:flex flex-col items-center">
-                <span className="text-[3rem] text-white/80 leading-none font-light">⇔</span>
+                <svg width="48" height="24" viewBox="0 0 48 24" className="text-white/70" aria-hidden="true">
+                  <line x1="8" y1="12" x2="40" y2="12" stroke="currentColor" strokeWidth="1.5" />
+                  <polyline points="13,6 6,12 13,18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                  <polyline points="35,6 42,12 35,18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                </svg>
               </div>
 
-              {/* ⇔ connector — mobile */}
+              {/* Double arrow connector — mobile */}
               <div className="flex md:hidden items-center justify-center gap-3 w-full">
                 <div className="flex-1 h-px bg-white/15" />
-                <span className="text-[2.4rem] text-white/80 leading-none font-light">⇔</span>
+                <svg width="48" height="24" viewBox="0 0 48 24" className="text-white/70 flex-shrink-0" aria-hidden="true">
+                  <line x1="8" y1="12" x2="40" y2="12" stroke="currentColor" strokeWidth="1.5" />
+                  <polyline points="13,6 6,12 13,18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                  <polyline points="35,6 42,12 35,18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                </svg>
                 <div className="flex-1 h-px bg-white/15" />
               </div>
 

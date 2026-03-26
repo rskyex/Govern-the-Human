@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export function SectionDivider() {
   return (
-    <div className="relative flex items-center justify-center py-0 md:py-1">
+    <div className="relative flex items-center justify-center py-0 md:py-0">
       {/* Gold line — left */}
       <div className="w-36 md:w-48 h-[2.5px] bg-gradient-to-r from-transparent to-[#c9a84c] opacity-60 rounded-full" />
 
