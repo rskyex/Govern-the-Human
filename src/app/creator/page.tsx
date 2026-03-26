@@ -184,6 +184,9 @@ export default function CreatorPage() {
                     <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary group-hover:text-[#1e3a5f] transition-colors duration-300">
                       Faultline <span className="text-text-ghost">&rarr;</span>
                     </p>
+                    <p className="font-sans text-[0.8rem] leading-[1.7] text-text-tertiary font-light mt-1">
+                      The Strategic Risk Suite: mapping how orbital, nuclear, and cyber risks connect, overlap, and escalate.
+                    </p>
                   </div>
                 </div>
               </a>
@@ -209,8 +212,8 @@ export default function CreatorPage() {
                     <p className="font-sans text-[0.95rem] font-medium tracking-[0.01em] text-text-primary">
                       MYTHERA
                     </p>
-                    <p className="font-sans text-[0.8rem] text-text-tertiary font-light">
-                      Coming soon
+                    <p className="font-sans text-[0.8rem] leading-[1.7] text-text-tertiary font-light mt-1">
+                      The interactive mythic world of cultural and philosophical interfaces where memory, meaning, and selfhood can be explored. Coming soon.
                     </p>
                   </div>
                 </div>
