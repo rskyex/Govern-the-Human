@@ -31,34 +31,27 @@ export const metadata: Metadata = {
 export default function SelfTracePage() {
   return (
     <SuitePageWrapper>
-      {/* ── Hero with selftrace-2 background ── */}
+      {/* ── Hero with selftrace-2 background (flipped) ── */}
       <section className="relative min-h-[70svh] flex items-end overflow-hidden">
         <Image
           src={IMAGES.selfTraceHero}
           alt=""
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center -scale-x-100"
           sizes="100vw"
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.85) 65%, #ffffff 90%)',
-          }}
         />
         <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
           <Reveal>
             <h1
-              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-6"
+              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-white mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]"
               style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
             >
               SelfTrace
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px]">
+            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-white/85 font-light max-w-[640px] drop-shadow-[0_1px_6px_rgba(0,0,0,0.2)]">
               A reflective instrument for examining how AI-mediated environments reshape
               self-perception, memory, and the continuity of personal identity.
             </p>
@@ -108,35 +101,50 @@ export default function SelfTracePage() {
         </div>
       </SuiteSection>
 
-      {/* ── What it makes visible ── */}
-      <SuiteSection bg="surface">
-        <SectionHeading
-          title="What it makes visible"
-          description="Four dimensions of mediated selfhood that operate beneath conscious awareness."
+      {/* ── What it makes visible — with background image ── */}
+      <section className="relative py-24 md:py-36 overflow-hidden">
+        <Image
+          src={IMAGES.selfTraceAbstract}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          <ConceptCard
-            index={0}
-            title="Reflexive distortion"
-            description="How AI-generated reflections of behaviour create feedback loops that gradually alter self-understanding — not through deception, but through selective emphasis."
-          />
-          <ConceptCard
-            index={1}
-            title="Memory mediation"
-            description="How algorithmically curated archives of personal history reshape what subjects remember, forget, and consider significant about their own past."
-          />
-          <ConceptCard
-            index={2}
-            title="Identity coherence"
-            description="How the demand for consistent digital profiles creates pressure toward a fixed self-presentation that may diverge from lived experience."
-          />
-          <ConceptCard
-            index={3}
-            title="Affective calibration"
-            description="How personalised environments tune emotional responses over time, shifting the baseline of what feels normal, urgent, or important."
-          />
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16">
+          <div className="mb-14 md:mb-20">
+            <Reveal delay={0.05}>
+              <h2 className="font-display text-[1.6rem] md:text-[2.2rem] font-normal leading-[1.2] tracking-[-0.015em] text-white mb-5">
+                What it makes visible
+              </h2>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-white/75 font-light max-w-[640px]">
+                Four dimensions of mediated selfhood that operate beneath conscious awareness.
+              </p>
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {[
+              { title: 'Reflexive distortion', description: 'How AI-generated reflections of behaviour create feedback loops that gradually alter self-understanding — not through deception, but through selective emphasis.' },
+              { title: 'Memory mediation', description: 'How algorithmically curated archives of personal history reshape what subjects remember, forget, and consider significant about their own past.' },
+              { title: 'Identity coherence', description: 'How the demand for consistent digital profiles creates pressure toward a fixed self-presentation that may diverge from lived experience.' },
+              { title: 'Affective calibration', description: 'How personalised environments tune emotional responses over time, shifting the baseline of what feels normal, urgent, or important.' },
+            ].map((item, i) => (
+              <Reveal key={item.title} delay={0.08 + i * 0.05}>
+                <div className="p-7 md:p-9 border border-white/20 bg-white/10 backdrop-blur-sm rounded-sm h-full">
+                  <h3 className="font-display text-[1.15rem] md:text-[1.25rem] font-medium text-white mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="font-sans text-[0.9rem] leading-[1.85] text-white/70 font-light">
+                    {item.description}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
-      </SuiteSection>
+      </section>
 
       {/* ── How it works ── */}
       <SuiteSection>
