@@ -36,6 +36,28 @@ The site presents three diagnostic instruments:
 | [Tailwind CSS](https://tailwindcss.com/) | 4 |
 | [Framer Motion](https://www.framer.com/motion/) | 12 |
 
+## Design System
+
+**Typography**
+
+- Display: Cormorant Garamond (serif) — headings and titles
+- Body: Inter (sans-serif) — body text and UI elements
+- Base size: 17px
+
+**Color Tokens**
+
+| Token | Value | Usage |
+|---|---|---|
+| `base` | `#ffffff` | Main background |
+| `surface` | `#f5f6f8` | Alternate section background |
+| `text-primary` | `#0e1117` | Primary text |
+| `text-secondary` | `#363a45` | Secondary text |
+| `text-tertiary` | `#555a68` | Tertiary text |
+| `text-ghost` | `#7d8291` | Muted labels and captions |
+| `text-subtitle` | `#1e3a5f` | Blue accent text |
+| `panel` | `rgba(255,255,255,0.7)` | Card backgrounds |
+| `rule` | `rgba(0,0,0,0.09)` | Borders and dividers |
+
 ## Getting Started
 
 ### Prerequisites
@@ -56,7 +78,7 @@ npm run dev
 
 ### Build
 
-The project is configured for static export.
+The project is configured for static export (`output: 'export'` in `next.config.ts`).
 
 ```bash
 npm run build
@@ -67,24 +89,33 @@ npm run build
 ```
 src/
 ├── app/
-│   ├── page.tsx                # Home — thesis, framework, suite overview
-│   ├── layout.tsx              # Root layout with metadata
-│   ├── globals.css             # Tailwind theme configuration
-│   ├── observatory/            # Observatory instrument page
-│   ├── selftrace/              # SelfTrace instrument page
-│   └── narrative-drift/        # Narrative Drift instrument page
+│   ├── page.tsx                  # Home — thesis, framework, suite overview
+│   ├── layout.tsx                # Root layout with metadata and fonts
+│   ├── globals.css               # Tailwind theme and design tokens
+│   ├── observatory/
+│   │   ├── page.tsx              # Observatory instrument page
+│   │   └── observatory-page.tsx  # Alternative layout variant
+│   ├── selftrace/
+│   │   ├── page.tsx              # SelfTrace instrument page
+│   │   └── selftrace-page.tsx    # Alternative layout variant
+│   └── narrative-drift/
+│       ├── page.tsx              # Narrative Drift instrument page
+│       └── narrative-drift-page.tsx  # Alternative layout variant
 ├── components/
-│   ├── header.tsx              # Fixed navigation header
-│   ├── hero.tsx                # Hero section
-│   ├── thesis.tsx              # Central research question
-│   ├── three-layer-model.tsx   # Epistemic / Ontological / Political framework
-│   ├── suite.tsx               # Three instruments overview
-│   ├── governance-gap.tsx      # Current vs. proposed governance diagram
-│   ├── closing.tsx             # Closing statement
-│   ├── footer.tsx              # Footer with author bio
-│   └── ui/                     # Shared UI primitives
+│   ├── header.tsx                # Fixed navigation header
+│   ├── hero.tsx                  # Hero section with full-bleed background
+│   ├── thesis.tsx                # Central research question
+│   ├── three-layer-model.tsx     # Epistemic / Ontological / Political framework
+│   ├── suite.tsx                 # Three instruments overview cards
+│   ├── governance-gap.tsx        # Current vs. proposed governance diagram
+│   ├── closing.tsx               # Closing statement
+│   ├── footer.tsx                # Footer with author bio
+│   ├── section-divider.tsx       # Gold gradient divider with logo
+│   ├── suite-page-layout.tsx     # Shared suite page components (SuiteHero, ConceptCard, SuiteNav, etc.)
+│   └── ui/
+│       └── reveal.tsx            # Scroll-triggered Framer Motion animation
 └── lib/
-    └── images.ts               # Centralized image asset map
+    └── images.ts                 # Centralized image asset map
 ```
 
 ## Author
