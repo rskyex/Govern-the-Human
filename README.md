@@ -40,7 +40,7 @@ The site presents three diagnostic instruments:
 
 ### Prerequisites
 
-- Node.js >= 20
+- Node.js >= 20 (the repo pins Node 22 via `.node-version`)
 
 ### Installation
 
@@ -67,24 +67,33 @@ npm run build
 ```
 src/
 ├── app/
-│   ├── page.tsx                # Home — thesis, framework, suite overview
-│   ├── layout.tsx              # Root layout with metadata
-│   ├── globals.css             # Tailwind theme configuration
-│   ├── observatory/            # Observatory instrument page
-│   ├── selftrace/              # SelfTrace instrument page
-│   └── narrative-drift/        # Narrative Drift instrument page
+│   ├── page.tsx                      # Home — thesis, framework, suite overview
+│   ├── layout.tsx                    # Root layout with metadata
+│   ├── globals.css                   # Tailwind theme configuration
+│   ├── observatory/
+│   │   ├── page.tsx                  # Observatory route (metadata + entry)
+│   │   └── observatory-page.tsx      # Observatory instrument content
+│   ├── selftrace/
+│   │   ├── page.tsx                  # SelfTrace route (metadata + entry)
+│   │   └── selftrace-page.tsx        # SelfTrace instrument content
+│   └── narrative-drift/
+│       ├── page.tsx                  # Narrative Drift route (metadata + entry)
+│       └── narrative-drift-page.tsx  # Narrative Drift instrument content
 ├── components/
-│   ├── header.tsx              # Fixed navigation header
-│   ├── hero.tsx                # Hero section
-│   ├── thesis.tsx              # Central research question
-│   ├── three-layer-model.tsx   # Epistemic / Ontological / Political framework
-│   ├── suite.tsx               # Three instruments overview
-│   ├── governance-gap.tsx      # Current vs. proposed governance diagram
-│   ├── closing.tsx             # Closing statement
-│   ├── footer.tsx              # Footer with author bio
-│   └── ui/                     # Shared UI primitives
+│   ├── header.tsx                    # Fixed navigation header
+│   ├── hero.tsx                      # Hero section
+│   ├── thesis.tsx                    # Central research question
+│   ├── three-layer-model.tsx         # Epistemic / Ontological / Political framework
+│   ├── suite.tsx                     # Three instruments overview
+│   ├── governance-gap.tsx            # Current vs. proposed governance diagram
+│   ├── closing.tsx                   # Closing statement
+│   ├── footer.tsx                    # Footer with author bio
+│   ├── section-divider.tsx           # Section transition divider
+│   ├── suite-page-layout.tsx         # Shared layout for instrument pages
+│   └── ui/
+│       └── reveal.tsx                # Scroll-reveal animation primitive
 └── lib/
-    └── images.ts               # Centralized image asset map
+    └── images.ts                     # Centralized image asset map
 ```
 
 ## Author
