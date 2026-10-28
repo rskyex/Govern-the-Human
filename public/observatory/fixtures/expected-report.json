@@ -16,7 +16,7 @@
       "generated_at": "2026-10-28T16:49:09.738Z",
       "mode": "verifier",
       "file": "narrative-drift-script-a.json",
-      "sha256": "0ac1b204ef6792ef30e6b40ffc2065b284e6d4490ae6a51463291d1895719080",
+      "sha256": "78025fa52b3ab17db449eed0915387864efe487869cfb0ff3a1e17b5c64abef1",
       "warnings": []
     },
     {
@@ -26,7 +26,7 @@
       "generated_at": "2026-10-28T16:49:13.805Z",
       "mode": "verifier",
       "file": "narrative-drift-script-b.json",
-      "sha256": "4c92f8577a141089ca377d0e086c6bcdb20c0bb7b553a6702f97236a903eb894",
+      "sha256": "b27bafe5dac566e1aac547acd4fc10d5805048acc22eaa1f4a94ebe981abcc88",
       "warnings": []
     },
     {
@@ -36,7 +36,7 @@
       "generated_at": "2026-10-28T16:49:46.032Z",
       "mode": "demo",
       "file": "selftrace-demo-intellectual.json",
-      "sha256": "74a4d63b7adb5d78670a1b0b927bc607125dcbff7175b023aed84ab0dec2532f",
+      "sha256": "b9942529cd214e56f6613c6041c88134199f47321cee65ede3633c5f0751d65e",
       "warnings": []
     }
   ],

@@ -1,0 +1,2 @@
+# Reference runs are hashed (SHA-256) in the expected report: keep their bytes identical on every OS.
+public/observatory/fixtures/** -text
