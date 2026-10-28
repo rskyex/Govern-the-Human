@@ -87,7 +87,7 @@ Reference runs are bundled with the Observatory in `public/observatory/fixtures/
 
 ## Second-Order Assessment report
 
-The Observatory exports its own report as JSON with `schema: "gth-assessment/v1"`. It lists the source files (instrument, version, timestamp, file name, SHA-256 of the file as loaded, and any warnings from the file checks), and for each layer the question, the indicators with their values and source instrument, the reading, and the provision it is relevant to. The report is not a legal or clinical assessment. It reflects what the instruments recorded, not behaviour outside them.
+The Observatory exports its own report as JSON with `schema: "gth-assessment/v1"`. It lists the source files (instrument, version, timestamp, file name, SHA-256 of the file as loaded, and any warnings from the file checks), and for each of the three layers (epistemic, ontological, political) the question, the indicators with their values, source instrument and the concept each stands in for (`proxyFor`), the reading, and the provisions it is relevant to. Each provision carries the operative words quoted from the official EUR-Lex text (`quote`), a paraphrased `summary`, the relevance and a link. A separate `data_handling` block, which is not a framework layer, reports the privacy checks. `thresholds` and `threshold_rationale` give the values used and why; they are provisional. The report is not a legal or clinical assessment. It reflects what the instruments recorded, not behaviour outside them.
 
 `expected-report.json` in the fixtures folder is the report for the three reference runs with `generated_at` removed. `npm test` rebuilds it and fails on any difference; `npm run test:update` rewrites it after an intended change.
 

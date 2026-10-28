@@ -2,7 +2,7 @@
 
 import { Component, useCallback, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { parseResult } from '@/lib/observatory/parse'
-import { buildAssessment, DISCLAIMER, THRESHOLDS, type Assessment, type LayerAssessment } from '@/lib/observatory/assess'
+import { buildAssessment, DISCLAIMER, THRESHOLDS, type Assessment, type Indicator, type Provision } from '@/lib/observatory/assess'
 import type { LoadedResult } from '@/lib/observatory/types'
 import { FIXTURE_PATH, REFERENCE_RUNS } from '@/lib/observatory/reference'
 
@@ -320,41 +320,80 @@ function Report({ report }: { report: Assessment }) {
 
       <div className="space-y-10">
         {report.layers.map((l) => (
-          <LayerCard key={l.id} layer={l} />
+          <LayerCard key={l.id} id={l.id} kicker={l.layer} question={l.question} muted={l.status === 'no-data'} indicators={l.indicators} reading={l.reading} provisions={l.provisions} />
         ))}
+        {report.data_handling.indicators.length > 0 && (
+          <LayerCard
+            id="data-handling"
+            kicker="Data handling check (not a framework layer)"
+            question={report.data_handling.question}
+            indicators={report.data_handling.indicators}
+            reading={report.data_handling.reading}
+            provisions={report.data_handling.provisions}
+          />
+        )}
       </div>
 
-      <p className="font-sans text-[12px] leading-[1.8] text-text-ghost mt-10">
-        Thresholds used: delegation counts as high at {THRESHOLDS.delegationHigh}% or more and low at{' '}
-        {THRESHOLDS.delegationLow}% or less; an axis counts as stable when it moves less than {THRESHOLDS.stablePoints}{' '}
-        points; topic range counts as narrowed when the last SelfTrace diversity value is below {THRESHOLDS.narrowingShare}%
-        of the first (recomputed from the bits in the file). These thresholds are the Observatory&apos;s own choices.
-        Provision summaries are paraphrased for orientation and are not legal text. The full SHA-256 of each source
-        file is in the exported JSON.
-      </p>
+      <section aria-labelledby="thresholds-title" className="mt-10 font-sans text-[12px] leading-[1.8] text-text-ghost">
+        <h3 id="thresholds-title" className="font-medium text-text-tertiary mb-1">
+          Thresholds ({report.threshold_rationale.status})
+        </h3>
+        <p className="mb-2">{report.threshold_rationale.note}</p>
+        <ul className="list-disc pl-5 space-y-1 mb-3">
+          <li>Delegation high at {THRESHOLDS.delegationHigh}% or more: {report.threshold_rationale.delegationHigh}</li>
+          <li>Delegation low at {THRESHOLDS.delegationLow}% or less: {report.threshold_rationale.delegationLow}</li>
+          <li>An axis is stable when it moves less than {THRESHOLDS.stablePoints} points: {report.threshold_rationale.stablePoints}</li>
+          <li>
+            Topic range narrowed when the last SelfTrace diversity value is below {THRESHOLDS.narrowingShare}% of the first
+            (recomputed from the bits in the file): {report.threshold_rationale.narrowingShare}
+          </li>
+        </ul>
+        <p>
+          Indicators are labelled with the framework concept each one stands in for. Provision quotes are from the official
+          EUR-Lex text; summaries are paraphrased for orientation and are not legal text. The full SHA-256 of each source
+          file is in the exported JSON.
+        </p>
+      </section>
     </article>
   )
 }
 
-function LayerCard({ layer }: { layer: LayerAssessment }) {
+function LayerCard({
+  id,
+  kicker,
+  question,
+  muted = false,
+  indicators,
+  reading,
+  provisions,
+}: {
+  id: string
+  kicker: string
+  question: string
+  muted?: boolean
+  indicators: Indicator[]
+  reading: string[]
+  provisions: Provision[]
+}) {
   return (
     <section
-      aria-labelledby={`layer-${layer.id}`}
+      aria-labelledby={`layer-${id}`}
       className="border border-panel-border bg-panel rounded-sm p-6 md:p-9 break-inside-avoid"
     >
-      <p className={`${label} mb-3`}>{layer.layer}</p>
-      <h3 id={`layer-${layer.id}`} className="font-display text-[1.3rem] md:text-[1.5rem] font-medium leading-[1.35] text-text-primary mb-6">
-        {layer.question}
+      <p className={`${label} mb-3`}>{kicker}</p>
+      <h3 id={`layer-${id}`} className="font-display text-[1.3rem] md:text-[1.5rem] font-medium leading-[1.35] text-text-primary mb-6">
+        {question}
       </h3>
 
-      {layer.indicators.length > 0 && (
+      {indicators.length > 0 && (
         <div className="mb-6">
           <p className="font-sans text-[12px] font-medium text-text-tertiary mb-2">Observed indicators</p>
           <dl className="divide-y divide-rule border-y border-rule">
-            {layer.indicators.map((ind, i) => (
+            {indicators.map((ind, i) => (
               <div key={i} className="py-3 grid grid-cols-1 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-1 md:gap-6">
                 <dt className="font-sans text-[13px] text-text-secondary">
                   {ind.label}
+                  {ind.proxyFor && <span className="block text-[11px] text-text-tertiary">Proxy for: {ind.proxyFor}</span>}
                   <span className="block text-[11px] text-text-ghost">{ind.source}</span>
                 </dt>
                 <dd className="font-sans text-[13px] text-text-primary m-0 break-words">{ind.value}</dd>
@@ -367,20 +406,33 @@ function LayerCard({ layer }: { layer: LayerAssessment }) {
       <div className="mb-6">
         <p className="font-sans text-[12px] font-medium text-text-tertiary mb-2">Reading</p>
         <div className="space-y-3">
-          {layer.reading.map((r, i) => (
-            <p key={i} className={`font-sans text-[0.92rem] leading-[1.85] font-light ${layer.status === 'no-data' ? 'text-text-ghost italic' : 'text-text-secondary'}`}>
+          {reading.map((r, i) => (
+            <p key={i} className={`font-sans text-[0.92rem] leading-[1.85] font-light ${muted ? 'text-text-ghost italic' : 'text-text-secondary'}`}>
               {r}
             </p>
           ))}
         </div>
       </div>
 
-      <div className="bg-surface rounded-sm p-4 md:p-5">
-        <p className="font-sans text-[12px] font-medium text-text-tertiary mb-1">
-          Relevant provision: {layer.provision.instrument}, {layer.provision.reference}
-        </p>
-        <p className="font-sans text-[13px] leading-[1.75] text-text-secondary mb-2">{layer.provision.summary}</p>
-        <p className="font-sans text-[13px] leading-[1.75] text-text-tertiary">{layer.provision.relevance}</p>
+      <div className="space-y-3">
+        {provisions.map((pr) => (
+          <div key={pr.reference} className="bg-surface rounded-sm p-4 md:p-5">
+            <p className="font-sans text-[12px] font-medium text-text-tertiary mb-2">
+              Relevant provision:{' '}
+              <a href={pr.url} className="underline underline-offset-4 hover:text-text-primary">
+                {pr.instrument}, {pr.reference}
+              </a>
+            </p>
+            <blockquote className="font-sans text-[13px] leading-[1.75] text-text-secondary mb-2 border-l-2 border-rule pl-3">
+              {pr.quote}
+            </blockquote>
+            <p className="font-sans text-[13px] leading-[1.75] text-text-secondary mb-2">
+              <span className="text-text-tertiary">Paraphrased: </span>
+              {pr.summary}
+            </p>
+            <p className="font-sans text-[13px] leading-[1.75] text-text-tertiary">{pr.relevance}</p>
+          </div>
+        ))}
       </div>
     </section>
   )

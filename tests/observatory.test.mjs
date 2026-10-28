@@ -83,7 +83,9 @@ test("readings describe the record, flag verifier replays and shared derivation"
   assert.match(text("political"), /2 were options the instrument scores as faster/);
   assert.doesNotMatch(text("political"), /system shortened deliberation/);
   assert.match(text("ontological"), /top 3/);
-  assert.match(text("processing"), /heuristic/);
+  assert.match(r.data_handling.reading.join(" "), /heuristic/);
+  assert.equal(r.layers.length, 3);
+  assert.equal(r.threshold_rationale.status, "provisional");
 });
 
 test("one bad file does not stop the others from loading", () => {
@@ -92,4 +94,23 @@ test("one bad file does not stop the others from loading", () => {
   assert.equal(good.ok, true);
   assert.equal(bad.ok, false);
   assert.doesNotThrow(() => buildAssessment([good.result], "t"));
+});
+
+test("provisions quote the official text and label summaries as paraphrased", () => {
+  const r = referenceReport();
+  const all = [...r.layers.flatMap((l) => l.provisions), ...r.data_handling.provisions];
+  for (const p of all) {
+    assert.match(p.quote, /“.+”/, p.reference);
+    assert.match(p.url, /^https:\/\/eur-lex\.europa\.eu\//, p.reference);
+  }
+  const political = r.layers.find((l) => l.id === "political").provisions;
+  assert.match(political[0].quote, /thereby causing them to take a decision that they would not have otherwise taken/);
+  assert.match(political[0].relevance, /related behavioural signal/);
+  assert.ok(political.some((p) => /Annex III, point 8\(b\)/.test(p.reference)));
+  assert.match(r.layers.find((l) => l.id === "ontological").provisions[0].reference, /34\(1\)\(b\) and 34\(2\)\(a\)/);
+  assert.match(r.layers.find((l) => l.id === "epistemic").provisions[0].relevance, /not the end users/);
+});
+
+test("every layer indicator says what it is a proxy for", () => {
+  for (const l of referenceReport().layers) for (const i of l.indicators) assert.ok(i.proxyFor, `${l.id}: ${i.label}`);
 });

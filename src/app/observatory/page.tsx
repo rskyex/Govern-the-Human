@@ -123,7 +123,7 @@ export default function ObservatoryPage() {
           <SectionHeading
             label="04"
             title="What it reads"
-            description="Each layer of the framework is paired with one question and the instrument that can speak to it."
+            description="Each layer of the framework is paired with one question and the instrument that can speak to it. Every indicator is labelled with the concept it stands in for: the instruments measure proxies, not the layers themselves."
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <ConceptCard
@@ -143,8 +143,8 @@ export default function ObservatoryPage() {
             />
             <ConceptCard
               index={3}
-              title="Processing: data minimisation"
-              description="Results carry option indices, counts and topic labels only. The Observatory checks each file for free text and processes everything on the device."
+              title="Data handling check (not a layer)"
+              description="A check on the assessment itself, outside the three layers. Results carry option indices, counts and topic labels; the Observatory refuses files that declare personal content, runs a heuristic scan for free text and processes everything on the device."
             />
           </div>
         </SuiteSection>
