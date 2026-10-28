@@ -24,3 +24,14 @@ export const IMAGES = {
   /** Fluid abstract structural — atmospheric accent */
   fluidAbstract: '/img-fluid-abstract.png',
 } as const
+
+/** Suite page heroes and side panels (same images as the live site). */
+export const SUITE_IMAGES = {
+  observatory: '/img-hall-solitary.png',
+  selftrace: '/selftrace-2.png',
+  narrativeDrift: '/narrative drift hero.png',
+  /* secondary / sectional images */
+  observatorySection: '/img-architecture-wide.png',
+  selftraceSection: '/selftrace-5.png',
+  narrativeDriftSection: '/interlude.png',
+} as const

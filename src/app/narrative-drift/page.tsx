@@ -7,8 +7,8 @@ import {
   ConceptCard,
   SideImagePanel,
   SuiteNav,
-  SUITE_IMAGES,
 } from '@/components/suite-page-layout'
+import { SUITE_IMAGES } from '@/lib/images'
 import { Reveal } from '@/components/ui/reveal'
 
 export default function NarrativeDriftPage() {

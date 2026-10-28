@@ -7,16 +7,9 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import type { ReactNode } from 'react'
 
-/* ── Image asset map — centralized for easy replacement ── */
-export const SUITE_IMAGES = {
-  observatory: '/git-image (1).png',
-  selftrace: '/git-image (4).png',
-  narrativeDrift: '/narrative drift hero.png',
-  /* secondary / sectional images */
-  observatorySection: '/git-image (2).png',
-  selftraceSection: '/git-image (5).png',
-  narrativeDriftSection: '/git-image (7).png',
-}
+/* Suite page image paths live in src/lib/images.ts (SUITE_IMAGES): this is a
+   client module, so a plain object exported from here is undefined when a
+   server component page imports it. */
 
 /* ── Hero variant for suite pages ── */
 export function SuiteHero({
