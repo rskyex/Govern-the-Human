@@ -42,3 +42,24 @@ body {
 ::selection {
   background-color: rgba(74, 111, 165, 0.1);
 }
+
+/* ── Print: Observatory report ── */
+@media print {
+  header,
+  footer {
+    display: none !important;
+  }
+  html {
+    font-size: 12px;
+  }
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+  .break-inside-avoid {
+    break-inside: avoid;
+  }
+  @page {
+    margin: 16mm;
+  }
+}

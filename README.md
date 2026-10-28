@@ -22,9 +22,13 @@ The site presents three diagnostic instruments:
 
 | Instrument | Path | Focus |
 |---|---|---|
-| **Observatory** | `/observatory` | Tracking ontological transformations — agency displacement, identity classification, selfhood mediation, temporal compression, and normative drift |
+| **Observatory** | `/observatory` | Working tool: loads `gth-result/v1` files from SelfTrace and Narrative Drift and produces a Second-Order Assessment across the epistemic, ontological and political layers. Runs entirely in the browser. |
 | **SelfTrace** | `/selftrace` | Examining mediated identity — reflexive distortion, memory mediation, identity coherence, and affective calibration |
 | **Narrative Drift** | `/narrative-drift` | Investigating algorithmic curation — salience manipulation, temporal fragmentation, preference drift, memory substitution, and coherence erosion |
+
+### Observatory and the shared result format
+
+SelfTrace (`/results`) and Narrative Drift (diagnostic page) each export a `gth-result/v1` JSON file. The format is documented in [`SCHEMA.md`](SCHEMA.md). The Observatory reads one or more of these files (file picker or drag and drop), or bundled example results that match the verified reference runs, and builds a report with one question per layer, the indicators and their source instrument, a reading derived only from those indicators, and the provision each question is relevant to. The report exports as JSON (`gth-assessment/v1`) or prints. It is not a legal or clinical assessment.
 
 ## Tech Stack
 
@@ -71,8 +75,8 @@ src/
 │   ├── layout.tsx                    # Root layout with metadata
 │   ├── globals.css                   # Tailwind theme configuration
 │   ├── observatory/
-│   │   ├── page.tsx                  # Observatory route (metadata + entry)
-│   │   └── observatory-page.tsx      # Observatory instrument content
+│   │   ├── page.tsx                  # Observatory route and framing sections
+│   │   └── observatory-tool.tsx      # Loader and Second-Order Assessment report
 │   ├── selftrace/
 │   │   ├── page.tsx                  # SelfTrace route (metadata + entry)
 │   │   └── selftrace-page.tsx        # SelfTrace instrument content
@@ -93,7 +97,12 @@ src/
 │   └── ui/
 │       └── reveal.tsx                # Scroll-reveal animation primitive
 └── lib/
-    └── images.ts                     # Centralized image asset map
+    ├── images.ts                     # Centralized image asset map
+    └── observatory/
+        ├── types.ts                  # gth-result/v1 types
+        ├── parse.ts                  # Validation and personal-content scan
+        ├── assess.ts                 # Builds the Second-Order Assessment
+        └── fixtures/                 # Example results (Script A, Script B, SelfTrace demo)
 ```
 
 ## Author

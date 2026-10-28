@@ -5,12 +5,13 @@ import Link from 'next/link'
 import { Reveal } from '@/components/ui/reveal'
 import { IMAGES } from '@/lib/images'
 
-const INSTRUMENTS = [
+const INSTRUMENTS: { name: string; slug: string; description: string; cta?: string }[] = [
   {
     name: 'Ontological Governance Observatory',
     slug: '/observatory',
     description:
-      'A diagnostic framework for tracking how AI systems alter the categories of agency, identity, and selfhood that governance presupposes.',
+      'Load results from SelfTrace and Narrative Drift and get a Second-Order Assessment across the epistemic, ontological and political layers, with the provisions each question touches. Runs in your browser.',
+    cta: 'Open the Observatory',
   },
   {
     name: 'SelfTrace',
@@ -76,7 +77,7 @@ export function Suite() {
                     {item.description}
                   </p>
                   <span className="font-sans text-[12px] tracking-[0.06em] text-text-ghost group-hover:text-text-secondary transition-colors duration-300">
-                    Explore &rarr;
+                    {item.cta ?? 'Explore'} &rarr;
                   </span>
                 </div>
               </Link>

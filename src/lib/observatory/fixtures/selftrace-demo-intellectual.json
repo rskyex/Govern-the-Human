@@ -1,0 +1,96 @@
+{
+  "schema": "gth-result/v1",
+  "instrument": {
+    "name": "selftrace",
+    "version": "09959e8",
+    "url": "https://selftrace.vercel.app"
+  },
+  "generated_at": "2026-10-28T16:49:46.032Z",
+  "inputs": {
+    "source": "demo",
+    "profile_id": "demo-intellectual",
+    "profile_label": "The Emerging Public Intellectual",
+    "platform": "twitter",
+    "post_count": 548,
+    "reflection_answers_included": false
+  },
+  "outputs": {
+    "post_count": 548,
+    "date_range": {
+      "start": "2021-06-06T23:00:00.000Z",
+      "end": "2023-11-28T00:00:00.000Z",
+      "start_label": "June 2021",
+      "end_label": "November 2023"
+    },
+    "top_topics": [
+      {
+        "topic": "AI-governance",
+        "count": 101
+      },
+      {
+        "topic": "tech-ethics",
+        "count": 96
+      },
+      {
+        "topic": "film",
+        "count": 76
+      },
+      {
+        "topic": "platform-accountability",
+        "count": 63
+      },
+      {
+        "topic": "philosophy",
+        "count": 53
+      }
+    ],
+    "rewarded_rising": [
+      {
+        "topic": "platform-accountability",
+        "post_count": 63,
+        "engagement_vs_average": 2.58,
+        "frequency_trend": "increasing"
+      },
+      {
+        "topic": "AI-governance",
+        "post_count": 101,
+        "engagement_vs_average": 2.38,
+        "frequency_trend": "increasing"
+      },
+      {
+        "topic": "tech-ethics",
+        "post_count": 96,
+        "engagement_vs_average": 2.38,
+        "frequency_trend": "increasing"
+      }
+    ],
+    "kept": [],
+    "kept_without_encouragement": [],
+    "resisted_reward": [],
+    "topic_range": {
+      "distinct_topics": 11,
+      "diversity_first_quarter_bits": 2.2,
+      "diversity_last_quarter_bits": 1.93,
+      "diversity_change_pct": -12,
+      "quarters": 11,
+      "narrowed": false
+    },
+    "definitions": {
+      "rewarded_rising": "Topic with above-average engagement whose posting frequency increased (top 3).",
+      "kept": "As on /results: topic with engagement below 50% of the average whose posting frequency did not decrease (top 3).",
+      "kept_without_encouragement": "As on /kept: topic with engagement below 60% of the average whose posting frequency did not decrease.",
+      "resisted_reward": "As on /kept: topic with engagement above 130% of the average whose posting frequency did not increase (top 3).",
+      "narrowed": "Topic diversity in the last quarter is below 75% of the first quarter (Shannon entropy, bits)."
+    }
+  },
+  "privacy": {
+    "processing": "client-side",
+    "personal_content_included": false,
+    "excluded": [
+      "post text",
+      "phrases and self-descriptions",
+      "reflection answers",
+      "MBTI and Enneagram"
+    ]
+  }
+}
