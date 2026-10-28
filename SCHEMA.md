@@ -79,7 +79,7 @@ A topic row is `{topic, post_count, engagement_vs_average, frequency_trend}`. `e
 
 ## Example
 
-Reference files that match the verified runs are bundled with the Observatory in `src/lib/observatory/fixtures/`:
+Reference runs are bundled with the Observatory in `public/observatory/fixtures/` and served at `/observatory/fixtures/`. They are exports from particular instrument builds (Narrative Drift `51d91e3`, SelfTrace `09959e8`), not independently verified results; a later build may give different numbers. The Observatory page's Verify section links each one to the live instrument.
 
 - `narrative-drift-script-a.json`: The Optimized, 22% displacement, 100% system-aligned.
 - `narrative-drift-script-b.json`: The Self-Authored, 12% displacement, 11% system-aligned.
@@ -87,4 +87,19 @@ Reference files that match the verified runs are bundled with the Observatory in
 
 ## Second-Order Assessment report
 
-The Observatory exports its own report as JSON with `schema: "gth-assessment/v1"`. It lists the source files (instrument, version, timestamp), and for each layer the question, the indicators with their values and source instrument, the reading, and the provision it is relevant to. The report is not a legal or clinical assessment. It reflects what the instruments recorded, not behaviour outside them.
+The Observatory exports its own report as JSON with `schema: "gth-assessment/v1"`. It lists the source files (instrument, version, timestamp, file name, SHA-256 of the file as loaded, and any warnings from the file checks), and for each layer the question, the indicators with their values and source instrument, the reading, and the provision it is relevant to. The report is not a legal or clinical assessment. It reflects what the instruments recorded, not behaviour outside them.
+
+`expected-report.json` in the fixtures folder is the report for the three reference runs with `generated_at` removed. `npm test` rebuilds it and fails on any difference; `npm run test:update` rewrites it after an intended change.
+
+## What the Observatory checks
+
+A file is refused, with the reason shown, when:
+
+- `schema`, `instrument`, `inputs` or `outputs` is missing or unknown, `generated_at` is not ISO 8601, or `instrument.version` is empty;
+- `privacy.personal_content_included` is `true`;
+- Narrative Drift: `encounter_count` is not 9, there are not 9 encounters of which 3 are civic (zone 3), `system_aligned_count` does not match the encounters marked system-aligned, `system_aligned_pct` is not that count as a rounded percentage (±1), a percentage is outside 0 to 100, an axis value is outside -100 to +100, an axis `change` is not `end - origin`, or `inputs.encounter_choices` does not match the encounters;
+- SelfTrace: `date_range.start` or `.end` is missing, not ISO 8601, or out of order; a topic count exceeds `post_count`; `inputs.post_count` differs from `outputs.post_count`; diversity bits are missing or outside 0 to 20; or `diversity_change_pct` disagrees with the bits by more than 2 points.
+
+A file is accepted with a warning, which the report repeats, when the version is not a git sha or package version, the privacy block is missing or incomplete, or the SelfTrace `narrowed` flag disagrees with its bits. The Observatory always recomputes `narrowed` from the bits (last below 75% of first; never when `topic_range.sufficient` is `false`) and uses that value.
+
+The personal-content scan is a heuristic: it flags suspicious field names and long free text. It can miss personal data and is not a guarantee that none is present.

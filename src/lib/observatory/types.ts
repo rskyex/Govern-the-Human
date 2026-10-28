@@ -76,9 +76,13 @@ export type SelfTraceResult = Envelope<
       diversity_first_quarter_bits: number
       diversity_last_quarter_bits: number
       diversity_change_pct: number | null
-      quarters: number
+      quarters?: number
       narrowed: boolean
+      /** Newer SelfTrace builds: false when a comparison window had too few posts */
+      sufficient?: boolean
+      window_months?: number
     }
+    definitions?: Record<string, string>
   }
 >
 
@@ -90,6 +94,12 @@ export interface LoadedResult {
   /** Short human label, e.g. "Script A" or "The Emerging Public Intellectual" */
   label: string
   doc: GthResult
-  /** Findings of the personal-content scan; empty when clean */
+  /** SHA-256 of the file as loaded (hex), or null when it could not be computed */
+  sha256: string | null
+  /** Findings of the heuristic personal-content scan; empty when nothing was found */
   contentFlags: string[]
+  /** Non-fatal problems: the file was accepted, but the report should say this */
+  warnings: string[]
+  /** SelfTrace only: "narrowed" recomputed from the diversity bits (the file's flag is not trusted) */
+  narrowed?: boolean
 }

@@ -16,7 +16,7 @@ export const IMAGES = {
   /** Reflective arches, quieter mood — SelfTrace page */
   selfTrace: '/img-arches-reflective.png',
   /** Spatial uncertainty, transformation — Narrative Drift page */
-  narrativeDrift: '/narrative drift hero.png',
+  narrativeDrift: '/narrative-drift-hero.png',
   /** Transition image — Narrative Drift */
   narrativeDriftTransition: '/transition-1.png',
   /** Interlude image — Narrative Drift */
@@ -29,7 +29,7 @@ export const IMAGES = {
 export const SUITE_IMAGES = {
   observatory: '/img-hall-solitary.png',
   selftrace: '/selftrace-2.png',
-  narrativeDrift: '/narrative drift hero.png',
+  narrativeDrift: '/narrative-drift-hero.png',
   /* secondary / sectional images */
   observatorySection: '/img-architecture-wide.png',
   selftraceSection: '/selftrace-5.png',

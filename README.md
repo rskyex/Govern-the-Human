@@ -23,12 +23,12 @@ The site presents three diagnostic instruments:
 | Instrument | Path | Focus |
 |---|---|---|
 | **Observatory** | `/observatory` | Working tool: loads `gth-result/v1` files from SelfTrace and Narrative Drift and produces a Second-Order Assessment across the epistemic, ontological and political layers. Runs entirely in the browser. |
-| **SelfTrace** | `/selftrace` | Examining mediated identity — reflexive distortion, memory mediation, identity coherence, and affective calibration |
-| **Narrative Drift** | `/narrative-drift` | Investigating algorithmic curation — salience manipulation, temporal fragmentation, preference drift, memory substitution, and coherence erosion |
+| **SelfTrace** | `/selftrace` | Reads a posting archive (demo profile or own export) and shows rewarded, kept and resisted topics and the range of subjects over time |
+| **Narrative Drift** | `/narrative-drift` | Single-session simulation: five calibration questions, nine encounters, five axes; records which options were taken and how far the profile moved |
 
 ### Observatory and the shared result format
 
-SelfTrace (`/results`) and Narrative Drift (diagnostic page) each export a `gth-result/v1` JSON file. The format is documented in [`SCHEMA.md`](SCHEMA.md). The Observatory reads one or more of these files (file picker or drag and drop), or bundled example results that match the verified reference runs, and builds a report with one question per layer, the indicators and their source instrument, a reading derived only from those indicators, and the provision each question is relevant to. The report exports as JSON (`gth-assessment/v1`) or prints. It is not a legal or clinical assessment.
+SelfTrace (`/results`) and Narrative Drift (diagnostic page) each export a `gth-result/v1` JSON file. The format is documented in [`SCHEMA.md`](SCHEMA.md). The Observatory reads one or more of these files (file picker or drag and drop), or the bundled reference runs, and builds a report with one question per layer, the indicators and their source instrument, a reading derived only from those indicators, and the provision each question is relevant to. The report exports as JSON (`gth-assessment/v1`) or prints. It is not a legal or clinical assessment.
 
 ## Tech Stack
 
@@ -66,6 +66,16 @@ The project is configured for static export.
 npm run build
 ```
 
+Pages are exported as `<route>/index.html` (`trailingSlash: true`), so `/observatory/` works on any static host without rewrites. Set `NEXT_PUBLIC_SITE_URL` to the public address if it is not the Vercel production URL; it is used for `og:image`.
+
+### Test
+
+```bash
+npm test
+```
+
+Checks the Observatory's file validation and rebuilds the report for the reference runs, comparing it with `public/observatory/fixtures/expected-report.json` (ignoring `generated_at`). After an intended change, run `npm run test:update` and commit the new expected report.
+
 ## Project Structure
 
 ```
@@ -102,7 +112,9 @@ src/
         ├── types.ts                  # gth-result/v1 types
         ├── parse.ts                  # Validation and personal-content scan
         ├── assess.ts                 # Builds the Second-Order Assessment
-        └── fixtures/                 # Example results (Script A, Script B, SelfTrace demo)
+        └── reference.ts              # Reference runs and how to reproduce them
+public/observatory/fixtures/          # Reference runs and the expected report
+tests/                                # npm test (node --test)
 ```
 
 ## Author

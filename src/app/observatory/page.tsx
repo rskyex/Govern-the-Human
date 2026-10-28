@@ -9,6 +9,7 @@ import {
 import { Reveal } from '@/components/ui/reveal'
 import { IMAGES } from '@/lib/images'
 import { ObservatoryTool } from './observatory-tool'
+import { EXPECTED_REPORT, FIXTURE_PATH, REFERENCE_RUNS } from '@/lib/observatory/reference'
 
 export default function ObservatoryPage() {
   return (
@@ -42,9 +43,47 @@ export default function ObservatoryPage() {
       </section>
 
       <div className="print:hidden">
+        {/* ── Verify ── */}
+        <SuiteSection>
+          <SectionHeading
+            label="02"
+            title="Verify"
+            description="The example results are reference runs: exports from particular builds of each instrument. You can reproduce them and check the report against a committed copy."
+          />
+          <ol className="max-w-[780px] list-decimal pl-5 space-y-5 font-sans text-[0.92rem] leading-[1.85] text-text-secondary font-light">
+            {REFERENCE_RUNS.map((r) => (
+              <li key={r.file}>
+                <span className="text-text-primary">{r.instrument}, {r.label}.</span>{' '}
+                <a className="underline underline-offset-4 hover:text-text-primary" href={r.url}>
+                  Open the live instrument
+                </a>
+                . {r.steps} The reference file (
+                <a className="underline underline-offset-4 hover:text-text-primary" href={FIXTURE_PATH + r.file} download>
+                  {r.file}
+                </a>
+                ) was exported from build <span className="font-mono text-[0.85em]">{r.version}</span>.
+              </li>
+            ))}
+            <li>
+              Load your downloaded files above. The report&apos;s Sources table shows the instrument build and the
+              SHA-256 of each file. If the build matches the reference file&apos;s, the numbers should match; a
+              later build may differ because the instrument changed.
+            </li>
+            <li>
+              Compare with the{' '}
+              <a className="underline underline-offset-4 hover:text-text-primary" href={FIXTURE_PATH + EXPECTED_REPORT} download>
+                expected report for the three reference runs
+              </a>
+              . In the repository, <span className="font-mono text-[0.85em]">npm test</span> rebuilds that report from the
+              reference files and fails if anything except <span className="font-mono text-[0.85em]">generated_at</span>{' '}
+              differs.
+            </li>
+          </ol>
+        </SuiteSection>
+
         {/* ── Why this project exists ── */}
         <SuiteSection bg="surface">
-          <SectionHeading label="02" title="Why this project exists" />
+          <SectionHeading label="03" title="Why this project exists" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             <div>
               <Reveal delay={0.05}>
@@ -56,9 +95,9 @@ export default function ObservatoryPage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-                  The Observatory makes that change visible. It tracks the shifts that occur when human
-                  self-understanding is shaped by systems designed to predict, classify, and optimise behaviour
-                  at scale.
+                  The Observatory is a small step toward making that change visible. It reads result files
+                  from single runs of Narrative Drift and SelfTrace and sets out what they recorded, one
+                  question per layer. It does not observe people over time or across a population.
                 </p>
               </Reveal>
             </div>
@@ -82,7 +121,7 @@ export default function ObservatoryPage() {
         {/* ── What it makes visible ── */}
         <SuiteSection>
           <SectionHeading
-            label="03"
+            label="04"
             title="What it reads"
             description="Each layer of the framework is paired with one question and the instrument that can speak to it."
           />
@@ -112,7 +151,7 @@ export default function ObservatoryPage() {
 
         {/* ── Limits ── */}
         <SuiteSection bg="surface">
-          <SectionHeading label="04" title="What the report is not" />
+          <SectionHeading label="05" title="What the report is not" />
           <div className="max-w-[740px] space-y-7">
             <Reveal delay={0.05}>
               <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">

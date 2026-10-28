@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://govern-the-human.vercel.app'),
   title: 'Govern the Human',
   description:
     'A research project on second-order AI governance, subject formation, and the human under AI conditions.',

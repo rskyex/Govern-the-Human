@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --import ./tests/ts-hooks.mjs --test \"tests/*.test.mjs\"",
+    "test:update": "node --import ./tests/ts-hooks.mjs tests/update-expected.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.2",

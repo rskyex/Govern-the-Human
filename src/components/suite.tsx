@@ -17,13 +17,13 @@ const INSTRUMENTS: { name: string; slug: string; description: string; cta?: stri
     name: 'SelfTrace',
     slug: '/selftrace',
     description:
-      'A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity.',
+      'A browser-based instrument that reads a posting archive, a fictional demo profile or your own export, and shows which topics drew more engagement than the typical post of the same month, which you kept posting about anyway, and how your range of subjects changed.',
   },
   {
     name: 'Narrative Drift',
     slug: '/narrative-drift',
     description:
-      'An investigation into how algorithmic curation restructures personal memory, narrative coherence, and the temporal continuity required for self-governance.',
+      'An interactive simulation: five calibration questions set a baseline on five axes, then nine encounters with a feed, an AI companion and civic tools record which options you take and how far your profile moves.',
   },
 ]
 

@@ -1,20 +1,43 @@
 'use client'
 
-import { useCallback, useId, useMemo, useRef, useState } from 'react'
+import { Component, useCallback, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { parseResult } from '@/lib/observatory/parse'
 import { buildAssessment, DISCLAIMER, THRESHOLDS, type Assessment, type LayerAssessment } from '@/lib/observatory/assess'
 import type { LoadedResult } from '@/lib/observatory/types'
-import exampleA from '@/lib/observatory/fixtures/narrative-drift-script-a.json'
-import exampleB from '@/lib/observatory/fixtures/narrative-drift-script-b.json'
-import exampleST from '@/lib/observatory/fixtures/selftrace-demo-intellectual.json'
+import { FIXTURE_PATH, REFERENCE_RUNS } from '@/lib/observatory/reference'
 
 const VERSION = process.env.NEXT_PUBLIC_OBSERVATORY_VERSION || 'unknown'
 
-const EXAMPLES: [string, unknown][] = [
-  ['narrative-drift-script-a.json', exampleA],
-  ['narrative-drift-script-b.json', exampleB],
-  ['selftrace-demo-intellectual.json', exampleST],
-]
+
+async function sha256Hex(text: string): Promise<string | null> {
+  try {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))
+    return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('')
+  } catch {
+    return null
+  }
+}
+
+/** Keeps a rendering failure in the report from removing the loaded files. */
+class ReportBoundary extends Component<{ children: ReactNode }, { error: string | null }> {
+  state = { error: null as string | null }
+  static getDerivedStateFromError(e: unknown) {
+    return { error: e instanceof Error ? e.message : String(e) }
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div role="alert" className="mt-16 border border-red-800/20 bg-red-50 rounded-sm p-4">
+          <p className="font-sans text-[13px] font-medium text-red-900 mb-1">The report could not be built from these files</p>
+          <p className="font-sans text-[13px] text-red-900">
+            {this.state.error}. The loaded files are kept; remove the file that caused this and the report will be rebuilt.
+          </p>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 const label = 'font-sans text-[10px] font-medium tracking-[0.3em] uppercase text-text-ghost'
 const btnPrimary =
@@ -41,13 +64,22 @@ export function ObservatoryTool() {
   const inputRef = useRef<HTMLInputElement>(null)
   const inputId = useId()
 
-  const add = useCallback((items: { name: string; text: string }[]) => {
+  const add = useCallback(async (items: { name: string; text: string }[]) => {
     const errs: string[] = []
     const ok: LoadedResult[] = []
     for (const it of items) {
-      const out = parseResult(it.text, it.name)
-      if (out.ok) ok.push(out.result)
-      else errs.push(out.error)
+      const out = parseResult(it.text, it.name, await sha256Hex(it.text))
+      if (!out.ok) {
+        errs.push(out.error)
+        continue
+      }
+      // A file that passes the checks but still breaks the assessment is refused on its own.
+      try {
+        buildAssessment([out.result], VERSION)
+        ok.push(out.result)
+      } catch (e) {
+        errs.push(`${it.name}: could not be assessed (${e instanceof Error ? e.message : String(e)}).`)
+      }
     }
     setErrors(errs)
     setResults((prev) => {
@@ -65,12 +97,29 @@ export function ObservatoryTool() {
     [add]
   )
 
-  const loadExamples = () => add(EXAMPLES.map(([name, doc]) => ({ name, text: JSON.stringify(doc) })))
+  const loadExamples = async () => {
+    try {
+      const items = await Promise.all(
+        REFERENCE_RUNS.map(async ({ file: name }) => {
+          const res = await fetch(FIXTURE_PATH + name)
+          if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`)
+          return { name, text: await res.text() }
+        })
+      )
+      await add(items)
+    } catch (e) {
+      setErrors([`The reference runs could not be loaded (${e instanceof Error ? e.message : String(e)}).`])
+    }
+  }
 
-  const report: Assessment | null = useMemo(
-    () => (results.length ? buildAssessment(results, VERSION) : null),
-    [results]
-  )
+  const report: Assessment | null = useMemo(() => {
+    if (!results.length) return null
+    try {
+      return buildAssessment(results, VERSION)
+    } catch {
+      return null
+    }
+  }, [results])
 
   return (
     <div>
@@ -98,21 +147,24 @@ export function ObservatoryTool() {
             browser and are not uploaded anywhere.
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap gap-3">
-            <label htmlFor={inputId} className={`${btnPrimary} cursor-pointer text-center`}>
-              Choose JSON files
-            </label>
             <input
               ref={inputRef}
               id={inputId}
               type="file"
               accept=".json,application/json"
               multiple
-              className="sr-only"
+              className="sr-only peer"
               onChange={(e) => {
                 if (e.target.files?.length) readFiles(e.target.files)
                 e.target.value = ''
               }}
             />
+            <label
+              htmlFor={inputId}
+              className={`${btnPrimary} cursor-pointer text-center peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-text-subtitle peer-focus-visible:outline-none`}
+            >
+              Choose JSON files
+            </label>
             <button type="button" className={btnSecondary} onClick={loadExamples}>
               Load example results
             </button>
@@ -130,8 +182,8 @@ export function ObservatoryTool() {
             )}
           </div>
           <p className="font-sans text-[12px] leading-[1.7] text-text-ghost mt-5">
-            The examples are the reference runs used for verification: Narrative Drift Script A and Script B,
-            and the SelfTrace demo profile.
+            The examples are reference runs: Narrative Drift Script A and Script B (verifier replays of fixed
+            scripts) and the SelfTrace demo profile. See &quot;Verify&quot; below to reproduce them.
           </p>
         </div>
 
@@ -159,6 +211,11 @@ export function ObservatoryTool() {
                     <p className="font-sans text-[12px] text-text-ghost break-all">
                       {r.fileName} &middot; version {r.doc.instrument.version} &middot; {r.doc.generated_at}
                     </p>
+                    {r.warnings.map((w) => (
+                      <p key={w} className="font-sans text-[12px] text-amber-900 mt-1">
+                        Check: {w}
+                      </p>
+                    ))}
                   </div>
                   <button
                     type="button"
@@ -175,8 +232,21 @@ export function ObservatoryTool() {
         )}
       </div>
 
+      {/* Announces report changes to screen readers */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {report
+          ? `Report generated from ${report.sources.length} file${report.sources.length > 1 ? 's' : ''}: ${report.layers.filter((l) => l.status === 'assessed').length} of ${report.layers.length} layers assessed.`
+          : results.length
+            ? 'The report could not be generated.'
+            : ''}
+      </p>
+
       {/* ── Report ── */}
-      {report && <Report report={report} />}
+      {report && (
+        <ReportBoundary key={results.map((r) => r.key).join('|')}>
+          <Report report={report} />
+        </ReportBoundary>
+      )}
     </div>
   )
 }
@@ -219,14 +289,15 @@ function Report({ report }: { report: Assessment }) {
           Sources
         </h3>
         <div className="overflow-x-auto">
-          <table className="w-full font-sans text-[13px] text-left border-collapse min-w-[520px]">
+          <table className="w-full font-sans text-[13px] text-left border-collapse min-w-[640px]">
             <thead>
               <tr className="border-b border-rule text-text-ghost">
                 <th scope="col" className="py-2 pr-4 font-medium">Instrument</th>
                 <th scope="col" className="py-2 pr-4 font-medium">Run</th>
                 <th scope="col" className="py-2 pr-4 font-medium">Mode</th>
                 <th scope="col" className="py-2 pr-4 font-medium">Version</th>
-                <th scope="col" className="py-2 font-medium">Exported</th>
+                <th scope="col" className="py-2 pr-4 font-medium">Exported</th>
+                <th scope="col" className="py-2 font-medium">SHA-256</th>
               </tr>
             </thead>
             <tbody>
@@ -236,7 +307,10 @@ function Report({ report }: { report: Assessment }) {
                   <td className="py-2 pr-4">{s.label}</td>
                   <td className="py-2 pr-4">{s.mode}</td>
                   <td className="py-2 pr-4 font-mono text-[12px]">{s.version}</td>
-                  <td className="py-2 font-mono text-[12px]">{s.generated_at}</td>
+                  <td className="py-2 pr-4 font-mono text-[12px]">{s.generated_at}</td>
+                  <td className="py-2 font-mono text-[11px] break-all" title={s.sha256 ?? undefined}>
+                    {s.sha256 ? `${s.sha256.slice(0, 12)}…` : 'n/a'}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -253,8 +327,10 @@ function Report({ report }: { report: Assessment }) {
       <p className="font-sans text-[12px] leading-[1.8] text-text-ghost mt-10">
         Thresholds used: delegation counts as high at {THRESHOLDS.delegationHigh}% or more and low at{' '}
         {THRESHOLDS.delegationLow}% or less; an axis counts as stable when it moves less than {THRESHOLDS.stablePoints}{' '}
-        points; SelfTrace counts topic range as narrowed when the last quarter is below {THRESHOLDS.narrowingShare}% of the
-        first. Provision summaries are paraphrased for orientation and are not legal text.
+        points; topic range counts as narrowed when the last SelfTrace diversity value is below {THRESHOLDS.narrowingShare}%
+        of the first (recomputed from the bits in the file). These thresholds are the Observatory&apos;s own choices.
+        Provision summaries are paraphrased for orientation and are not legal text. The full SHA-256 of each source
+        file is in the exported JSON.
       </p>
     </article>
   )

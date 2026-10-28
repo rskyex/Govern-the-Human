@@ -1,0 +1,216 @@
+{
+  "schema": "gth-assessment/v1",
+  "observatory_version": "reference",
+  "disclaimer": "This is not a legal or clinical assessment. It reports what the instruments recorded during a run, which may be a scripted, simulated or fictional one, and does not describe anyone’s behaviour outside the instruments. Provisions are listed because they address the same question, not to suggest compliance or breach.",
+  "thresholds": {
+    "delegationHigh": 60,
+    "delegationLow": 30,
+    "stablePoints": 5,
+    "narrowingShare": 75
+  },
+  "sources": [
+    {
+      "instrument": "narrative-drift",
+      "version": "51d91e3",
+      "label": "Script A",
+      "generated_at": "2026-10-28T16:49:09.738Z",
+      "mode": "verifier",
+      "file": "narrative-drift-script-a.json",
+      "sha256": "0ac1b204ef6792ef30e6b40ffc2065b284e6d4490ae6a51463291d1895719080",
+      "warnings": []
+    },
+    {
+      "instrument": "narrative-drift",
+      "version": "51d91e3",
+      "label": "Script B",
+      "generated_at": "2026-10-28T16:49:13.805Z",
+      "mode": "verifier",
+      "file": "narrative-drift-script-b.json",
+      "sha256": "4c92f8577a141089ca377d0e086c6bcdb20c0bb7b553a6702f97236a903eb894",
+      "warnings": []
+    },
+    {
+      "instrument": "selftrace",
+      "version": "09959e8",
+      "label": "The Emerging Public Intellectual",
+      "generated_at": "2026-10-28T16:49:46.032Z",
+      "mode": "demo",
+      "file": "selftrace-demo-intellectual.json",
+      "sha256": "74a4d63b7adb5d78670a1b0b927bc607125dcbff7175b023aed84ab0dec2532f",
+      "warnings": []
+    }
+  ],
+  "layers": [
+    {
+      "id": "epistemic",
+      "layer": "Epistemic",
+      "question": "After repeated use, does the person still make routine choices on their own reasoning, or by default through the system?",
+      "provision": {
+        "instrument": "EU AI Act",
+        "reference": "Article 4, AI literacy",
+        "summary": "Providers and deployers of AI systems must take measures to ensure a sufficient level of AI literacy among the people who operate or use those systems on their behalf.",
+        "relevance": "The literacy duty assumes people keep exercising their own judgement alongside the system. A rising delegation rate and an autonomy axis moving toward external guidance are the pattern that duty is meant to counter."
+      },
+      "status": "assessed",
+      "indicators": [
+        {
+          "label": "Delegation rate (encounter choices the instrument scores as system-aligned)",
+          "value": "9 of 9 (100%)",
+          "source": "Narrative Drift 51d91e3, Script A"
+        },
+        {
+          "label": "Autonomy axis, origin to end",
+          "value": "+20 to -60 (change -80)",
+          "source": "Narrative Drift 51d91e3, Script A"
+        },
+        {
+          "label": "Delegation rate (encounter choices the instrument scores as system-aligned)",
+          "value": "1 of 9 (11%)",
+          "source": "Narrative Drift 51d91e3, Script B"
+        },
+        {
+          "label": "Autonomy axis, origin to end",
+          "value": "+20 to +68 (change +48)",
+          "source": "Narrative Drift 51d91e3, Script B"
+        }
+      ],
+      "reading": [
+        "Script A: 9 of 9 encounter choices (100%) were options the instrument scores as system-aligned, and the autonomy axis moved 80 points toward external guidance (+20 to -60). Most recorded choices were the options the instrument scores as delegating to the system, and the autonomy axis moved toward external guidance. The two indicators are not independent: the autonomy change (-80) is the sum of the autonomy scores of the same 9 choices that make up the delegation rate. This file is a verifier replay of Script A: the choices were scripted and no participant took part.",
+        "Script B: 1 of 9 encounter choices (11%) was an option the instrument scores as system-aligned, and the autonomy axis moved 48 points toward self-direction (+20 to +68). Few recorded choices were the options the instrument scores as delegating to the system, and the autonomy axis moved toward self-direction. The two indicators are not independent: the autonomy change (+48) is the sum of the autonomy scores of the same 9 choices that make up the delegation rate. This file is a verifier replay of Script B: the choices were scripted and no participant took part.",
+        "Across the 2 runs the delegation rate ranges from 11% to 100%. The instrument records which options were chosen; it does not record why."
+      ]
+    },
+    {
+      "id": "ontological",
+      "layer": "Ontological",
+      "question": "Does the environment reward a narrower self-presentation than the one the person would choose?",
+      "provision": {
+        "instrument": "Digital Services Act",
+        "reference": "Article 34, systemic risk assessment",
+        "summary": "Providers of very large online platforms must assess systemic risks arising from their service, including actual or foreseeable negative effects on civic discourse.",
+        "relevance": "Reward patterns that concentrate what people express on fewer topics are one route to such effects. SelfTrace shows the pattern for a single account; a platform risk assessment would look at it across users."
+      },
+      "status": "assessed",
+      "indicators": [
+        {
+          "label": "Posts analysed",
+          "value": "548, June 2021 to November 2023",
+          "source": "SelfTrace 09959e8, The Emerging Public Intellectual"
+        },
+        {
+          "label": "Topic diversity, first to last quarter",
+          "value": "2.20 to 1.93 bits (-12%) over 11 quarters; 11 distinct topics; narrowed (recomputed): no",
+          "source": "SelfTrace 09959e8, The Emerging Public Intellectual"
+        },
+        {
+          "label": "Rewarded and rising topics (posts)",
+          "value": "platform-accountability (63), AI-governance (101), tech-ethics (96) (the file lists only the top 3)",
+          "source": "SelfTrace 09959e8, The Emerging Public Intellectual"
+        },
+        {
+          "label": "Kept without reward (posts)",
+          "value": "none",
+          "source": "SelfTrace 09959e8, The Emerging Public Intellectual"
+        },
+        {
+          "label": "Rewarded but not followed (resisted reward, posts)",
+          "value": "none",
+          "source": "SelfTrace 09959e8, The Emerging Public Intellectual"
+        }
+      ],
+      "reading": [
+        "The Emerging Public Intellectual: topic diversity went from 2.20 to 1.93 bits (-12%), which is not below 75% of its starting value, so the recorded range did not narrow. 3 topics were recorded as rewarded and rising: platform-accountability (63), AI-governance (101), tech-ethics (96). Some rewarded topics grew, but the overall range did not narrow, so the record does not show a narrower self-presentation. Topic lists in this file are cut to the top 3, so counts of rewarded, kept and resisted topics are lower bounds. The instrument cannot see which self-presentation the person would have chosen. Kept and resisted topics are its only proxies for that choice, so this reading is about the recorded rewards, not about intentions. This profile is fictional demo data."
+      ]
+    },
+    {
+      "id": "political",
+      "layer": "Political",
+      "question": "Does the system shorten deliberation in civic acts?",
+      "provision": {
+        "instrument": "EU AI Act",
+        "reference": "Article 5(1)(a), prohibited manipulative techniques",
+        "summary": "Prohibits AI systems that deploy subliminal, purposefully manipulative or deceptive techniques with the objective or effect of materially distorting behaviour by appreciably impairing the ability to make an informed decision, causing or likely to cause significant harm.",
+        "relevance": "The prohibition turns on whether informed decision making is impaired. Shortened deliberation in civic acts is an observable precondition worth tracking. It is not evidence that the legal threshold is met."
+      },
+      "status": "assessed",
+      "indicators": [
+        {
+          "label": "Tempo axis, origin to end",
+          "value": "+20 to +68 (change +48)",
+          "source": "Narrative Drift 51d91e3, Script A"
+        },
+        {
+          "label": "Civic encounter: Curated political feed",
+          "value": "option 1 (z3e1-agree); tempo 0; system-aligned",
+          "source": "Narrative Drift 51d91e3, Script A"
+        },
+        {
+          "label": "Civic encounter: AI summary of candidates",
+          "value": "option 1 (z3e2-use); tempo +10; system-aligned",
+          "source": "Narrative Drift 51d91e3, Script A"
+        },
+        {
+          "label": "Civic encounter: Pre-drafted petition comment",
+          "value": "option 1 (z3e3-sign); tempo +8; system-aligned",
+          "source": "Narrative Drift 51d91e3, Script A"
+        },
+        {
+          "label": "Tempo axis, origin to end",
+          "value": "+20 to +4 (change -16)",
+          "source": "Narrative Drift 51d91e3, Script B"
+        },
+        {
+          "label": "Civic encounter: Curated political feed",
+          "value": "option 3 (z3e1-disengage); tempo 0; not system-aligned",
+          "source": "Narrative Drift 51d91e3, Script B"
+        },
+        {
+          "label": "Civic encounter: AI summary of candidates",
+          "value": "option 3 (z3e2-skip); tempo 0; not system-aligned",
+          "source": "Narrative Drift 51d91e3, Script B"
+        },
+        {
+          "label": "Civic encounter: Pre-drafted petition comment",
+          "value": "option 3 (z3e3-ignore); tempo 0; not system-aligned",
+          "source": "Narrative Drift 51d91e3, Script B"
+        }
+      ],
+      "reading": [
+        "Script A: of the 3 civic choices recorded, 2 were options the instrument scores as faster (AI summary of candidates +10, Pre-drafted petition comment +8), 0 as slower, and 3 of 3 as system-aligned. Across all encounters the tempo axis moved 48 points toward speed (+20 to +68). In this record, the faster civic options were mostly the ones taken. Tempo scores are the instrument’s own coding of each option; they do not measure how long anyone actually deliberated. This file is a verifier replay of Script A: the choices were scripted and no participant took part.",
+        "Script B: of the 3 civic choices recorded, 0 were options the instrument scores as faster, 0 as slower, and 0 of 3 as system-aligned. Across all encounters the tempo axis moved 16 points toward deliberation (+20 to +4). In this record, no faster civic option was taken and every system offer in the civic encounters was declined. Tempo scores are the instrument’s own coding of each option; they do not measure how long anyone actually deliberated. This file is a verifier replay of Script B: the choices were scripted and no participant took part."
+      ]
+    },
+    {
+      "id": "processing",
+      "layer": "Processing",
+      "question": "Does the assessment use only the data it needs?",
+      "status": "assessed",
+      "indicators": [
+        {
+          "label": "narrative-drift-script-a.json",
+          "value": "client-side; personal content declared absent; heuristic scan flagged nothing",
+          "source": "Narrative Drift 51d91e3, Script A"
+        },
+        {
+          "label": "narrative-drift-script-b.json",
+          "value": "client-side; personal content declared absent; heuristic scan flagged nothing",
+          "source": "Narrative Drift 51d91e3, Script B"
+        },
+        {
+          "label": "selftrace-demo-intellectual.json",
+          "value": "client-side; personal content declared absent; heuristic scan flagged nothing",
+          "source": "SelfTrace 09959e8, The Emerging Public Intellectual"
+        }
+      ],
+      "reading": [
+        "3 files were read in this browser and not uploaded. 3 of 3 declare that no personal content is included; files that declare the opposite are refused. The Observatory’s scan flagged nothing. The scan is a heuristic that looks for suspicious field names and long free text; it can miss personal data and is not a guarantee that none is present."
+      ],
+      "provision": {
+        "instrument": "GDPR",
+        "reference": "Article 5(1)(c), data minimisation",
+        "summary": "Personal data must be adequate, relevant and limited to what is necessary for the purposes for which it is processed.",
+        "relevance": "The instruments are designed to export counts and option indices rather than content, and processing here happens on the device. Whether a particular use of these files meets the principle depends on its purpose and context, which this tool does not assess."
+      }
+    }
+  ]
+}
