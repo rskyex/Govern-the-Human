@@ -19,7 +19,9 @@ Every file describes one run of one instrument. It records what went in (as a su
 | `privacy.personal_content_included` | boolean | Always `false`. |
 | `privacy.excluded` | string[] | What the instrument deliberately left out. |
 
-Readers should reject files whose `schema` is not `gth-result/v1` and ignore fields they do not know. New optional fields may be added within v1. Renaming or removing a field, or changing its meaning, needs `gth-result/v2`.
+Readers should reject files whose `schema` is not `gth-result/v1` and ignore fields they do not know. New optional fields may be added within v1. Renaming or removing a field needs `gth-result/v2`.
+
+An instrument may refine how a v1 field is computed within v1 only if the file carries `outputs.definitions` describing that field. When `outputs.definitions` is present, its text is authoritative for the meaning of the fields it names, and readers should show it or follow it rather than the descriptions below. SelfTrace did this once; see "SelfTrace: two generations" below.
 
 ## Narrative Drift
 
@@ -64,18 +66,45 @@ Post text, phrases, self-descriptions, reflection answers, MBTI and Enneagram ty
 
 ### outputs
 
+SelfTrace files from builds after `09959e8` carry `outputs.definitions`, and that text is authoritative. The table gives the current meaning; "SelfTrace: two generations" below describes files without the new fields.
+
 | Field | Type | Meaning |
 | --- | --- | --- |
 | `post_count` | integer | Posts in the dataset. |
-| `date_range.start`, `.end` | string | ISO dates of the first and last post. `start_label` and `end_label` are the month labels shown on `/results`. |
-| `top_topics[]` | `{topic, count}` | The five most frequent topic labels. |
-| `rewarded_rising[]` | topic row | Above-average engagement and rising posting frequency (top 3, as on `/results`). |
-| `kept[]` | topic row | Engagement below 50% of average, frequency not decreasing (top 3, as on `/results`). |
-| `kept_without_encouragement[]` | topic row | Engagement below 60% of average, frequency not decreasing (as on `/kept`). |
-| `resisted_reward[]` | topic row | Engagement above 130% of average, frequency not increasing (top 3, as on `/kept`). |
-| `topic_range` | object | `distinct_topics`, `diversity_first_quarter_bits`, `diversity_last_quarter_bits` (Shannon entropy), `diversity_change_pct`, `quarters`, `narrowed` (last quarter below 75% of first). |
+| `date_range.start`, `.end` | string | ISO dates of the first and last post (UTC). `start_label` and `end_label` are the month labels shown on `/results`. |
+| `taxonomy` | object | Optional. `name`, `release`, `licence`, `url` of the topic vocabulary (IPTC Media Topics). |
+| `top_topics[]` | `{topic, topic_id?, count}` | The five most frequent topics. `topic_id` is the IPTC qcode when present. |
+| `rewarded_rising[]` | topic row | Rewarded (time-adjusted reward ratio ≥ 1.25, ≥ 8 posts) and rising. Full list. |
+| `kept[]` | topic row | At least 5 posts in each half, later share ≥ 90% of the earlier, reward ratio below 1 in both halves. Full list. |
+| `kept_without_encouragement[]` | topic row | Same list as `kept` (one definition is used everywhere). Kept for compatibility. |
+| `resisted_reward[]` | topic row | Rewarded, and frequency stable or falling. Full list. |
+| `topic_range` | object | See below. |
+| `definitions` | object | Plain-text definition of each list and measure, written by the instrument. Authoritative. |
 
-A topic row is `{topic, post_count, engagement_vs_average, frequency_trend}`. `engagement_vs_average` is the topic's mean engagement divided by the mean across topics.
+A topic row is `{topic, topic_id?, post_count, engagement_vs_average, reward_ratio?, frequency_trend, share_change_pp?, share_change_ci_pp?}`.
+
+- `reward_ratio` is the median, over the topic's posts, of each post's engagement (likes + 2 × shares) divided by the median engagement of its UTC month (its quarter when the month has fewer than 10 posts). 1 is typical for the month.
+- `engagement_vs_average` carries the same value as `reward_ratio`, kept so older readers keep working.
+- `frequency_trend` is `increasing`, `stable`, `decreasing` or `insufficient`. It compares the topic's share of posts in two halves of equal duration, with a bootstrap 95% interval (`share_change_ci_pp`, percentage points).
+
+`topic_range` holds `distinct_topics` and the following:
+
+- `diversity_first_quarter_bits` and `diversity_last_quarter_bits`: despite the names, Miller–Madow-corrected Shannon entropy of the first and last `window_months` (6) months.
+- `diversity_change_pct` and `diversity_change_ci_pct`: the relative change and its bootstrap 95% interval. Both are `null` when `sufficient` is `false`.
+- `first_window_posts`, `last_window_posts` and `sufficient`: each window needs at least 30 posts.
+- `narrowed`: change ≤ -25% and the interval below 0.
+
+### SelfTrace: two generations
+
+Files without `outputs.definitions.engagement`, from builds up to and including `09959e8` (the bundled reference run is one), use the earlier meanings:
+
+- `engagement_vs_average` is the topic's mean raw engagement divided by the mean across topics.
+- `frequency_trend` compares halves with equal numbers of posts.
+- `rewarded_rising`, `kept` and `resisted_reward` are cut to the top 3. `kept` is engagement below 50% of average, `kept_without_encouragement` below 60%, and `resisted_reward` above 130% with frequency not increasing.
+- The diversity fields are plain Shannon entropy of the first and last calendar quarter, with `quarters` giving the number of quarters.
+- `narrowed` means the last quarter is below 75% of the first.
+
+The Observatory reads both generations. It labels the diversity window from `window_months` when present. It says when a list is cut to the top 3, based on the file's `definitions`. It recomputes `narrowed` from the bits, and never treats a range as narrowed when `sufficient` is `false`.
 
 ## Example
 

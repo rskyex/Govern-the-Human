@@ -114,3 +114,23 @@ test("provisions quote the official text and label summaries as paraphrased", ()
 test("every layer indicator says what it is a proxy for", () => {
   for (const l of referenceReport().layers) for (const i of l.indicators) assert.ok(i.proxyFor, `${l.id}: ${i.label}`);
 });
+
+test("current SelfTrace exports (definitions block, 6-month windows) load and read correctly", () => {
+  const text = readFileSync(new URL("./fixtures/selftrace-2c1395e-demo-political.json", import.meta.url), "utf8");
+  const out = parseResult(text, "selftrace-2c1395e-demo-political.json");
+  assert.equal(out.ok, true, out.error);
+  assert.deepEqual(out.result.warnings, []);
+  assert.equal(out.result.narrowed, out.result.doc.outputs.topic_range.narrowed);
+  const l = buildAssessment([out.result], "t").layers.find((x) => x.id === "ontological");
+  assert.ok(l.indicators.some((i) => /first to last 6 months/.test(i.label)));
+  assert.match(l.reading[0], /kept without reward: sport \(57\)/);
+  assert.doesNotMatch(l.reading[0], /top 3/);
+});
+
+test("an insufficient SelfTrace window is never read as narrowed", () => {
+  const d = JSON.parse(readFileSync(new URL("./fixtures/selftrace-2c1395e-demo-political.json", import.meta.url), "utf8"));
+  Object.assign(d.outputs.topic_range, { sufficient: false, diversity_last_quarter_bits: 1, diversity_change_pct: null, narrowed: false });
+  const out = parse(d);
+  assert.equal(out.ok, true);
+  assert.equal(out.result.narrowed, false);
+});
