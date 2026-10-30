@@ -1,0 +1,153 @@
+{
+  "schema": "gth-result/v1",
+  "instrument": {
+    "name": "selftrace",
+    "version": "2c1395e",
+    "url": "https://selftrace.vercel.app"
+  },
+  "generated_at": "2026-10-28T23:00:00.000Z",
+  "inputs": {
+    "source": "demo",
+    "profile_id": "demo-political",
+    "profile_label": "The Politically Reactive Voice",
+    "platform": "twitter",
+    "post_count": 775,
+    "reflection_answers_included": false
+  },
+  "outputs": {
+    "post_count": 775,
+    "date_range": {
+      "start": "2021-01-01T00:00:00.000Z",
+      "end": "2023-12-28T00:00:00.000Z",
+      "start_label": "January 2021",
+      "end_label": "December 2023"
+    },
+    "taxonomy": {
+      "name": "IPTC Media Topics",
+      "release": "2026-09-30",
+      "licence": "CC BY 4.0",
+      "url": "https://cv.iptc.org/newscodes/mediatopic/"
+    },
+    "top_topics": [
+      {
+        "topic": "politics and government",
+        "topic_id": "medtop:11000000",
+        "count": 354
+      },
+      {
+        "topic": "social media",
+        "topic_id": "medtop:20001182",
+        "count": 129
+      },
+      {
+        "topic": "election",
+        "topic_id": "medtop:20000574",
+        "count": 119
+      },
+      {
+        "topic": "communities",
+        "topic_id": "medtop:20000768",
+        "count": 110
+      },
+      {
+        "topic": "fundamental rights",
+        "topic_id": "medtop:20000587",
+        "count": 96
+      }
+    ],
+    "rewarded_rising": [],
+    "kept": [
+      {
+        "topic": "sport",
+        "topic_id": "medtop:15000000",
+        "post_count": 57,
+        "engagement_vs_average": 0.29,
+        "reward_ratio": 0.29,
+        "frequency_trend": "stable",
+        "share_change_pp": -0.02,
+        "share_change_ci_pp": [
+          -3.7,
+          3.86
+        ]
+      }
+    ],
+    "kept_without_encouragement": [
+      {
+        "topic": "sport",
+        "topic_id": "medtop:15000000",
+        "post_count": 57,
+        "engagement_vs_average": 0.29,
+        "reward_ratio": 0.29,
+        "frequency_trend": "stable",
+        "share_change_pp": -0.02,
+        "share_change_ci_pp": [
+          -3.7,
+          3.86
+        ]
+      }
+    ],
+    "resisted_reward": [
+      {
+        "topic": "local government policy",
+        "topic_id": "medtop:20001265",
+        "post_count": 78,
+        "engagement_vs_average": 1.68,
+        "reward_ratio": 1.68,
+        "frequency_trend": "decreasing",
+        "share_change_pp": -14.05,
+        "share_change_ci_pp": [
+          -19.22,
+          -8.91
+        ]
+      },
+      {
+        "topic": "government policy",
+        "topic_id": "medtop:20000621",
+        "post_count": 37,
+        "engagement_vs_average": 1.51,
+        "reward_ratio": 1.51,
+        "frequency_trend": "stable",
+        "share_change_pp": 2.56,
+        "share_change_ci_pp": [
+          -0.37,
+          5.18
+        ]
+      }
+    ],
+    "topic_range": {
+      "distinct_topics": 15,
+      "diversity_first_quarter_bits": 3.14,
+      "diversity_last_quarter_bits": 2.43,
+      "diversity_change_pct": -23,
+      "diversity_change_ci_pct": [
+        -26,
+        -18
+      ],
+      "window_months": 6,
+      "first_window_posts": 80,
+      "last_window_posts": 176,
+      "sufficient": true,
+      "narrowed": false
+    },
+    "definitions": {
+      "topics": "IPTC Media Topics concepts assigned from post text by SelfTrace's published keyword list; posts with no match are left out of topic counts.",
+      "engagement": "Engagement = likes + 2 × shares. Each post is divided by the median engagement of its UTC month (its quarter if the month has fewer than 10 posts). reward_ratio is the median of that ratio over a topic's posts; engagement_vs_average carries the same value.",
+      "frequency_trend": "Share of posts carrying the topic in two halves of equal duration, each with at least 20 posts. Increasing: later share at least 1.3× the earlier, up at least 2 points, and the bootstrap 95% interval (1000 resamples) above 0. Decreasing is the mirror image.",
+      "rewarded_rising": "Topic with reward_ratio at least 1.25 over at least 8 posts, whose frequency_trend is increasing.",
+      "kept": "Topic with at least 5 posts in each half, later share at least 90% of the earlier, and reward_ratio below 1 in both halves.",
+      "kept_without_encouragement": "Same list as kept: one definition is used everywhere.",
+      "resisted_reward": "Topic with reward_ratio at least 1.25 over at least 8 posts, whose frequency_trend is stable or decreasing.",
+      "narrowed": "Miller–Madow-corrected topic entropy in the last 6 months is at least 25% below the first 6 months, with the bootstrap 95% interval below 0. Each window needs at least 30 posts."
+    }
+  },
+  "privacy": {
+    "processing": "client-side",
+    "personal_content_included": false,
+    "excluded": [
+      "post text",
+      "phrases and self-descriptions",
+      "reflection answers",
+      "MBTI and Enneagram"
+    ]
+  }
+}

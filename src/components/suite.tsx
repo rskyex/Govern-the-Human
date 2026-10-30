@@ -5,26 +5,27 @@ import Link from 'next/link'
 import { Reveal } from '@/components/ui/reveal'
 import { IMAGES } from '@/lib/images'
 
-const INSTRUMENTS = [
+const INSTRUMENTS: { name: string; slug: string; description: string; cta?: string; image?: string }[] = [
   {
     name: 'Ontological Governance Observatory',
     slug: '/observatory',
     description:
-      'A diagnostic framework for tracking how AI systems alter the categories of agency, identity, and selfhood that governance presupposes.',
+      'Load results from SelfTrace and Narrative Drift and get a Second-Order Assessment across the epistemic, ontological and political layers, with the provisions each question touches. Runs in your browser.',
+    cta: 'Open the Observatory',
     image: '/ogo-og.png',
   },
   {
     name: 'SelfTrace',
     slug: '/selftrace',
     description:
-      'A reflective instrument for examining how AI-mediated environments reshape self-perception, memory, and the continuity of personal identity.',
+      'A browser-based instrument that reads a posting archive, a fictional demo profile or your own export, and shows which topics drew more engagement than the typical post of the same month, which you kept posting about anyway, and how your range of subjects changed.',
     image: '/selftrace%20og.png',
   },
   {
     name: 'Narrative Drift',
     slug: '/narrative-drift',
     description:
-      'An investigation into how algorithmic curation restructures personal memory, narrative coherence, and the temporal continuity required for self-governance.',
+      'An interactive simulation: five calibration questions set a baseline on five axes, then nine encounters with a feed, an AI companion and civic tools record which options you take and how far your profile moves.',
     image: IMAGES.narrativeDriftHp,
   },
 ]
@@ -91,7 +92,7 @@ export function Suite() {
                       {item.description}
                     </p>
                     <span className="font-sans text-[12px] tracking-[0.06em] text-text-ghost group-hover:text-text-secondary transition-colors duration-300">
-                      Explore &rarr;
+                      {item.cta ?? 'Explore'} &rarr;
                     </span>
                   </div>
                 </div>

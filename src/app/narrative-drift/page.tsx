@@ -8,6 +8,7 @@ import {
   SideImagePanel,
   SuiteNav,
 } from '@/components/suite-page-layout'
+import { SUITE_IMAGES } from '@/lib/images'
 import { Reveal } from '@/components/ui/reveal'
 
 const siteUrl =
@@ -37,7 +38,7 @@ export default function NarrativeDriftPage() {
       {/* ── Hero — full-bleed background like Home ── */}
       <section className="relative min-h-[70svh] flex items-end overflow-hidden">
         <Image
-          src="/narrative drift hero.png"
+          src={SUITE_IMAGES.narrativeDrift}
           alt=""
           fill
           priority
@@ -67,9 +68,9 @@ export default function NarrativeDriftPage() {
             <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-white/85 font-light max-w-[640px]"
               style={{ textShadow: '0 1px 8px rgba(0,0,0,0.2)' }}
             >
-              An investigation into how algorithmic curation restructures personal
-              memory, narrative coherence, and the temporal continuity required for
-              self-governance.
+              An interactive simulation: five calibration questions set a baseline on
+              five axes, then nine encounters with a feed, an AI companion and civic
+              tools record which options you take and how far your profile moves.
             </p>
           </Reveal>
           <Reveal delay={0.2}>
@@ -144,9 +145,11 @@ export default function NarrativeDriftPage() {
           <SectionHeading title="How the research works" />
           <Reveal delay={0.05}>
             <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              Narrative Drift combines longitudinal observation with conceptual analysis.
-              It tracks how individuals&apos; self-reported narratives, preferences, and sense
-              of continuity shift under different conditions of algorithmic mediation.
+              Narrative Drift is a single-session simulation, not a longitudinal study.
+              Five calibration questions place you on five axes (autonomy, novelty,
+              sociality, tempo, affect). Nine encounters then offer options, some of them
+              handing the choice to the system, and each option moves the axes by a fixed
+              amount set in the instrument.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -159,9 +162,9 @@ export default function NarrativeDriftPage() {
           </Reveal>
           <Reveal delay={0.14}>
             <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-              The outputs are analytical frameworks, case studies, and conceptual tools
-              for distinguishing between organic narrative evolution and algorithmically
-              induced drift.
+              The output is a diagnostic of how far the profile moved and how many choices
+              went to the system, and a result file with option indices and axis values. A
+              verifier mode replays fixed scripts so anyone can reproduce a run.
             </p>
           </Reveal>
         </SideImagePanel>

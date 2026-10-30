@@ -64,8 +64,10 @@ export default function SelfTracePage() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-white/90 md:text-text-secondary font-light max-w-[640px] drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
-              A reflective instrument for examining how AI-mediated environments reshape
-              self-perception, memory, and the continuity of personal identity.
+              A browser-based instrument that reads a posting archive, a fictional demo
+              profile or your own export, and shows which topics drew more engagement than
+              the typical post of the same month, which you kept posting about anyway, and
+              how your range of subjects changed.
             </p>
           </Reveal>
         </div>
@@ -176,17 +178,19 @@ export default function SelfTracePage() {
             <SectionHeading title="How the instrument works" />
             <Reveal delay={0.05}>
               <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-                SelfTrace is a reflective research instrument, not a diagnostic tool. It
-                does not measure selfhood — it creates conditions for examining how selfhood
-                is being shaped.
+                SelfTrace is a research instrument, not a diagnostic tool. It does not
+                measure selfhood. It counts what a posting archive shows: topics, engagement
+                compared with the typical post of the same month, tone markers and
+                self-descriptions, over time.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-                Through structured reflection exercises, comparative self-assessments, and
-                mediation-aware journaling, SelfTrace helps subjects and researchers trace
-                the points where AI-mediated experience diverges from unmediated
-                self-understanding.
+                You can try it on fictional demo profiles or on your own export. A short set
+                of optional reflection questions lets you set your own account of yourself
+                beside the record. The analysis runs in the browser, and the result file it
+                exports holds only counts and topic labels: no post text, phrases or
+                answers.
               </p>
             </Reveal>
             <Reveal delay={0.14}>

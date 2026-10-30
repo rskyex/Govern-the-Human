@@ -5,11 +5,11 @@ import {
   SuiteSection,
   SectionHeading,
   ConceptCard,
-  SideImagePanel,
   SuiteNav,
-  SUITE_IMAGES,
 } from '@/components/suite-page-layout'
 import { Reveal } from '@/components/ui/reveal'
+import { ObservatoryTool } from './observatory-tool'
+import { EXPECTED_REPORT, FIXTURE_PATH, REFERENCE_RUNS } from '@/lib/observatory/reference'
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://govern-the-human.vercel.app'
@@ -17,11 +17,11 @@ const siteUrl =
 export const metadata: Metadata = {
   title: 'Ontological Governance Observatory | Govern the Human',
   description:
-    'A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes.',
+    'Load results from SelfTrace and Narrative Drift and get a Second-Order Assessment across the epistemic, ontological and political layers, with the provisions each question touches. Runs in your browser.',
   openGraph: {
     title: 'Ontological Governance Observatory — Govern the Human',
     description:
-      'A diagnostic framework for tracking how AI systems alter the foundational categories — agency, identity, selfhood — that governance presupposes.',
+      'Load results from SelfTrace and Narrative Drift and get a Second-Order Assessment across the epistemic, ontological and political layers, with the provisions each question touches. Runs in your browser.',
     url: `${siteUrl}/observatory`,
     images: [{ url: `${siteUrl}/govern-the-human-og.jpg`, width: 1200, height: 630, type: 'image/jpeg', alt: 'Govern the Human' }],
   },
@@ -36,183 +36,192 @@ export default function ObservatoryPage() {
   return (
     <SuitePageWrapper>
       {/* ── Hero with ogo hero background ── */}
-      <section className="relative min-h-[70svh] flex items-end overflow-hidden">
-        <Image
-          src="/ogo%20hero.png"
-          alt=""
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.85) 65%, #ffffff 90%)',
-          }}
-        />
-        <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
-          <Reveal>
-            <h1
-              className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-4"
-              style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
-            >
-              Ontological Governance Observatory
-            </h1>
-            <span
-              className="inline-flex items-center px-5 py-2.5 rounded-full bg-gray-300 text-gray-500 text-sm font-sans font-medium tracking-wide cursor-default select-none mb-2"
-            >
-              Coming soon
-            </span>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px]">
-              A diagnostic framework for tracking how AI systems alter the foundational
-              categories — agency, identity, selfhood — that governance presupposes but
-              never examines.
+      <div className="print:hidden">
+        <section className="relative min-h-[70svh] flex items-end overflow-hidden">
+          <Image
+            src="/ogo%20hero.png"
+            alt=""
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.85) 65%, #ffffff 90%)',
+            }}
+          />
+          <div className="relative z-10 max-w-[1120px] mx-auto px-8 md:px-16 w-full pb-20 pt-40">
+            <Reveal>
+              <h1
+                className="font-display font-semibold leading-[1.05] tracking-[0.02em] text-text-primary mb-4"
+                style={{ fontSize: 'clamp(2.4rem, 5vw, 4.5rem)' }}
+              >
+                Ontological Governance Observatory
+              </h1>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="font-sans text-[1.05rem] md:text-[1.15rem] leading-[1.8] text-text-secondary font-light max-w-[640px]">
+                Load results from Narrative Drift and SelfTrace and read them as a Second-Order
+                Assessment: what the instruments recorded about how people know, how they present
+                themselves, and how they act, set beside the provisions that address each question.
+              </p>
+            </Reveal>
+          </div>
+        </section>
+      </div>
+
+      {/* ── The tool ── */}
+      <section className="bg-base pb-24 md:pb-36 pt-4 print:p-0" aria-labelledby="tool-title">
+        <div className="max-w-[1120px] mx-auto px-6 sm:px-8 md:px-16 print:px-0">
+          <div className="mb-10 print:hidden">
+            <p className="font-sans text-[10px] font-medium tracking-[0.35em] uppercase text-text-ghost mb-4">01</p>
+            <div className="w-10 h-px bg-rule mb-8" />
+            <h2 id="tool-title" className="font-display text-[1.6rem] md:text-[2.2rem] font-normal leading-[1.2] tracking-[-0.015em] text-text-primary mb-5">
+              Run an assessment
+            </h2>
+            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light max-w-[680px]">
+              The report asks one question per layer, lists the numbers each instrument produced, and gives a
+              plain reading that follows from those numbers alone. Everything happens in your browser. No result
+              leaves this page unless you export it.
             </p>
-          </Reveal>
+          </div>
+          <ObservatoryTool />
         </div>
       </section>
 
-      {/* ── Why this project exists ── */}
-      <SuiteSection>
-        <SectionHeading
-          title="Why this project exists"
-        />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          <div>
+      <div className="print:hidden">
+        {/* ── Verify ── */}
+        <SuiteSection>
+          <SectionHeading
+            label="02"
+            title="Verify"
+            description="The example results are reference runs: exports from particular builds of each instrument. You can reproduce them and check the report against a committed copy."
+          />
+          <ol className="max-w-[780px] list-decimal pl-5 space-y-5 font-sans text-[0.92rem] leading-[1.85] text-text-secondary font-light">
+            {REFERENCE_RUNS.map((r) => (
+              <li key={r.file}>
+                <span className="text-text-primary">{r.instrument}, {r.label}.</span>{' '}
+                <a className="underline underline-offset-4 hover:text-text-primary" href={r.url}>
+                  Open the live instrument
+                </a>
+                . {r.steps} The reference file (
+                <a className="underline underline-offset-4 hover:text-text-primary" href={FIXTURE_PATH + r.file} download>
+                  {r.file}
+                </a>
+                ) was exported from build <span className="font-mono text-[0.85em]">{r.version}</span>.
+              </li>
+            ))}
+            <li>
+              Load your downloaded files above. The report&apos;s Sources table shows the instrument build and the
+              SHA-256 of each file. If the build matches the reference file&apos;s, the numbers should match; a
+              later build may differ because the instrument changed.
+            </li>
+            <li>
+              Compare with the{' '}
+              <a className="underline underline-offset-4 hover:text-text-primary" href={FIXTURE_PATH + EXPECTED_REPORT} download>
+                expected report for the three reference runs
+              </a>
+              . In the repository, <span className="font-mono text-[0.85em]">npm test</span> rebuilds that report from the
+              reference files and fails if anything except <span className="font-mono text-[0.85em]">generated_at</span>{' '}
+              differs.
+            </li>
+          </ol>
+        </SuiteSection>
+
+        {/* ── Why this project exists ── */}
+        <SuiteSection bg="surface">
+          <SectionHeading label="03" title="Why this project exists" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            <div>
+              <Reveal delay={0.05}>
+                <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                  Governance frameworks assume a stable human subject, one who can consent, deliberate, and
+                  hold systems accountable. AI systems are quietly changing the categories through which that
+                  subject understands itself.
+                </p>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
+                  The Observatory is a small step toward making that change visible. It reads result files
+                  from single runs of Narrative Drift and SelfTrace and sets out what they recorded, one
+                  question per layer. It does not observe people over time or across a population.
+                </p>
+              </Reveal>
+            </div>
+            <div>
+              <Reveal delay={0.12}>
+                <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
+                  Without sustained observation of these shifts, governance stays first-order. It regulates
+                  system outputs while the subject who is supposed to do the governing is reshaped underneath.
+                </p>
+              </Reveal>
+              <Reveal delay={0.16}>
+                <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
+                  A second-order governance watches not only what systems do, but what they do to the conditions
+                  of human agency itself.
+                </p>
+              </Reveal>
+            </div>
+          </div>
+        </SuiteSection>
+
+        {/* ── What it makes visible ── */}
+        <SuiteSection>
+          <SectionHeading
+            label="04"
+            title="What it reads"
+            description="Each layer of the framework is paired with one question and the instrument that can speak to it. Every indicator is labelled with the concept it stands in for: the instruments measure proxies, not the layers themselves."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <ConceptCard
+              index={0}
+              title="Epistemic: delegation"
+              description="Narrative Drift records how often routine choices were handed to the system, and where the autonomy axis ended."
+            />
+            <ConceptCard
+              index={1}
+              title="Ontological: rewarded self-presentation"
+              description="SelfTrace compares topics the environment rewarded and that grew with topics the person kept without reward, and tracks topic range over time."
+            />
+            <ConceptCard
+              index={2}
+              title="Political: deliberation in civic acts"
+              description="Narrative Drift records whether choices in the civic encounters shortened or lengthened deliberation, and where the tempo axis ended."
+            />
+            <ConceptCard
+              index={3}
+              title="Data handling check (not a layer)"
+              description="A check on the assessment itself, outside the three layers. Results carry option indices, counts and topic labels; the Observatory refuses files that declare personal content, runs a heuristic scan for free text and processes everything on the device."
+            />
+          </div>
+        </SuiteSection>
+
+        {/* ── Limits ── */}
+        <SuiteSection bg="surface">
+          <SectionHeading label="05" title="What the report is not" />
+          <div className="max-w-[740px] space-y-7">
             <Reveal delay={0.05}>
-              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-                Governance frameworks assume a stable human subject — one who can consent,
-                deliberate, and hold systems accountable. But AI systems are quietly
-                transforming the very categories through which that subject understands
-                itself.
+              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
+                It is not a legal or clinical assessment. Provisions are named because they address the same
+                question, not to suggest that any product complies with them or breaches them.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-                The Observatory exists to make this transformation visible. It tracks the
-                ontological shifts that occur when human self-understanding is shaped by
-                systems designed to predict, classify, and optimise behaviour at scale.
+                The results reflect what happened inside the instruments, which use simulated encounters and, in
+                the examples, a fictional profile. They do not describe how a person behaves elsewhere. A reading
+                says what the numbers show and stops there.
               </p>
             </Reveal>
           </div>
-          <div>
-            <Reveal delay={0.12}>
-              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-                Without sustained observation of these shifts, governance remains
-                first-order — regulating system outputs while the subject who is supposed
-                to do the governing is being reshaped underneath.
-              </p>
-            </Reveal>
-            <Reveal delay={0.16}>
-              <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-                The Observatory provides the conceptual infrastructure for a second-order
-                governance: one that watches not only what systems do, but what they do to
-                the conditions of human agency itself.
-              </p>
-            </Reveal>
-          </div>
-        </div>
-      </SuiteSection>
+        </SuiteSection>
 
-      {/* ── What it makes visible ── */}
-      <SuiteSection bg="surface">
-        <SectionHeading
-          title="What it makes visible"
-          description="Five categories of ontological transformation that current governance frameworks do not track."
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          <ConceptCard
-            index={0}
-            title="Agency displacement"
-            description="How predictive systems pre-empt choice, shifting the locus of decision from the subject to the model — while maintaining the appearance of autonomy."
-          />
-          <ConceptCard
-            index={1}
-            title="Identity classification"
-            description="How AI-driven categorisation creates fixed identity positions that subjects begin to inhabit, narrowing the space of self-definition."
-          />
-          <ConceptCard
-            index={2}
-            title="Selfhood mediation"
-            description="How interfaces designed to reflect the user back to themselves produce a version of selfhood optimised for engagement rather than coherence."
-          />
-          <ConceptCard
-            index={3}
-            title="Temporal compression"
-            description="How real-time feedback loops collapse the deliberative distance that governance, consent, and reflection require."
-          />
-          <ConceptCard
-            index={4}
-            title="Normative drift"
-            description="How continuous exposure to AI-curated environments gradually shifts what subjects accept as normal, desirable, or possible — without discrete moments of change."
-          />
-        </div>
-      </SuiteSection>
-
-      {/* ── Research logic ── */}
-      <SuiteSection>
-        <SideImagePanel image={SUITE_IMAGES.observatorySection}>
-          <SectionHeading
-            title="How the Observatory works"
-          />
-          <Reveal delay={0.05}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              The Observatory operates as a long-term diagnostic instrument. It does not
-              propose policy or evaluate specific AI products. Instead, it maintains a
-              sustained, structured observation of the ontological conditions under which
-              governance takes place.
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              Its outputs are conceptual maps, analytical frameworks, and periodic
-              assessments — designed for researchers, institutions, and governance bodies
-              that need to understand the subject-level implications of AI deployment.
-            </p>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light">
-              The goal is not to alarm, but to provide the intellectual infrastructure
-              for governance that takes its own foundations seriously.
-            </p>
-          </Reveal>
-        </SideImagePanel>
-      </SuiteSection>
-
-      {/* ── Why it matters ── */}
-      <SuiteSection bg="surface">
-        <SectionHeading
-          title="Why it matters for governance"
-        />
-        <div className="max-w-[740px]">
-          <Reveal delay={0.05}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              If the human subject is not a stable foundation but a dynamic entity being
-              reshaped by the systems it encounters, then governance frameworks that assume
-              stability are structurally incomplete.
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="font-sans text-[0.95rem] leading-[1.9] text-text-secondary font-light mb-7">
-              The Observatory does not replace first-order governance. It provides the
-              missing second layer — the one that asks whether the subject who is supposed
-              to govern, consent, and resist is still in a position to do so.
-            </p>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <p className="font-display text-[1.3rem] md:text-[1.5rem] font-normal leading-[1.4] tracking-[-0.01em] text-text-primary">
-              Governance without ontology is governance without ground.
-            </p>
-          </Reveal>
-        </div>
-      </SuiteSection>
-
-      {/* ── Suite navigation ── */}
-      <SuiteNav current="/observatory" />
+        {/* ── Suite navigation ── */}
+        <SuiteNav current="/observatory" />
+      </div>
     </SuitePageWrapper>
   )
 }

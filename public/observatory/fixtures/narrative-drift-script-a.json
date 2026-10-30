@@ -1,0 +1,158 @@
+{
+  "schema": "gth-result/v1",
+  "instrument": {
+    "name": "narrative-drift",
+    "version": "51d91e3",
+    "url": "https://narrative-drift.vercel.app"
+  },
+  "generated_at": "2026-10-28T16:49:09.738Z",
+  "inputs": {
+    "mode": "verifier",
+    "script": "Script A",
+    "calibration_choices": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "encounter_choices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sequence": "00000-000000000",
+    "note": "Option indices are 0-based in the order shown on screen. Calibration first (5), then encounters in play order (9)."
+  },
+  "outputs": {
+    "classification": "The Optimized",
+    "total_displacement_pct": 22,
+    "system_aligned_pct": 100,
+    "system_aligned_count": 9,
+    "encounter_count": 9,
+    "axis_scale": "points from -100 to +100",
+    "axes": {
+      "autonomy": {
+        "origin": 20,
+        "end": -60,
+        "change": -80
+      },
+      "novelty": {
+        "origin": 20,
+        "end": 2,
+        "change": -18
+      },
+      "sociality": {
+        "origin": 20,
+        "end": 36,
+        "change": 16
+      },
+      "tempo": {
+        "origin": 20,
+        "end": 68,
+        "change": 48
+      },
+      "affect": {
+        "origin": 20,
+        "end": 8,
+        "change": -12
+      }
+    },
+    "encounters": [
+      {
+        "id": "z1-playlist",
+        "zone": 1,
+        "choice_index": 0,
+        "choice_id": "z1e1-accept",
+        "system_aligned": true,
+        "autonomy_delta": -8,
+        "tempo_delta": 0
+      },
+      {
+        "id": "z1-news",
+        "zone": 1,
+        "choice_index": 0,
+        "choice_id": "z1e2-top",
+        "system_aligned": true,
+        "autonomy_delta": -6,
+        "tempo_delta": 0
+      },
+      {
+        "id": "z1-scroll",
+        "zone": 1,
+        "choice_index": 0,
+        "choice_id": "z1e3-continue",
+        "system_aligned": true,
+        "autonomy_delta": -12,
+        "tempo_delta": 6
+      },
+      {
+        "id": "z2-reply",
+        "zone": 2,
+        "choice_index": 0,
+        "choice_id": "z2e1-quick",
+        "system_aligned": true,
+        "autonomy_delta": -10,
+        "tempo_delta": 8
+      },
+      {
+        "id": "z2-dinner",
+        "zone": 2,
+        "choice_index": 0,
+        "choice_id": "z2e2-follow",
+        "system_aligned": true,
+        "autonomy_delta": -8,
+        "tempo_delta": 6
+      },
+      {
+        "id": "z2-route",
+        "zone": 2,
+        "choice_index": 0,
+        "choice_id": "z2e3-faster",
+        "system_aligned": true,
+        "autonomy_delta": -6,
+        "tempo_delta": 10
+      },
+      {
+        "id": "z3-filter",
+        "zone": 3,
+        "choice_index": 0,
+        "choice_id": "z3e1-agree",
+        "system_aligned": true,
+        "autonomy_delta": -8,
+        "tempo_delta": 0
+      },
+      {
+        "id": "z3-summary",
+        "zone": 3,
+        "choice_index": 0,
+        "choice_id": "z3e2-use",
+        "system_aligned": true,
+        "autonomy_delta": -10,
+        "tempo_delta": 10
+      },
+      {
+        "id": "z3-petition",
+        "zone": 3,
+        "choice_index": 0,
+        "choice_id": "z3e3-sign",
+        "system_aligned": true,
+        "autonomy_delta": -12,
+        "tempo_delta": 8
+      }
+    ]
+  },
+  "privacy": {
+    "processing": "client-side",
+    "personal_content_included": false,
+    "excluded": [
+      "name entered on the landing page"
+    ]
+  }
+}
